@@ -37,7 +37,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>3.0.3</revision>
+        <revision>3.0.4-SNAPSHOT</revision>
         <main.verticle>org.qubership.itool.cli.ci.CiExecVerticle</main.verticle>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -51,7 +51,7 @@
         <guava.version>33.4.0-jre</guava.version>
         <groovy.version>3.0.9</groovy.version>
         <vertx.version>4.1.0</vertx.version>
-        <inventory-tool-core.version>3.0.3</inventory-tool-core.version>
+        <inventory-tool-core.version>3.0.4-SNAPSHOT</inventory-tool-core.version>
     </properties>
 
     <dependencyManagement>
