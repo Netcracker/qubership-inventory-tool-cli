@@ -16,12 +16,9 @@
 
 package org.qubership.itool.tasks.html.report;
 
-import freemarker.template.TemplateMethodModelEx;
 import io.vertx.core.json.JsonObject;
 import org.qubership.itool.modules.diagram.DiagramService;
 import org.qubership.itool.modules.template.ConfluencePage;
-import org.qubership.itool.modules.template.DiagramDomainMethod;
-import org.qubership.itool.modules.template.DiagramGeneralDomainMethod;
 import org.qubership.itool.tasks.html.AbstractHtmlGenerationPageVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.qubership.itool.modules.graph.Graph.F_ID;
 import static org.qubership.itool.modules.graph.Graph.V_DOMAIN;
 import static org.qubership.itool.modules.graph.Graph.V_ROOT;
-import static org.qubership.itool.modules.gremlin2.P.eq;
-import static org.qubership.itool.modules.gremlin2.P.within;
 import static org.qubership.itool.modules.gremlin2.graph.__.has;
 import static org.qubership.itool.modules.gremlin2.graph.__.hasType;
 import static org.qubership.itool.modules.gremlin2.graph.__.in;

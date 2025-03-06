@@ -24,6 +24,12 @@ parseSearchPasswordInYaml
 parseErrorCodes
 parseSqlFiles
 
+-- Custom files handling for nc_reports
+
+parseCustomFiles
+validateLicenseFile
+
+
 enrichDocumentationLinks
 
 fillMandatoryValues

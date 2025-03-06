@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import static org.qubership.itool.modules.graph.Graph.F_DIRECTORY;
 import static org.qubership.itool.modules.graph.Graph.F_ID;
 import static org.qubership.itool.modules.graph.Graph.V_DOMAIN;
+import static org.qubership.itool.modules.graph.Graph.V_ROOT;
 
 public abstract class AbstractInclusiveParseFileTask extends FlowTask {
 
@@ -136,7 +137,7 @@ public abstract class AbstractInclusiveParseFileTask extends FlowTask {
     }
 
     protected List<Map<String, JsonObject>> getComponentsWithDomains() {
-        return V().hasType(V_DOMAIN).as("D")
+        return V(V_ROOT).out().hasType(V_DOMAIN).as("D")
                 .out().hasKeys(F_DIRECTORY).as("C")
                 .<JsonObject>select("D", "C").toList();
     }

@@ -31,7 +31,7 @@
 </head>
 <body>
 <div class="container">
-    <p>Report is generated at #GEN_DATE# UTC</p>
+    <p>Report is generated at [=aDateTime?iso("UTC")] UTC</p>
 
     <table id="main-table" style="width:100%">
         <thead>
@@ -39,9 +39,9 @@
             <th>#</th>
             <th>Name</th>
             <th>Owner</th>
-            <th>DNS name</th>
             <th>Description</th>
             <th>Tech stack</th>
+            <th>License</th>
         </tr>
         </thead>
         <tbody>
@@ -49,11 +49,11 @@
         [#items as entry][#t]
             <tr>
                 <td>[=entry?counter]</td>
-                <td>[=(entry.C.name)!"missed"]</td>
-                <td>[=(entry.C.details.owner)!"missed"]</td>
-                <td>[=(entry.C.details.dnsName)!"missed"]</td>
-                <td>[=(entry.C.details.description)!"missed"]</td>
-                <td>[#list (entry.TECH)!["no"] as tech][=tech][#sep], [/#sep][#else ]no[/#list]</td>
+                <td><a href="[=(entry.C.repository)!""]">[=(entry.C.id)!"❌&nbsp;"]</a></td>
+                <td>[=(entry.C.details.owner)!"❌&nbsp;"]</td>
+                <td>[=(entry.C.details.description)!"❌&nbsp;"]</td>
+                <td>[#list (entry.TECH)!["no"] as tech][=tech][#sep], [/#sep][#else ]❌&nbsp;[/#list]</td>
+                <td>[=(entry.C.validationResults.license.result)!"❌&nbsp;"]</td>
             </tr>
         [/#items][#t]
         [#else ][#t]
