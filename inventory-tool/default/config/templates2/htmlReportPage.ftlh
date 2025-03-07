@@ -41,7 +41,11 @@
             <th>Owner</th>
             <th>Description</th>
             <th>Tech stack</th>
-            <th>License</th>
+            [#list reportHeaders![]][#t]
+            [#items as entry][#t]
+            <th>[=entry]</th>
+            [/#items][#t]
+            [/#list][#t]
         </tr>
         </thead>
         <tbody>
@@ -53,7 +57,11 @@
                 <td>[=(entry.C.details.owner)!"❌&nbsp;"]</td>
                 <td>[=(entry.C.details.description)!"❌&nbsp;"]</td>
                 <td>[#list (entry.TECH)!["no"] as tech][=tech][#sep], [/#sep][#else ]❌&nbsp;[/#list]</td>
-                <td>[=(entry.C.validationResults.license.result)!"❌&nbsp;"]</td>
+                [#list reportHeaders![]][#t]
+                [#items as header][#t]
+                <td>[=(entry.C.validationResults[header].result)!"❌&nbsp;"]</td>
+                [/#items][#t]
+                [/#list][#t]
             </tr>
         [/#items][#t]
         [#else ][#t]

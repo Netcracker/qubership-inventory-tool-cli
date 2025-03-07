@@ -38,8 +38,7 @@ public class ValidateLicenseFileTask extends AbstractValidateFileTask {
 
     @Override
     protected void validateFile(JsonObject component, String fileContents) {
-        JsonObject validationResult = JsonUtils.getOrCreateJsonObject(component, JsonPointer.from("/validationResults/license"));
-        validationResult.put("header", "/License");
+        JsonObject validationResult = JsonUtils.getOrCreateJsonObject(component, JsonPointer.from("/validationResults/~1License"));
         if (fileContents == null) {
             getLogger().info("No license file found for component {}", component.getString(F_ID));
             validationResult

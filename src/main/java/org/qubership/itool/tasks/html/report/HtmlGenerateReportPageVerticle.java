@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.qubership.itool.modules.graph.Graph.V_DOMAIN;
 import static org.qubership.itool.modules.graph.Graph.V_ROOT;
@@ -69,7 +70,13 @@ public class HtmlGenerateReportPageVerticle extends AbstractHtmlGenerationPageVe
                 .<JsonObject>select("C", "T", "TECH")
                 .toList();
         page.addDataModel("components", components);
-
+        List<String> headers = List.of();
+        if (!components.isEmpty()) {
+            JsonObject component = components.get(0).get("C");
+            JsonObject validationResults = component.getJsonObject("validationResults");
+            headers = new ArrayList<>(validationResults.getMap().keySet());
+        }
+        page.addDataModel("reportHeaders", headers);
         return generatedPageList;
     }
 
