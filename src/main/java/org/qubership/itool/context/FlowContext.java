@@ -56,6 +56,8 @@ public interface FlowContext {
 
     ClassLoader getTaskClassLoader();
 
+    void setTaskClassLoader(ClassLoader taskClassLoader);
+
     void setBreakRequested(boolean b);
 
     boolean isBreakRequested();

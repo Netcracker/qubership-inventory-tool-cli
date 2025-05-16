@@ -32,7 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.qubership.itool.cli.config.ConfigProvider;
-import org.qubership.itool.context.FlowContextImpl;
+import org.qubership.itool.context.FlowContext;
+import org.qubership.itool.context.FlowContextFactory;
 import org.qubership.itool.factories.JavaAppContextVerticleFactory;
 
 import static org.qubership.itool.utils.ConfigProperties.CONFIG_PATH_POINTER;
@@ -77,22 +78,23 @@ public abstract class AbstractCommand extends ClasspathHandler {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void configLoaded(Vertx vertx, FlowMainVerticle main, GraphService graphService, JsonObject config, Promise promise) {
         try {
-            FlowContextImpl flowContext = new FlowContextImpl(graphService);
+            FlowContextFactory factory = FlowContextFactory.create(config);
+            FlowContext flowContext = factory.createFlowContext(graphService);
 
             // XXX Still needs reviewing for real multi-flow design
-            Optional<VerticleFactory> factory = vertx.verticleFactories()
+            Optional<VerticleFactory> verticleFactory = vertx.verticleFactories()
                     .stream()
                     .filter(f -> f instanceof JavaAppContextVerticleFactory)
                     .findAny();
             JavaAppContextVerticleFactory javaTaskFactory;
-            if (factory.isEmpty()) {
+            if (verticleFactory.isEmpty()) {
                 javaTaskFactory = new JavaAppContextVerticleFactory(flowContext, config);
                 vertx.registerVerticleFactory(javaTaskFactory);
             } else {
-                javaTaskFactory = (JavaAppContextVerticleFactory) factory.get();
+                javaTaskFactory = (JavaAppContextVerticleFactory) verticleFactory.get();
             }
 
-            flowContext.initialize(vertx, config);
+            factory.initializeFlowContext(flowContext, vertx, config);
             flowContext.setTaskClassLoader(javaTaskFactory.getTaskClassLoader());
 
             main.deployAndRunFlow(flowContext)
