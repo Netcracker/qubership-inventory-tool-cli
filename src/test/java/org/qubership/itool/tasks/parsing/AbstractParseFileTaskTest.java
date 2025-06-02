@@ -18,7 +18,9 @@ package org.qubership.itool.tasks.parsing;
 
 import org.junit.jupiter.api.Disabled;
 import org.qubership.itool.context.FlowContext;
-import org.qubership.itool.context.FlowContextImpl;
+import org.qubership.itool.di.ApplicationContext;
+import org.qubership.itool.di.CliModule;
+
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -36,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
+import com.google.inject.Module;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,22 +66,24 @@ class AbstractParseFileTaskTest {
     static Vertx vertx;
     static JsonObject config;
     static TestParseFileTask testParseFileTask;
-    static FlowContext appContext = new FlowContextImpl();
-    VertxTestContext testContext;
+    static FlowContext flowContext;
 
     Checkpoint checkpoint;
+    VertxTestContext testContext;
 
     @BeforeAll
     public static void setUp() {
         vertx = Vertx.vertx();
         config = new JsonObject();
-        appContext.initialize(vertx, config);
+        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new CliModule(vertx)});
+        flowContext = appContext.getInstance(FlowContext.class);
+        flowContext.initialize(vertx, config);
     }
 
     @BeforeEach
     public void initEach() {
         testParseFileTask = new TestParseFileTask();
-        appContext.initialize(testParseFileTask);
+        flowContext.initialize(testParseFileTask);
         testContext = new VertxTestContext();
         checkpoint = testContext.checkpoint(3);
     }

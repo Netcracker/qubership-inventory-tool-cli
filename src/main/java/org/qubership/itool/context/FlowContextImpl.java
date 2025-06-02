@@ -37,10 +37,8 @@ import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphClassifier;
 import org.qubership.itool.modules.graph.GraphClassifierBuilderImpl;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
-import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.modules.graph.GraphService;
 import org.qubership.itool.modules.report.GraphReport;
-import org.qubership.itool.modules.report.GraphReportImpl;
 import org.qubership.itool.modules.template.TemplateService;
 import org.qubership.itool.modules.template.TemplateServiceImpl;
 import org.qubership.itool.utils.JsonUtils;
@@ -49,6 +47,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
+import com.google.inject.Inject;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +56,10 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.qubership.itool.modules.diagram.providers.DiagramProvider.*;
+import org.qubership.itool.modules.graph.GraphFactory;
+import org.qubership.itool.modules.graph.GraphReportFactory;
+import org.qubership.itool.modules.processor.GraphMerger;
+import org.qubership.itool.modules.processor.GraphMergerFactory;
 
 public class FlowContextImpl implements FlowContext {
     private static final Logger LOG = LoggerFactory.getLogger(FlowContextImpl.class);
@@ -74,27 +77,39 @@ public class FlowContextImpl implements FlowContext {
     private ClassLoader taskClassLoader;
     private Vertx vertx;
     private boolean breakRequested;
+    private final GraphFactory graphFactory;
+    private final GraphReportFactory graphReportFactory;
+    private final GraphMergerFactory graphMergerFactory;
 
-    /* Create a flow context not bound to any graph service and create a new graph in it. */
-    public FlowContextImpl() {
-        this((GraphService)null);
+    @Inject
+    public FlowContextImpl(GraphFactory graphFactory, GraphReportFactory graphReportFactory, GraphMergerFactory graphMergerFactory) {
+        this.graphFactory = graphFactory;
+        this.graphReportFactory = graphReportFactory;
+        this.graphMergerFactory = graphMergerFactory;
+        
+        this.report = graphReportFactory.createGraphReport();
+        this.graph = graphFactory.createGraph();
+        this.graph.setReport(report);
+        this.graphService = null;
     }
 
-    /* Create a flow context not bound to any graph service and use provided graph in it. */
-    public FlowContextImpl(Graph graph) {
+    public FlowContextImpl(GraphFactory graphFactory, GraphReportFactory graphReportFactory, GraphMergerFactory graphMergerFactory, Graph graph) {
+        this.graphFactory = graphFactory;
+        this.graphReportFactory = graphReportFactory;
+        this.graphMergerFactory = graphMergerFactory;
+        
         this.graph = graph;
         this.report = graph.getReport();
         this.graphService = null;
     }
 
-    /** Create a flow context and a new graph for it.
-     * If GraphService is provided, the given graph is registered in that service.
-     *
-     * @param graphService Graph Service, nullable
-     */
-    public FlowContextImpl(GraphService graphService) {
-        this.report = new GraphReportImpl();
-        this.graph = new GraphImpl();
+    public FlowContextImpl(GraphFactory graphFactory, GraphReportFactory graphReportFactory, GraphMergerFactory graphMergerFactory, GraphService graphService) {
+        this.graphFactory = graphFactory;
+        this.graphReportFactory = graphReportFactory;
+        this.graphMergerFactory = graphMergerFactory;
+        
+        this.report = graphReportFactory.createGraphReport();
+        this.graph = graphFactory.createGraph();
         this.graph.setReport(report);
         this.graphService = graphService;
 
@@ -152,6 +167,11 @@ public class FlowContextImpl implements FlowContext {
         if (graphClassifier != null) {
             resources.put(GraphClassifier.class, graphClassifier);
         }
+
+        // Add graph-related resources
+        this.resources.put(GraphFactory.class, this.graphFactory);
+        this.resources.put(GraphReportFactory.class, this.graphReportFactory);
+        this.resources.put(GraphMergerFactory.class, this.graphMergerFactory);
     }
 
     @Override
@@ -251,6 +271,7 @@ public class FlowContextImpl implements FlowContext {
         return taskClassLoader;
     }
 
+    @Override
     public void setTaskClassLoader(ClassLoader taskClassLoader) {
         this.taskClassLoader = taskClassLoader;
     }

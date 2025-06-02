@@ -38,9 +38,11 @@ import org.slf4j.LoggerFactory;
 
 import org.qubership.itool.cli.ci.CiConstants;
 import org.qubership.itool.context.FlowContext;
-import org.qubership.itool.context.FlowContextImpl;
+import org.qubership.itool.di.ApplicationContext;
+import org.qubership.itool.di.CliModule;
 import org.qubership.itool.tasks.dependency.SetEdgesBetweenComponentsVerticle;
 import org.qubership.itool.tasks.init.InitializeDomainsVerticle;
+import com.google.inject.Module;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -81,16 +83,17 @@ public class ParseApplicationInventoryFileTaskTest {
         config.put(CiConstants.P_REPOSITORY, REPO_ADDR);
 
         vertx = Vertx.vertx();
-        FlowContext appContext = new FlowContextImpl();
-        appContext.initialize(vertx, config);
-        graph = appContext.getGraph();
+        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new CliModule(vertx)});
+        FlowContext flowContext = appContext.getInstance(FlowContext.class);
+        flowContext.initialize(vertx, config);
+        graph = flowContext.getGraph();
 
         task0 = new InitializeDomainsVerticle();
-        appContext.initialize(task0);
+        flowContext.initialize(task0);
         task1 = new ParseApplicationInventoryFileTask();
-        appContext.initialize(task1);
+        flowContext.initialize(task1);
         task2 = new SetEdgesBetweenComponentsVerticle();
-        appContext.initialize(task2);
+        flowContext.initialize(task2);
     }
 
     @AfterEach
