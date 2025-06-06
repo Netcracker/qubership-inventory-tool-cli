@@ -1,0 +1,9 @@
+[
+  {
+    "id": "orphans",
+    "type": "domain",
+    "name": "Components without domain in inventory file",
+    "technical-manager": "unknown",
+    "department": "unknown"
+  }
+]

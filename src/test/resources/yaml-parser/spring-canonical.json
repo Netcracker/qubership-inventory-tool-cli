@@ -1,0 +1,29 @@
+[
+ {
+  "policy" : {
+   "update" : {
+    "enabled" : false
+   }
+  },
+  "quarkus" : {
+   "log" : {
+    "category" : {
+     "cloud" : {
+      "level" : "error"
+     },
+     "org" : {
+      "qubership" : {
+       "cloud" : {
+        "level" : "warn",
+        "module" : {
+         "level" : "info",
+         "package" : { "interceptor" : { "InterceptingInterceptor" : { "level" : "debug" }}}
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+]
