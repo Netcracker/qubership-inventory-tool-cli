@@ -36,7 +36,7 @@ public class ApplicationContext {
      */
     public static ApplicationContext createDefault() {
         Vertx vertx = Vertx.vertx();
-        return new ApplicationContext(vertx, new JsonObject(), new Module[] {new CliModule(vertx)});
+        return new ApplicationContext(vertx, new JsonObject(), new Module[] {new QubershipModule(vertx)});
     }
 
     /**

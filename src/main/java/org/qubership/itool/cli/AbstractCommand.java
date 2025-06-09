@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.qubership.itool.cli.config.ConfigProvider;
 import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.di.ApplicationContext;
-import org.qubership.itool.di.CliModule;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.factories.JavaAppContextVerticleFactory;
 
 import static org.qubership.itool.utils.ConfigProperties.CONFIG_PATH_POINTER;
@@ -130,7 +130,7 @@ public abstract class AbstractCommand extends ClasspathHandler {
      * @return Array of modules to use for dependency injection
      */
     protected Module[] createModules(Vertx vertx) {
-        return new Module[] { new CliModule(vertx) };
+        return new Module[] { new QubershipModule(vertx) };
     }
 
     protected void flowFinished(FlowMainVerticle main, AsyncResult<?> flowResult) {

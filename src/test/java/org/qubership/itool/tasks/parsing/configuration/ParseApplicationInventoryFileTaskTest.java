@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.qubership.itool.cli.ci.CiConstants;
 import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.di.ApplicationContext;
-import org.qubership.itool.di.CliModule;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.tasks.dependency.SetEdgesBetweenComponentsVerticle;
 import org.qubership.itool.tasks.init.InitializeDomainsVerticle;
 import com.google.inject.Module;
@@ -83,7 +83,7 @@ public class ParseApplicationInventoryFileTaskTest {
         config.put(CiConstants.P_REPOSITORY, REPO_ADDR);
 
         vertx = Vertx.vertx();
-        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new CliModule(vertx)});
+        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
         FlowContext flowContext = appContext.getInstance(FlowContext.class);
         flowContext.initialize(vertx, config);
         graph = flowContext.getGraph();

@@ -46,7 +46,7 @@ public class TestModule extends AbstractModule {
                                             GraphMerger mockGraphMerger,
                                             FlowContext mockFlowContext,
                                             GraphReportFactory customGraphReportFactory) {
-        return Modules.override(new CliModule(vertx))
+        return Modules.override(new QubershipModule(vertx))
                      .with(new TestModule(mockGraphMerger, mockFlowContext, customGraphReportFactory));
     }
 } 

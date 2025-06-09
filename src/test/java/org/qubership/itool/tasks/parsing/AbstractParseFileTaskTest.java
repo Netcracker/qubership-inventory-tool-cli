@@ -19,7 +19,7 @@ package org.qubership.itool.tasks.parsing;
 import org.junit.jupiter.api.Disabled;
 import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.di.ApplicationContext;
-import org.qubership.itool.di.CliModule;
+import org.qubership.itool.di.QubershipModule;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
@@ -75,7 +75,7 @@ class AbstractParseFileTaskTest {
     public static void setUp() {
         vertx = Vertx.vertx();
         config = new JsonObject();
-        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new CliModule(vertx)});
+        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
         flowContext = appContext.getInstance(FlowContext.class);
         flowContext.initialize(vertx, config);
     }

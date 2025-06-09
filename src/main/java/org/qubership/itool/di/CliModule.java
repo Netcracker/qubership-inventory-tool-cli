@@ -1,5 +1,6 @@
 package org.qubership.itool.di;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import io.vertx.core.Vertx;
@@ -13,20 +14,7 @@ import org.qubership.itool.modules.processor.GraphMergerFactory;
  * CLI-specific module that extends the base module with CLI-specific bindings.
  * Can be extended or overridden by extension applications.
  */
-public class CliModule extends QubershipModule {
-    
-    private final Vertx vertx;
-    
-    public CliModule(Vertx vertx) {
-        this.vertx = vertx;
-    }
-
-    @Override
-    protected void configure() {
-        super.configure();
-        // Bind Vertx instance
-        bind(Vertx.class).toInstance(vertx);
-    }
+public class CliModule extends AbstractModule {
 
     /**
      * Default FlowContext with CLI-specific implementation.
@@ -36,5 +24,4 @@ public class CliModule extends QubershipModule {
     protected FlowContext provideFlowContext(GraphFactory graphFactory, GraphReportFactory graphReportFactory, GraphMergerFactory graphMergerFactory) {
         return new FlowContextImpl(graphFactory, graphReportFactory, graphMergerFactory);
     }
-
 } 

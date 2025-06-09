@@ -28,7 +28,7 @@ import com.google.inject.Module;
 
 import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.di.ApplicationContext;
-import org.qubership.itool.di.CliModule;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.factories.JavaAppContextVerticleFactory;
 
 import io.vertx.core.*;
@@ -48,7 +48,7 @@ public class TestApplicationContextService {
     Vertx vertx = Vertx.vertx();
     
     JsonObject config = new JsonObject();
-    ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new CliModule(vertx)});
+    ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
 
     FlowContext flowContext = appContext.getInstance(FlowContext.class);
     flowContext.initialize(vertx, config);

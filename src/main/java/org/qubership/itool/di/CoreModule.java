@@ -20,30 +20,26 @@ import org.qubership.itool.modules.graph.GraphFactory;
  * This module can be extended or overridden by users of the library.
  */
 public class CoreModule extends AbstractModule {
+
+    private final Vertx vertx;
     
+    public CoreModule(Vertx vertx) {
+        this.vertx = vertx;
+    }
+
     @Override
     protected void configure() {
-        // Bind core services as singletons
-        /* bind(GraphService.class).to(GraphServiceImpl.class).in(Singleton.class); */
-        bind(MergerApi.class).to(GraphMerger.class).in(Singleton.class);
-        
-        // Bind managers
-      /*   bind(GraphManager.class).in(Singleton.class); */
-        
-        // Bind factories
+        // Bind core factories
         bind(GraphFactory.class).to(DefaultGraphFactory.class).in(Singleton.class);
         bind(GraphReportFactory.class).to(DefaultGraphReportFactory.class).in(Singleton.class);
-        
-        // GraphFetcher is abstract and must be provided by the user
-        /* requireBinding(GraphFetcher.class); */
     }
 
     /**
-     * Default GraphMerger implementation.
+     * Provides the Vertx instance for the application.
      */
     @Provides
     @Singleton
-    protected GraphMergerFactory provideGraphMergerFactory(Vertx vertx, GraphFactory graphFactory) {
-        return new DefaultGraphMergerFactory(vertx, graphFactory);
+    public Vertx provideVertx() {
+        return vertx;
     }
 } 
