@@ -24,9 +24,11 @@ import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import com.google.inject.Module;
 
 import org.qubership.itool.context.FlowContext;
-import org.qubership.itool.context.FlowContextImpl;
+import org.qubership.itool.di.ApplicationContext;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.factories.JavaAppContextVerticleFactory;
 
 import io.vertx.core.*;
@@ -44,24 +46,26 @@ public class TestApplicationContextService {
   public void testDependencyInjection() throws Throwable {
     VertxTestContext testContext = new VertxTestContext();
     Vertx vertx = Vertx.vertx();
-
+    
     JsonObject config = new JsonObject();
-    FlowContext appContext = new FlowContextImpl();
-    appContext.initialize(vertx, config);
+    ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
 
-    vertx.registerVerticleFactory(new JavaAppContextVerticleFactory(appContext, config));
+    FlowContext flowContext = appContext.getInstance(FlowContext.class);
+    flowContext.initialize(vertx, config);
+
+    vertx.registerVerticleFactory(new JavaAppContextVerticleFactory(flowContext, config));
     DeploymentOptions options = new DeploymentOptions().setWorker(true);
 
     TestResourceVerticle verticle = new TestResourceVerticle();
-    appContext.initialize(verticle);
+    flowContext.initialize(verticle);
     vertx.deployVerticle(verticle, options, deployHandler -> {
       if (deployHandler.succeeded()) {
         System.out.println("TRY SEND message to the test address (1)");
         vertx.setTimer(2000, id -> {
           System.out.println("TRY SEND message to the test address (2)");
-          vertx.eventBus().request("test", null, teplyHandler -> {
-            if (teplyHandler.succeeded()) {
-              Object response = teplyHandler.result().body();
+          vertx.eventBus().request("test", null, replyHandler -> {
+            if (replyHandler.succeeded()) {
+              Object response = replyHandler.result().body();
               System.out.println("!!!!!! Received reply: " + response);
               if (response instanceof String && ((String) response).length() > 20) {
                 testContext.completeNow();
@@ -69,7 +73,7 @@ public class TestApplicationContextService {
                 testContext.failNow(new IllegalStateException("" + response));
               }
             } else {
-              testContext.failNow(teplyHandler.cause());
+              testContext.failNow(replyHandler.cause());
             }
           });
         });

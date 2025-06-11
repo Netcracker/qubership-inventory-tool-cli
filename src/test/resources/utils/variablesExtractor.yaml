@@ -1,0 +1,45 @@
+{{ if .Values.HPA_ENABLED }}
+---
+  {{- if or (and (eq .Values.PAAS_PLATFORM "KUBERNETES") (ne (semver .Values.PAAS_VERSION | (semver "1.25").Compare) 1)) (and (eq .Values.PAAS_PLATFORM "OPENSHIFT") (ne (semver .Values.PAAS_VERSION | (semver "4.10").Compare) 1)) }} # k8s older than 1.25 or os older than 4.10 (both included)
+apiVersion: autoscaling/v2
+  {{ else }}
+apiVersion: autoscaling/v2beta2
+  {{ end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  testValue: '{{ .Values.TEST_VARIABLE1 }} {{.Values.TEST_VARIABLE2}}'
+  name: '{{ coalesce .Values.DEPLOYMENT_RESOURCE_NAME .Values.SERVICE_NAME }}'
+spec:
+  scaleTargetRef:
+  {{- if eq .Values.PAAS_PLATFORM "KUBERNETES" }}
+  apiVersion: apps/v1
+  kind: Deployment
+  {{ else if eq .Values.PAAS_PLATFORM "OPENSHIFT" }}
+  apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  {{ end }}
+  name: '{{ coalesce .Values.DEPLOYMENT_RESOURCE_NAME .Values.SERVICE_NAME }}'
+  minReplicas: {{ .Values.HPA_MIN_REPLICAS  }}
+  maxReplicas: {{ .Values.HPA_MAX_REPLICAS  }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.HPA_AVG_CPU_UTILIZATION  }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.HPA_SCALING_UP_INTERVAL  }}
+      policies:
+        - type: Percent
+          value: 95
+          periodSeconds: {{ .Values.HPA_SCALING_UP_INTERVAL  }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.HPA_SCALING_DOWN_INTERVAL  }}
+      policies:
+        - type: Percent
+          value: 25
+          periodSeconds: {{ .Values.HPA_SCALING_DOWN_INTERVAL  }}
+
+  {{ end }}

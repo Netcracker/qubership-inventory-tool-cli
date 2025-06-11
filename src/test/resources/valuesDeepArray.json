@@ -1,0 +1,198 @@
+{
+  "id" : "DeepArray",
+  "type" : "file",
+  "path" : "censored/templates/Deployment.yaml",
+  "fileLink" : "https://git.url.com/-/blob/not-a-main/censored/templates/Deployment.yaml",
+  "name" : "Deployment.yaml",
+  "content" : "...",
+  "deep" : {
+    "a" : {
+      "b" : {
+        "c" : "abc"
+      }
+    }
+  },
+  "structured" : [ {
+    "kind" : "Deployment",
+    "apiVersion" : "apps/v1",
+    "metadata" : {
+      "name" : "{{ coalesce .Values.SOME_VALUE .Values.SOME_OTHER_VALUE }}",
+      "labels" : {
+        "name" : "{{ coalesce .Values.SOME_VALUE .Values.SOME_other_VALUE }}",
+        "app.kubernetes.io/label1" : "{{ .Values.SOME_VALUE }}",
+        "app.kubernetes.io/label2" : "{{ .Values.SOME_VALUE }}",
+        "app.kubernetes.io/label3" : "censored",
+        "app.kubernetes.io/label4" : "{{ .Values.SOME_VALUE }}",
+        "app.kubernetes.io/label5" : "censored",
+        "app.kubernetes.io/label6" : "{{ cat .Values.SOME_VALUE .Values.DELIMITER .Values.NAMESPACE | nospace | trunc 63 }}"
+      }
+    },
+    "spec" : {
+      "selector" : {
+        "matchLabels" : {
+          "name" : "{{ coalesce .Values.SOME_VALUE .Values.SOME_OTHER_VALUE }}"
+        }
+      },
+      "replicas" : "{{ .Values.SOME_VALUE }}",
+      "strategy" : {
+        "type" : "RollingUpdate",
+        "rollingUpdate" : {
+          "maxSurge" : "25%",
+          "maxUnavailable" : "25%"
+        }
+      },
+      "template" : {
+        "metadata" : {
+          "labels" : {
+            "name" : "{{ coalesce .Values.SOME_VALUE .Values.SOME_OTHER_VALUE }}",
+            "app.kubernetes.io/label1" : "{{ .Values.SOME_VALUE }}",
+            "app.kubernetes.io/label2" : "{{ .Values.SOME_VALUE }}",
+            "app.kubernetes.io/label3" : "censored",
+            "app.kubernetes.io/label4" : "{{ .Values.SOME_VALUE }}",
+            "app.kubernetes.io/label5" : "censored"
+          }
+        },
+        "spec" : {
+          "volumes" : [ {
+            "name" : "censored",
+            "secret" : {
+              "secretName" : "{{ .Values.SOME_VALUE }}-censored-censored"
+            }
+          }, {
+            "name" : "{{ .Values.SOME_VALUE }}",
+            "secret" : {
+              "secretName" : "{{ .Values.SOME_VALUE }}"
+            }
+          } ],
+          "containers" : [ {
+            "name" : "{{ .Values.SOME_VALUE }}",
+            "image" : "{{ .Values.SOME_VALUE }}:{{ .Values.SOME_VALUE }}",
+            "imagePullPolicy" : "Always",
+            "volumeMounts" : [ {
+              "name" : "censored-censored",
+              "mountPath" : "{{ .Values.SOME_VALUE }}",
+              "readOnly" : true
+            }, {
+              "name" : "{{ .Values.SOME_VALUE }}",
+              "mountPath" : "/tmp/'{{ .Values.SOME_VALUE }}'"
+            } ],
+            "args" : [ "/usr/bin/java", "{{ .Values.SOME_VALUE }}", "-Djava.security.egd=file:/dev/./urandom", "--add-opens java.base/java.lang=ALL-UNNAMED", "--add-opens java.base/java.util=ALL-UNNAMED", "-jar", "/app/quarkus.jar" ],
+            "ports" : [ {
+              "name" : "web",
+              "containerPort" : 8080,
+              "protocol" : "TCP"
+            } ],
+            "env" : [ {
+              "name" : "CERTIFICATE_BUNDLE_'{{ .Values.SOME_VALUE }}_MD5SUM'",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored1",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored2",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored3",
+              "value" : "{{ coalesce .Values.SOME_VALUE .Values.SOME_OTHER_VALUE }}"
+            }, {
+              "name" : "censored4",
+              "valueFrom" : {
+                "fieldRef" : {
+                  "fieldPath" : "censored.censored"
+                }
+              }
+            }, {
+              "name" : "censored5",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored6",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored7",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored8",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored9",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored10",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored11",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored12",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored13",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored14",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored15",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored16",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored17",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            }, {
+              "name" : "censored18",
+              "value" : "{{ .Values.SOME_VALUE }}"
+            } ],
+            "resources" : {
+              "requests" : {
+                "cpu" : "{{ .Values.SOME_VALUE }}",
+                "memory" : "{{ .Values.SOME_VALUE }}"
+              },
+              "limits" : {
+                "memory" : "{{ .Values.SOME_VALUE }}",
+                "cpu" : "{{ .Values.SOME_VALUE }}"
+              }
+            },
+            "livenessProbe" : {
+              "httpGet" : {
+                "path" : "/health/live",
+                "port" : "web",
+                "scheme" : "HTTP"
+              },
+              "initialDelaySeconds" : 180,
+              "timeoutSeconds" : 30
+            },
+            "readinessProbe" : {
+              "httpGet" : {
+                "path" : "/health/ready",
+                "port" : "web",
+                "scheme" : "HTTP"
+              },
+              "initialDelaySeconds" : 10,
+              "timeoutSeconds" : 30
+            }
+          } ],
+          "affinity" : {
+            "podAntiAffinity" : {
+              "preferredDuringSchedulingIgnoredDuringExecution" : [ {
+                "weight" : 100,
+                "podAffinityTerm" : {
+                  "labelSelector" : {
+                    "matchExpressions" : [ {
+                      "key" : "name",
+                      "operator" : "In",
+                      "values" : [ "{{ coalesce .Values.SOME_VALUE .Values.SOME_OTHER_VALUE }}" ]
+                    } ]
+                  },
+                  "topologyKey" : "kubernetes.io/label1"
+                }
+              } ]
+            }
+          }
+        }
+      },
+      "revisionHistoryLimit" : 3
+    }
+  } ]
+}

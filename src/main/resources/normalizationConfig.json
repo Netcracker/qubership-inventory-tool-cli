@@ -1,0 +1,32 @@
+{
+  "Angular" : "^(?:Angular|\\@angular/\\w+)(?:\\s+(.+))?$",
+  "SpringBoot" : "",
+  "Quarkus" : "",
+  "Spring" : "",
+  "Flask" : "",
+  "Vertx" : "",
+
+  "Java" : "",
+  "GoLang" : "^(?:go|Go|GoLang)(?:\\s+(.+))?$",
+  "TypeScript" : "",
+  "PostgreSQL" : "",
+  "C++" : "",
+  "C#" : "",
+  "C" : "",
+  "Rust" : "",
+  "Groovy" : "",
+  "HTML" : "",
+  "JavaScript" : "",
+  "Lua" : "",
+  "Shell" : "",
+  "Python": "",
+
+  "Cassandra" : "",
+  "Kafka" : "",
+  "Redis" : "",
+  "RabbitMQ" : "",
+  "Elasticsearch" : "^(?:Elasticsearch|opendistro[-\\s]elasticsearch)(?:\\s+(.+))?$",
+  "OpenSearch" : "",
+  "Vuetify" : "",
+  "ZooKeeper": ""
+}

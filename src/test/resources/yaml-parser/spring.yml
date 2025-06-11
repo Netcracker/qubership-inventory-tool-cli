@@ -1,0 +1,12 @@
+policy.update.enabled: false
+quarkus:
+  log:
+    category:
+      "org.qubership.cloud.module.package.interceptor.InterceptingInterceptor":
+        level: debug
+      "org.qubership.cloud":
+        level: warn
+      "cloud":
+        level: error
+      "org.qubership.cloud.module":
+        level: info

@@ -47,8 +47,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+import org.qubership.itool.utils.FutureUtils;
 
 /**
  * Run maven and collect dependency tree to "output/dependencies/${component.id}_dependency.txt"
@@ -59,18 +61,19 @@ public class MavenDependencyDumpExtractVerticle extends AbstractAggregationTaskV
     public static final String DEFAULT_PATH = "output/dependencies";
     private final XPathFactory xPathfactory = XPathFactory.newInstance();
     private final XPath xpath = xPathfactory.newXPath();
-
-    @Override
+    // Have to be global to avoid closing by GC
+    private WorkerExecutor executor;
+    
+    @Override   
     protected String[] features() {
         return new String[] { "mavenDependency" };
     }
-
-    @SuppressWarnings("rawtypes")
+    
     @Override
     protected void taskStart(Promise<?> taskPromise) {
         int coresCount = CpuCoreSensor.availableProcessors();
         LOG.debug("Detected {} CPU cores, using all of them", coresCount);
-        WorkerExecutor executor = vertx.createSharedWorkerExecutor("maven-dependency-extraction-worker-pool"
+        executor = vertx.createSharedWorkerExecutor("maven-dependency-extraction-worker-pool"
                 , coresCount
                 , 60
                 , TimeUnit.MINUTES);
@@ -88,17 +91,15 @@ public class MavenDependencyDumpExtractVerticle extends AbstractAggregationTaskV
         }
         String pomPath = component.getString("directoryPath");
         LOG.debug("{}: Scheduling blocking execute of maven dependencies collection, root pom path {}", component.getString("name"), pomPath);
-        Future blockingFuture = Future.future(promise -> executor.executeBlocking(processDependencies(component), false, promise));
+        Future blockingFuture = executor.executeBlocking(() -> processDependencies(component), false);
         return Collections.singletonList(blockingFuture);
     }
 
-    private Handler<Promise<Object>> processDependencies(JsonObject component) {
-        return p -> {
-            long executionStart = System.nanoTime();
-            createMavenDump(component);
-            LOG.debug("{}: Dependency retrieval finished in {}", component.getString(Graph.F_ID), Duration.ofNanos(System.nanoTime() - executionStart).toString());
-            p.complete();
-        };
+    private Callable<Void> processDependencies(JsonObject component) {
+        long executionStart = System.nanoTime();
+        createMavenDump(component);
+        LOG.debug("{}: Dependency retrieval finished in {}", component.getString(Graph.F_ID), Duration.ofNanos(System.nanoTime() - executionStart).toString());
+        return null;
     }
 
     private void createMavenDump(JsonObject component) {

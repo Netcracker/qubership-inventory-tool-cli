@@ -17,6 +17,8 @@
 package org.qubership.itool.tasks.parsing;
 
 import org.qubership.itool.tasks.FlowTask;
+import org.qubership.itool.utils.FutureUtils;
+
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;
@@ -46,21 +48,23 @@ public abstract class AbstractInclusiveParseFileTask extends FlowTask {
 
     protected static final String LINE_BREAK_REGEX = "[\\n\\r]{1,2}";
     protected static final Pattern LINE_BREAK_PATTERN = Pattern.compile(LINE_BREAK_REGEX);
+    // Have to be global to avoid closing by GC
+    private WorkerExecutor executor;
 
     @Override
     protected void taskStart(Promise<?> taskPromise) throws Exception {
         Integer coresCount = CpuCoreSensor.availableProcessors();
-        WorkerExecutor executor = vertx.createSharedWorkerExecutor("parsing-worker-pool"
+        executor = vertx.createSharedWorkerExecutor("parsing-worker-pool"
                 , coresCount
                 , 10
                 , TimeUnit.MINUTES);
 
-        vertx.executeBlocking(promise -> {
-                    List<Future> futureList = parseFiles(executor, getFilePatterns());
-                    joinFuturesAndHandleResult(futureList)
-                            .onComplete(ar -> promise.complete());
-                })
-                .onComplete(res -> taskCompleted(taskPromise));
+        List<Future> futures = parseFiles(executor, getFilePatterns());
+        joinFuturesAndHandleResult(futures)
+                .onComplete(res -> {
+                    // We are not closing executor here, because it is used in several tasks
+                    taskCompleted(taskPromise);
+                });
     }
 
 
@@ -111,7 +115,7 @@ public abstract class AbstractInclusiveParseFileTask extends FlowTask {
             getLogger().debug("Queue the parsing of files for {} component", component.getString("id"));
 
             // Async parallel executions: one Future task per component. Scan files, then read needed ones.
-            Future future = executor.executeBlocking(promise -> {
+            Future future = executor.executeBlocking(() -> {
                 long startTime = System.nanoTime();
                 List<String> pathList = findAllFiles(component, simplePatterns, shallowPatterns, deepPatterns);
                 for (String fileName: pathList) {
@@ -127,7 +131,7 @@ public abstract class AbstractInclusiveParseFileTask extends FlowTask {
                 long processingTime = endTime - startTime;
                 getLogger().debug("Processing time for component " + component.getValue("id") + ": " + Duration.ofNanos(processingTime));
 
-                promise.complete();
+                return null;
             }, false);
             futures.add(future);
         }
