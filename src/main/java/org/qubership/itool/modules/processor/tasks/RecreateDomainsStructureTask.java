@@ -20,10 +20,10 @@ import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDataConstants;
 import org.qubership.itool.modules.processor.InvalidGraphException;
 import org.qubership.itool.modules.report.GraphReport;
-import org.qubership.itool.modules.report.GraphReportImpl;
 import org.qubership.itool.utils.JsonUtils;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import jakarta.inject.Provider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +36,15 @@ import static org.qubership.itool.modules.graph.Graph.F_ID;
 
 public class RecreateDomainsStructureTask implements GraphProcessorTask {
 
+    private GraphReport graphReport;
+
+    public RecreateDomainsStructureTask(Provider<GraphReport> graphReportProvider){
+        this.graphReport = graphReportProvider.get();
+    }
+
     static final Logger LOG = LoggerFactory.getLogger(RecreateDomainsStructureTask.class);
 
     private static final String DOMAIN_RESOURCE_PATH = "classpath:/domains.json";
-
-    GraphReport graphReport = new GraphReportImpl();
 
     public void process(Graph graph) throws InvalidGraphException {
         Map<String, JsonObject> domainsDataFromReference = readJsonResource(DOMAIN_RESOURCE_PATH);

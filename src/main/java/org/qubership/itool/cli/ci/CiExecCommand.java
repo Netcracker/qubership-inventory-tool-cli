@@ -76,7 +76,6 @@ public class CiExecCommand extends ExecCommand {
         getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
         getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        getLogger().info("core version: {}", buildProperties.get("inventory-tool-core.version"));
         getLogger().info("profile: {}", properties.get(PROFILE_POINTER));
         logAndFillDirs();
         getLogger().info("outputFile: {}", properties.get(P_OUTPUT_FILE));

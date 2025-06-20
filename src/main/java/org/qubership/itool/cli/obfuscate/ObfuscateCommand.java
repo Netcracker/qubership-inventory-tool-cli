@@ -68,7 +68,6 @@ public class ObfuscateCommand extends ExecCommand {
         getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
         getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        getLogger().info("core version: {}", buildProperties.get("inventory-tool-core.version"));
         getLogger().info("profile: {}", properties.get(PROFILE_POINTER));
         getLogger().info("inputDirectory: {}", properties.get(P_INPUT_DIRECTORY));
         getLogger().info("inputFile: {}", properties.get(P_INPUT_FILE));

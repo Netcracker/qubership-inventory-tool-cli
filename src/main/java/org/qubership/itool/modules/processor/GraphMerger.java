@@ -18,7 +18,6 @@ package org.qubership.itool.modules.processor;
 
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
-import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.modules.processor.matchers.CompoundVertexMatcher;
 import org.qubership.itool.modules.processor.matchers.FileMatcher;
 import org.qubership.itool.modules.processor.matchers.MatcherById;
@@ -36,7 +35,6 @@ import org.qubership.itool.modules.processor.tasks.PatchVertexDnsNamesNormalizat
 import org.qubership.itool.modules.processor.tasks.RecreateDomainsStructureTask;
 import org.qubership.itool.modules.processor.tasks.RecreateHttpDependenciesTask;
 import org.qubership.itool.modules.report.GraphReport;
-import org.qubership.itool.modules.report.GraphReportImpl;
 import org.qubership.itool.utils.FutureUtils;
 
 import io.vertx.core.Future;
@@ -60,6 +58,9 @@ import static org.qubership.itool.modules.graph.Graph.CURRENT_GRAPH_MODEL_VERSIO
 import static org.qubership.itool.modules.graph.Graph.F_ID;
 import static org.qubership.itool.utils.JsonUtils.readJsonFile;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+
 /**
  * <p>Merges graphs.
  *
@@ -77,7 +78,7 @@ import static org.qubership.itool.utils.JsonUtils.readJsonFile;
  *   "name" : $appName, "version" : $appVersion }
  * </pre>
  */
-public class GraphMerger implements MergerApi, Closeable {
+public class GraphMerger implements MergerApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphMerger.class);
 
@@ -88,17 +89,13 @@ public class GraphMerger implements MergerApi, Closeable {
 
     private boolean useDeepCopy;
 
-    /** Use this constructor <b>only</b> if there is no {@link Vertx} instance available */
-    public GraphMerger() {
-        this(null, false);
-    }
+    private final Provider<Graph> graphProvider;
+    private final Provider<GraphReport> graphReportProvider;
+    
 
-    public GraphMerger(Vertx vertx) {
-        this(vertx, false);
-    }
-
-    public GraphMerger(Vertx vertx, boolean failFast) {
-        this.failFast = failFast;
+    @Inject
+    public GraphMerger(Vertx vertx, Provider<Graph> graphProvider, Provider<GraphReport> graphReportProvider) {
+        this.failFast = false;
         if (vertx == null) {
             this.vertx = Vertx.vertx();
             ownVertx = true;
@@ -106,10 +103,12 @@ public class GraphMerger implements MergerApi, Closeable {
             this.vertx = vertx;
             ownVertx = false;
         }
+        this.graphProvider = graphProvider;
+        this.graphReportProvider = graphReportProvider;
     }
 
     @Override
-    public synchronized void close() {
+    public synchronized void close() throws IOException {
         if (ownVertx && vertx != null) {
             vertx.close();
         }
@@ -130,8 +129,7 @@ public class GraphMerger implements MergerApi, Closeable {
     @Override
     public JsonObject mergeComponentDumps(Path sourceDirectory, JsonObject targetDesc)
             throws IOException, InvalidGraphException {
-        Graph graph = new GraphImpl();
-        graph.setReport(new GraphReportImpl());
+        Graph graph = graphProvider.get();
 
         prepareGraphForMerging(graph, targetDesc);
         walkAndMerge(sourceDirectory, graph, targetDesc);
@@ -143,8 +141,7 @@ public class GraphMerger implements MergerApi, Closeable {
     @Override
     public JsonObject mergeDumps(List<DumpAndMetainfo> sourceDumps, JsonObject targetDesc)
             throws InvalidGraphException {
-        Graph graph = new GraphImpl();
-        graph.setReport(new GraphReportImpl());
+        Graph graph = graphProvider.get();
 
         prepareGraphForMerging(graph, targetDesc);
         for (DumpAndMetainfo source: sourceDumps) {
@@ -163,18 +160,19 @@ public class GraphMerger implements MergerApi, Closeable {
 
     //======================================================
     // Advanced API: Customizable lifecycle
-
+    @Override
     public void prepareGraphForMerging(Graph targetGraph, JsonObject targetDesc) {
         GraphMetaInfoSupport.initMetaInfoFromDesc(targetGraph, targetDesc);
     }
 
+    @Override
     public void finalizeGraphAfterMerging(Graph targetGraph, JsonObject targetDesc) {
         Future<Void> theJob = Future.<Void>succeededFuture()
                 .compose(new CreateAppVertexTask(targetDesc).thenProcessAsync(vertx, targetGraph))
                 .compose(new RecreateHttpDependenciesTask().thenProcessAsync(vertx, targetGraph))
                 .compose(new CreateTransitiveQueueDependenciesTask().thenProcessAsync(vertx, targetGraph))
                 .compose(new CreateTransitiveHttpDependenciesTask().thenProcessAsync(vertx, targetGraph))
-                .compose(new RecreateDomainsStructureTask().thenProcessAsync(vertx, targetGraph))
+                .compose(new RecreateDomainsStructureTask(graphReportProvider).thenProcessAsync(vertx, targetGraph))
                 ;
         FutureUtils.blockForResultOrException(theJob);
 
@@ -190,6 +188,7 @@ public class GraphMerger implements MergerApi, Closeable {
      *
      * @throws IOException If IO error happened, and throwErrors is true
      */
+    @Override
     public void walkAndMerge(Path inputDirectory, Graph targetGraph, JsonObject targetDesc) throws IOException
     {
         getLogger().info("Merging everything from directory {}", inputDirectory);
@@ -232,12 +231,14 @@ public class GraphMerger implements MergerApi, Closeable {
      * @param targetGraph Merging target
      * @param targetDesc Target descriptor
      */
+    @Override
     public void mergeDump(JsonObject dump, JsonObject sourceDesc,
             Graph targetGraph, JsonObject targetDesc)
     {
-        Graph sourceGraph;
+        Graph sourceGraph = graphProvider.get();
         try {
-            sourceGraph = Objects.requireNonNull( GraphDumpSupport.restoreFromJson(dump) );
+            GraphDumpSupport.restoreFromJson(sourceGraph, dump);
+            Objects.requireNonNull(sourceGraph); 
         } catch (NullPointerException e) {  // Something crucial was missing
             excHappenned(e, InvalidGraphException.descToName(sourceDesc), sourceDesc, targetGraph);
             return;
@@ -257,6 +258,7 @@ public class GraphMerger implements MergerApi, Closeable {
      * @param deepCopy Set it to {@code true} if either {@code sourceGraph} or {@code targetGraph}
      * may be modified while another one is still used.
      */
+    @Override
     public void mergeGraph(Graph sourceGraph, JsonObject sourceDesc,
             Graph targetGraph, JsonObject targetDesc, boolean deepCopy)
     {

@@ -22,7 +22,6 @@ import org.junit.jupiter.api.*;
 import org.qubership.itool.modules.graph.FalloutDto;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
-import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.modules.gremlin2.graph.__;
 import org.qubership.itool.modules.processor.tasks.CreateAppVertexTask;
 import org.qubership.itool.modules.report.GraphReport;
@@ -32,6 +31,7 @@ import org.qubership.itool.utils.JsonUtils;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.pointer.JsonPointer;
+import jakarta.inject.Provider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,9 +56,30 @@ import static org.qubership.itool.modules.processor.MergerApi.P_IS_APPLICATION;
 import static org.qubership.itool.modules.processor.MergerApi.P_IS_NAMESPACE;
 import static org.qubership.itool.modules.processor.MergerApi.P_NAMESPACE_NAME;
 
+import io.vertx.core.Vertx;
+import org.qubership.itool.modules.graph.GraphImpl;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestGraphMerger {
+
+    private Vertx vertx;
+    private Provider<Graph> graphProvider;
+    private Provider<GraphReport> graphReportProvider;
+    private Provider<MergerApi> graphMergerProvider;
+
+    
+    @BeforeAll
+    public void setup() {
+        vertx = Vertx.vertx();
+        graphReportProvider = () -> new GraphReportImpl();
+        graphProvider = () -> new GraphImpl();
+        graphMergerProvider = () -> new GraphMerger(vertx, graphProvider, graphReportProvider);
+    }
+
+    @AfterAll
+    public void cleanup() {
+        vertx.close();
+    }
 
     @Disabled
     @Test
@@ -200,7 +221,7 @@ public class TestGraphMerger {
         targetDesc.put(P_APP_NAME, "AppName");
         targetDesc.put(P_APP_VERSION, "AppVersion");
 
-        try (GraphMerger merger = new GraphMerger()) {
+        try (MergerApi merger = graphMergerProvider.get()) {
             merger.prepareGraphForMerging(graph, targetDesc);
 
             merger.mergeGraph(graph1, desc1, graph, targetDesc, false);
@@ -625,7 +646,7 @@ public class TestGraphMerger {
         graph.setReport(report);
         JsonObject targetDesc = new JsonObject();
 
-        try (GraphMerger merger = new GraphMerger()) {
+        try (MergerApi merger = graphMergerProvider.get()) {
             merger.prepareGraphForMerging(graph, targetDesc);
 
             merger.mergeGraph(graph1, desc1, graph, targetDesc, false);
@@ -862,15 +883,13 @@ public class TestGraphMerger {
         GraphReport report = new GraphReportImpl();
         graph.setReport(report);
 
-        GraphMerger merger = new GraphMerger();
-        merger.prepareGraphForMerging(graph, targetDesc);
+        try (MergerApi merger = graphMergerProvider.get()) {
+            merger.prepareGraphForMerging(graph, targetDesc);
+            merger.mergeGraph(graph1, desc1, graph, targetDesc,false);
+            merger.mergeGraph(graph2, desc2, graph, targetDesc,false);
+            merger.finalizeGraphAfterMerging(graph, targetDesc);
+        }
 
-        merger.mergeGraph(graph1, desc1, graph, targetDesc, false);
-        merger.mergeGraph(graph2, desc2, graph, targetDesc, false);
-
-        merger.finalizeGraphAfterMerging(graph, targetDesc);
-
-        merger.close();
         return graph;
     }
 
@@ -880,7 +899,7 @@ public class TestGraphMerger {
         GraphReport report = new GraphReportImpl();
         graph.setReport(report);
 
-        try (GraphMerger merger = new GraphMerger()) {
+        try (MergerApi merger = graphMergerProvider.get()) {
             merger.prepareGraphForMerging(graph, targetDesc);
 
             merger.mergeGraph(graph1, desc1, graph, targetDesc, false);
@@ -907,6 +926,8 @@ public class TestGraphMerger {
     protected Graph loadGraphResource(String location) throws Exception {
         JsonObject dumpFile = JsonUtils.readJsonResource(getClass(), location);
         assertNotNull(dumpFile, "Dump file " + location + " must be non-null");
-        return GraphDumpSupport.restoreFromJson(dumpFile);
+        Graph graph = graphProvider.get();
+        GraphDumpSupport.restoreFromJson(graph, dumpFile);
+        return graph;
     }
 }

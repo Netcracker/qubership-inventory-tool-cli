@@ -19,8 +19,6 @@ package org.qubership.itool.modules.report;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.*;
-import org.qubership.itool.modules.report.GraphReport;
-import org.qubership.itool.modules.report.GraphReportImpl;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestReportHelper {

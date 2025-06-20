@@ -16,7 +16,13 @@
 
 package org.qubership.itool.cli;
 
-import io.vertx.core.*;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
+
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.cli.annotations.Description;
 import io.vertx.core.cli.annotations.Option;
 import io.vertx.core.impl.launcher.commands.ClasspathHandler;
@@ -32,7 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.qubership.itool.cli.config.ConfigProvider;
-import org.qubership.itool.context.FlowContextImpl;
+import org.qubership.itool.context.FlowContext;
+import org.qubership.itool.di.ApplicationContext;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.factories.JavaAppContextVerticleFactory;
 
 import static org.qubership.itool.utils.ConfigProperties.CONFIG_PATH_POINTER;
@@ -60,12 +68,18 @@ public abstract class AbstractCommand extends ClasspathHandler {
     public void runFlow(FlowMainVerticle main, GraphService graphService) {
         Vertx vertx = Vertx.vertx();
         vertx.exceptionHandler(err -> {
-            LOGGER.error("Critical error, application is stopping", err);
+            getLogger().error("Critical error, application is stopping", err);
             System.exit(1);
         });
 
         runFlow(vertx, main, graphService)
-            .onComplete(ar -> System.exit(0));
+            .onComplete(ar -> {
+                if (ar.failed()) {
+                    getLogger().error("Flow execution failed", ar.cause());
+                    System.exit(1);
+                }
+                System.exit(0);
+            });
     }
 
     protected Future<?> runFlow(Vertx vertx, FlowMainVerticle main, GraphService graphService) {
@@ -77,7 +91,11 @@ public abstract class AbstractCommand extends ClasspathHandler {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void configLoaded(Vertx vertx, FlowMainVerticle main, GraphService graphService, JsonObject config, Promise promise) {
         try {
-            FlowContextImpl flowContext = new FlowContextImpl(graphService);
+            // Create application context with the loaded config and custom modules
+            ApplicationContext context = new ApplicationContext(vertx, config, createModules(vertx));
+            
+            // Get flow context from the application context
+            FlowContext flowContext = context.getInstance(FlowContext.class);
 
             // XXX Still needs reviewing for real multi-flow design
             Optional<VerticleFactory> factory = vertx.verticleFactories()
@@ -103,6 +121,31 @@ public abstract class AbstractCommand extends ClasspathHandler {
         } catch (Throwable ex) {
             promise.fail(ex);
         }
+    }
+
+    /**
+     * Create the modules for dependency injection.
+     * 
+     * @param vertx The Vertx instance
+     * @return Array of modules to use for dependency injection
+     */
+    private Module[] createModules(Vertx vertx) {
+        Module overrideModule = createOverrideModule(vertx);
+        if (overrideModule != null) {
+            return new Module[] { Modules.override(new QubershipModule(vertx)).with(overrideModule) };
+        }
+        return new Module[] { new QubershipModule(vertx) };
+    }
+
+    /**
+     * Create the module for dependency injection.
+     * Override this method to add custom module for your application.
+     * 
+     * @param vertx The Vertx instance
+     * @return Module to use for dependency injection
+     */
+    protected Module createOverrideModule(Vertx vertx) {
+        return null;
     }
 
     protected void flowFinished(FlowMainVerticle main, AsyncResult<?> flowResult) {

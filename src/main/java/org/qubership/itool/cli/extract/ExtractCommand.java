@@ -65,7 +65,6 @@ public class ExtractCommand extends AbstractCommand {
         getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
         getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        getLogger().info("core version: {}", buildProperties.get("inventory-tool-core.version"));
         getLogger().info("inputFile: {}", properties.get(P_INPUT_FILE));
         getLogger().info("outputFile: {}", properties.get(P_OUTPUT_FILE));
 

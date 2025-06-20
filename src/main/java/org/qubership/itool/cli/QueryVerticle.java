@@ -17,6 +17,7 @@
 package org.qubership.itool.cli;
 
 import org.qubership.itool.cli.query.CliQuery;
+import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.tasks.FlowTask;
 
 import io.vertx.core.*;
@@ -39,11 +40,16 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
+
 import static org.qubership.itool.utils.ConfigProperties.*;
 
 public class QueryVerticle extends FlowMainVerticle {
     protected static final Logger LOG = LoggerFactory.getLogger(QueryVerticle.class);
 
+    @Resource
+    protected FlowContext flowContext;
+    
     protected Logger getLogger() {
         return LOG;
     }
@@ -85,7 +91,8 @@ public class QueryVerticle extends FlowMainVerticle {
                     p.fail("Dump is empty or not found for step " + step);
                 }
 
-                Graph graph = GraphDumpSupport.restoreFromJson(dump);
+                Graph graph = flowContext.getGraph();
+                GraphDumpSupport.restoreFromJson(graph, dump);
                 if (graph.getVertexCount() == 1) {
                     p.fail("Graph is empty for step " + step);
                     return;
@@ -120,12 +127,11 @@ public class QueryVerticle extends FlowMainVerticle {
                     p.fail("Empty data");
                 }
 
-                Graph graph;
+                Graph graph = flowContext.getProvider(Graph.class).get();
                 if (content.startsWith("[")) {
-                    graph = new GraphImpl();
                     loadFromJsonArray(file, graph, p, content);
                 } else {
-                    graph = GraphDumpSupport.restoreFromJson(new JsonObject(content));
+                    GraphDumpSupport.restoreFromJson(graph, new JsonObject(content));
                 }
                 content = null; // Help GC
 

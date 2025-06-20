@@ -19,7 +19,6 @@ package org.qubership.itool.tasks.dependency;
 import org.qubership.itool.tasks.AbstractAggregationTaskVerticle;
 
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
@@ -29,6 +28,7 @@ import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.utils.JsonUtils;
+import org.qubership.itool.utils.FutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +36,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -50,6 +51,8 @@ import static org.qubership.itool.modules.graph.Graph.F_ID;
  */
 public class MavenDependencyDumpParseVerticle extends AbstractAggregationTaskVerticle {
     protected Logger LOG = LoggerFactory.getLogger(MavenDependencyDumpParseVerticle.class);
+    // Have to be global to avoid closing by GC
+    private WorkerExecutor executor;
 
     public static final String COMPILE = "compile";
     public static final String PROVIDED = "provided";
@@ -81,7 +84,7 @@ public class MavenDependencyDumpParseVerticle extends AbstractAggregationTaskVer
     protected void taskStart(Promise<?> taskPromise) {
         Integer coresCount = CpuCoreSensor.availableProcessors();
         LOG.debug("Detected {} CPU cores, using all of them", coresCount);
-        WorkerExecutor executor = vertx.createSharedWorkerExecutor("maven-dependency-import-worker-pool"
+        executor = vertx.createSharedWorkerExecutor("maven-dependency-import-worker-pool"
                 , coresCount
                 , 60
                 , TimeUnit.SECONDS);
@@ -101,23 +104,21 @@ public class MavenDependencyDumpParseVerticle extends AbstractAggregationTaskVer
     @SuppressWarnings("rawtypes")
     private List<Future> processDependencyTree(JsonObject component, WorkerExecutor executor) {
         LOG.debug("{}: Scheduling blocking execution of maven dependencies import to the graph", component.getString(F_ID));
-        Future blockingFuture = Future.future(promise -> executor.executeBlocking(processDependencies(component), false, promise));
+        Future blockingFuture = executor.executeBlocking(() -> processDependencies(component), false);
         return Collections.singletonList(blockingFuture);
     }
 
-    private Handler<Promise<Object>> processDependencies(JsonObject component) {
-        return p -> {
-            long executionStart = System.currentTimeMillis();
-            File depTreeFile = Path.of(component.getString(F_DIRECTORY)).resolve("target").resolve("dependency_tree.json").toFile();
-            if (depTreeFile.exists()) {
-                parseDepTreeFromCi(component, depTreeFile);
-            } else {
-                parseDepFromMaven(component);
-            }
-            LOG.debug("{}: Dependency import finished in {}ms", component.getString(F_ID),
-                    System.currentTimeMillis() - executionStart);
-            p.complete();
-        };
+    private Callable<Void> processDependencies(JsonObject component) {
+        long executionStart = System.currentTimeMillis();
+        File depTreeFile = Path.of(component.getString(F_DIRECTORY)).resolve("target").resolve("dependency_tree.json").toFile();
+        if (depTreeFile.exists()) {
+            parseDepTreeFromCi(component, depTreeFile);
+        } else {
+            parseDepFromMaven(component);
+        }
+        LOG.debug("{}: Dependency import finished in {}ms", component.getString(F_ID),
+                System.currentTimeMillis() - executionStart);
+        return null;
     }
 
     //------------------------------------------------------
@@ -322,5 +323,4 @@ public class MavenDependencyDumpParseVerticle extends AbstractAggregationTaskVer
             .put("version", parts[3])
             .put("type", "library");
     }
-
 }

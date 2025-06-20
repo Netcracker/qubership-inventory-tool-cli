@@ -27,7 +27,7 @@ import io.vertx.core.Vertx;
 
 /**
  * Functionality similar to CLI flow tasks. Needed to perform some maintenance of graph integrity
- * for those who uses only {@link GraphMerger} from qubership-inventory-tool-core without flows from qubershipinventory-tool-cli.
+ * for those who uses only {@link GraphMerger} without CLI flows.
  */
 public interface GraphProcessorTask {
 

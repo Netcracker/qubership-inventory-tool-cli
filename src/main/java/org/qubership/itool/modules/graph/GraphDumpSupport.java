@@ -31,7 +31,7 @@ import io.vertx.core.json.pointer.JsonPointer;
  */
 public class GraphDumpSupport {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(GraphDumpSupport.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GraphDumpSupport.class);
 
     public static final int CURRENT_CONTAINER_MODEL_VERSION = 1;
 
@@ -45,7 +45,6 @@ public class GraphDumpSupport {
     /** No report found */
     public static final int NO_REPORT_MODEL_VERSION = -2;
     public static final int LEGACY_REPORT_MODEL_VERSION = -1;
-
 
     /** Dump graph and associated stuff (error report, fallout report, metainfo, etc...) into JSON.
      *
@@ -98,7 +97,6 @@ public class GraphDumpSupport {
      * @param dump Dump to restore from
      */
     public static void restoreFromJson(Graph target, JsonObject dump) {
-
         if (dump == null) {
             throw new NullPointerException("dump is null");
         }
@@ -115,7 +113,7 @@ public class GraphDumpSupport {
         if (rawReportDump != null) {
             GraphReport report = target.getReport();
             if (report == null) {
-                report = new GraphReportImpl();
+                report = new GraphReportImpl(); // TODO: We shouldn't get here, but need to do it properly through DI
                 target.setReport(report);
             }
 
@@ -144,11 +142,10 @@ public class GraphDumpSupport {
      *
      * @param dump Dump to restore Graph and Report from.
      * @return Graph model
+     * @deprecated Use {@link #restoreFromJson(Graph, JsonObject)} instead
      */
     public static Graph restoreFromJson(JsonObject dump) {
         Graph graph = new GraphImpl();
-        GraphReport report = new GraphReportImpl();
-        graph.setReport(report);
         restoreFromJson(graph, dump);
         return graph;
     }

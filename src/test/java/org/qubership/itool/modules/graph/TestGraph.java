@@ -18,8 +18,6 @@ package org.qubership.itool.modules.graph;
 
 import java.util.List;
 
-import org.qubership.itool.modules.graph.Graph;
-import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.modules.gremlin2.P;
 import org.junit.jupiter.api.*;
 import io.vertx.core.json.JsonObject;

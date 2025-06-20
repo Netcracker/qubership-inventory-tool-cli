@@ -16,13 +16,16 @@
 
 package org.qubership.itool.modules.processor;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.qubership.itool.modules.graph.Graph;
+
 import io.vertx.core.json.JsonObject;
 
-public interface MergerApi {
+public interface MergerApi extends Closeable {
 
     //------------------------------------------------------
     // Meta-info parameter keys
@@ -86,5 +89,59 @@ public interface MergerApi {
      */
     JsonObject mergeDumps(List<DumpAndMetainfo> sourceDumps, JsonObject targetDesc)
             throws InvalidGraphException;
+
+    /**
+     * Prepare graph for merging.
+     *
+     * @param targetGraph Target graph
+     * @param targetDesc Target description
+     */
+    void prepareGraphForMerging(Graph targetGraph, JsonObject targetDesc);
+
+    /**
+     * Finalize graph after merging.
+     *
+     * @param targetGraph Target graph
+     * @param targetDesc Target description
+     */
+    void finalizeGraphAfterMerging(Graph targetGraph, JsonObject targetDesc);
+
+    /**
+     * Merge multiple graphs residing in a directory (and its subdirectories). Merging order is system-dependent.
+     *
+     * @param inputDirectory Directory to scan
+     * @param targetGraph Target graph to merge all source dumps into
+     * @param targetDesc Target description and merging flags
+     *
+     * @throws IOException If IO error happened, and throwErrors is true
+     */
+    void walkAndMerge(Path inputDirectory, Graph targetGraph, JsonObject targetDesc) throws IOException;
+
+    /**
+     * Merge another dump file into target graph. The method is designed to
+     * be called several times in a row. Calling order matters, parallel
+     * merging not supported.
+     *
+     * <p><b>Always performs shallow copies and thus may alter source dump!</b>
+     *
+     * @param dump Source dump
+     * @param sourceDesc Source descriptor
+     * @param targetGraph Merging target
+     * @param targetDesc Target descriptor
+     */
+    void mergeDump(JsonObject dump, JsonObject sourceDesc, Graph targetGraph, JsonObject targetDesc);
+
+    /** Merge another {@link Graph} instance into target graph. The method is designed to
+     * be called several times in a row. Calling order matters, parallel
+     * merging not supported.
+     *
+     * @param sourceGraph Source graph
+     * @param sourceDesc Source descriptor
+     * @param targetGraph Merging target
+     * @param targetDesc Target descriptor
+     * @param deepCopy Set it to {@code true} if either {@code sourceGraph} or {@code targetGraph}
+     * may be modified while another one is still used.
+     */
+    void mergeGraph(Graph sourceGraph, JsonObject sourceDesc, Graph targetGraph, JsonObject targetDesc, boolean deepCopy);
 
 }

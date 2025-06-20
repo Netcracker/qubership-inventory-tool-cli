@@ -20,8 +20,9 @@ import com.google.common.cache.*;
 import org.qubership.itool.modules.artifactory.AppVersionDescriptor;
 import org.qubership.itool.modules.artifactory.FailureStage;
 import org.qubership.itool.modules.artifactory.GraphSnapshot;
-import org.qubership.itool.modules.processor.GraphMerger;
-import org.qubership.itool.modules.report.GraphReportImpl;
+
+import org.qubership.itool.modules.processor.MergerApi;
+import org.qubership.itool.modules.report.GraphReport;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -37,22 +38,29 @@ import java.util.stream.Collectors;
 
 import static org.qubership.itool.modules.processor.MergerApi.*;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
+/**
+ * Manager for graph operations.
+ */
 public class GraphManager {
 
     protected static final Logger LOG = LoggerFactory.getLogger(GraphManager.class);
 
     private final LoadingCache<String, GraphClassifier> graphClassifierCache;
 
-    private final Vertx vertx;
-
     private boolean failFast;
 
     private final GraphFetcher graphFetcher;
 
+    private final Provider<Graph> graphProvider;
+    private final Provider<GraphReport> graphReportProvider;
+    private final Provider<MergerApi> graphMergerProvider;
 
-    public GraphManager(Vertx vertx, GraphFetcher fetcher, boolean failFast) {
-        this(vertx, fetcher, defaultClassifierCacheBuilder(), failFast);
+    @Inject
+    public GraphManager(Vertx vertx, GraphFetcher fetcher, boolean failFast, Provider<Graph> graphProvider, Provider<GraphReport> graphReportProvider, Provider<MergerApi> graphMergerProvider) {
+        this(vertx, fetcher, defaultClassifierCacheBuilder(), failFast, graphProvider, graphReportProvider, graphMergerProvider);
     }
 
     @SuppressWarnings("rawtypes")
@@ -65,10 +73,12 @@ public class GraphManager {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public GraphManager(Vertx vertx, GraphFetcher fetcher,
-            CacheBuilder classifierCacheBuilder, boolean failFast) {
-        this.vertx = vertx;
+            CacheBuilder classifierCacheBuilder, boolean failFast, Provider<Graph> graphProvider, Provider<GraphReport> graphReportProvider, Provider<MergerApi> graphMergerProvider) {
         this.graphFetcher = fetcher;
         this.failFast = failFast;
+        this.graphProvider = graphProvider;
+        this.graphReportProvider = graphReportProvider;
+        this.graphMergerProvider = graphMergerProvider;
 
         this.graphClassifierCache = classifierCacheBuilder
             .recordStats()
@@ -85,7 +95,9 @@ public class GraphManager {
 
         GraphSnapshot graphSnapshot = graphFetcher.fetchGraphDumpByClassifier(classifier);
         if (graphSnapshot != null && graphSnapshot.getGraphDump() != null) {
-            return GraphDumpSupport.restoreFromJson(graphSnapshot.getGraphDump());
+            Graph graph = graphProvider.get();
+            GraphDumpSupport.restoreFromJson(graph, graphSnapshot.getGraphDump());
+            return graph;
         }
 
         List<AppVersionDescriptor> allAppVersionIds = ListUtils.emptyIfNull(
@@ -108,14 +120,14 @@ public class GraphManager {
             }
         }
 
-        Graph graph = new GraphImpl();
+        Graph graph = graphProvider.get();
         if (classifier.isWithReport()) {
-            graph.setReport(new GraphReportImpl());
+            graph.setReport(graphReportProvider.get());
         }
 
         if (!failFast || unprocessedAppIds.isEmpty()) {
             // Make merger throw exception for invalid graphs and catch them below
-            try (GraphMerger merger = new GraphMerger(vertx, true)) {
+            try (MergerApi merger = graphMergerProvider.get()) {
                 JsonObject targetInfo = new JsonObject();
 
                 merger.prepareGraphForMerging(graph, targetInfo);
@@ -170,7 +182,6 @@ public class GraphManager {
     public void evictCache() {
         this.graphClassifierCache.invalidateAll();
     }
-
 
     // ========================================================================
 

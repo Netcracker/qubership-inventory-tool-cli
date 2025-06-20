@@ -17,15 +17,16 @@
 package org.qubership.itool.modules.graph;
 
 import com.google.common.cache.CacheStats;
-import org.qubership.itool.modules.graph.Graph;
-import org.qubership.itool.modules.graph.GraphClassifier;
-import org.qubership.itool.modules.graph.GraphClassifierBuilderImpl;
-import org.qubership.itool.modules.graph.GraphImpl;
-import org.qubership.itool.modules.graph.GraphManager;
-import org.qubership.itool.modules.graph.GraphServiceImpl;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import jakarta.inject.Provider;
+
+import com.google.inject.Module;
+
+import org.qubership.itool.di.ApplicationContext;
+import org.qubership.itool.di.QubershipModule;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.modules.report.GraphReportImpl;
-
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,10 +36,28 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestGraphService {
 
     private GraphServiceImpl graphService;
+    private Vertx vertx;
+    private Provider<GraphReport> graphReportProvider;
+
+    @BeforeAll
+    public void setupAll() {
+        vertx = Vertx.vertx();
+        graphReportProvider = () -> new GraphReportImpl();
+    }
+
+    @AfterAll
+    public void cleanupAll() {
+        vertx.close();
+    }
 
     @BeforeEach
     public void setup() {
-        GraphManager graphManager = new GraphManager(null, null, false) {
+
+        JsonObject config = new JsonObject();
+        ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
+        Provider<Graph> graphProvider = appContext.getInjector().getProvider(Graph.class);
+
+        GraphManager graphManager = new GraphManager(vertx, null, false, graphProvider, graphReportProvider, null) {
 
             @Override
             public CacheStats getCacheStatistics() {
@@ -47,9 +66,9 @@ public class TestGraphService {
 
             @Override
             public Graph buildGraphByClassifier(GraphClassifier classifier) {
-                Graph graph = new GraphImpl();
+                Graph graph = graphProvider.get();
                 if (classifier.isWithReport()) {
-                    GraphReport report = new GraphReportImpl();
+                    GraphReport report = graphReportProvider.get();
                     graph.setReport(report);
                 }
                 return graph;

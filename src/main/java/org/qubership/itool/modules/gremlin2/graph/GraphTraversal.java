@@ -475,7 +475,7 @@ public interface GraphTraversal<S, E> extends Traversal<S, E> {
 
     default <E2> GraphTraversal<S, E2> union(Traversal<?, E2> ... unionTraversals) {
         return (GraphTraversal)this.asAdmin().addStep(
-            new UnionStep<>(this.asAdmin(), Arrays.copyOf(unionTraversals, unionTraversals.length, Traversal.Admin[].class))
+            new UnionStep<S, E2>(this.asAdmin(), Arrays.copyOf(unionTraversals, unionTraversals.length, Traversal.Admin[].class))
         );
     }
 
@@ -487,7 +487,7 @@ public interface GraphTraversal<S, E> extends Traversal<S, E> {
 
     default <E2> GraphTraversal<S, E2> or(final Traversal<?, E2> ... orTraversals) {
         return (GraphTraversal)this.asAdmin().addStep(
-            new OrStep<>(this.asAdmin(), Arrays.copyOf(orTraversals, orTraversals.length, Traversal.Admin[].class))
+            new OrStep<E2>(this.asAdmin(), Arrays.copyOf(orTraversals, orTraversals.length, Traversal.Admin[].class))
         );
     }
 
