@@ -39,6 +39,8 @@ import org.qubership.itool.modules.graph.GraphClassifierBuilderImpl;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
 import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.modules.graph.GraphService;
+import org.qubership.itool.modules.processor.GraphMergerFactory;
+import org.qubership.itool.modules.processor.DefaultGraphMergerFactory;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.modules.report.GraphReportImpl;
 import org.qubership.itool.modules.template.TemplateService;
@@ -145,6 +147,7 @@ public class FlowContextImpl implements FlowContext {
         this.resources.put(TemplateService.class, this.templateService);
         this.resources.put(GitAdapter.class, gitAdapter);
         this.resources.put(GitFileRetriever.class, gitFileRetriever);
+        this.resources.put(GraphMergerFactory.class, new DefaultGraphMergerFactory());
 
         if (graphService != null) {
             resources.put(GraphService.class, graphService);
