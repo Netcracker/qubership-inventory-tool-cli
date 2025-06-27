@@ -17,18 +17,20 @@
 package org.qubership.itool.cli;
 
 import org.qubership.itool.cli.query.CliQuery;
-import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.tasks.FlowTask;
 
-import io.vertx.core.*;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
+import io.vertx.core.WorkerExecutor;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+
+import jakarta.inject.Provider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
-import org.qubership.itool.modules.graph.GraphImpl;
 import org.qubership.itool.utils.ConfigUtils;
 import org.qubership.itool.utils.FSUtils;
 import org.qubership.itool.utils.JsonUtils;
@@ -42,14 +44,17 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import static org.qubership.itool.utils.ConfigProperties.*;
+import static org.qubership.itool.utils.ConfigProperties.QUERY_FILE_POINTER;
+import static org.qubership.itool.utils.ConfigProperties.QUERY_STEP_POINTER;
+import static org.qubership.itool.utils.ConfigProperties.SUPER_REPOSITORY_DIR_POINTER;
+import static org.qubership.itool.utils.ConfigProperties.QUERY_PROGRESS_PATH_POINTER;
 
 public class QueryVerticle extends FlowMainVerticle {
     protected static final Logger LOG = LoggerFactory.getLogger(QueryVerticle.class);
 
     @Resource
-    protected FlowContext flowContext;
-    
+    protected Provider<Graph> graphProvider;
+
     protected Logger getLogger() {
         return LOG;
     }
@@ -91,7 +96,7 @@ public class QueryVerticle extends FlowMainVerticle {
                     p.fail("Dump is empty or not found for step " + step);
                 }
 
-                Graph graph = flowContext.getGraph();
+                Graph graph = graphProvider.get();
                 GraphDumpSupport.restoreFromJson(graph, dump);
                 if (graph.getVertexCount() == 1) {
                     p.fail("Graph is empty for step " + step);
@@ -127,7 +132,7 @@ public class QueryVerticle extends FlowMainVerticle {
                     p.fail("Empty data");
                 }
 
-                Graph graph = flowContext.getProvider(Graph.class).get();
+                Graph graph = graphProvider.get();
                 if (content.startsWith("[")) {
                     loadFromJsonArray(file, graph, p, content);
                 } else {

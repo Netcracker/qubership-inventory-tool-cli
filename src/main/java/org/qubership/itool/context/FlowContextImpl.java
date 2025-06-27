@@ -45,16 +45,16 @@ import org.qubership.itool.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
+import com.google.inject.Key;
+
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,8 +63,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.*;
-import org.qubership.itool.modules.processor.MergerApi;
+import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_CACHING;
+import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DATABASE;
+import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DEFAULT_COMPONENT;
+import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DEFAULT_DOMAIN;
+import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_QUEUE;
 
 public class FlowContextImpl implements FlowContext {
     private static final Logger LOG = LoggerFactory.getLogger(FlowContextImpl.class);
@@ -82,19 +85,13 @@ public class FlowContextImpl implements FlowContext {
     private ClassLoader taskClassLoader;
     private Vertx vertx;
     private boolean breakRequested;
-    private final Provider<Graph> graphProvider;
-    private final Provider<GraphReport> graphReportProvider;
-    private final Provider<MergerApi> graphMergerProvider;
-
-    private final Map<Class<?>, Provider<?>> providerRegistry = new HashMap<>();
+    private final Injector injector;
 
     @Inject
-    public FlowContextImpl(Provider<Graph> graphProvider, Provider<GraphReport> graphReportProvider, Provider<MergerApi> graphMergerProvider) {
-        this.graphProvider = graphProvider;
-        this.graphReportProvider = graphReportProvider;
-        this.graphMergerProvider = graphMergerProvider;
+    public FlowContextImpl(Injector injector) {
+        this.injector = injector;
 
-        this.graph = graphProvider.get();
+        this.graph = injector.getInstance(Graph.class);
         this.report = graph.getReport();
     }
 
@@ -141,10 +138,6 @@ public class FlowContextImpl implements FlowContext {
             resources.put(GraphClassifier.class, graphClassifier);
         }
 
-        // Register providers
-        registerProvider(Graph.class, this.graphProvider);
-        registerProvider(GraphReport.class, this.graphReportProvider);
-        registerProvider(MergerApi.class, this.graphMergerProvider);
     }
 
     @Override
@@ -209,24 +202,16 @@ public class FlowContextImpl implements FlowContext {
             }
 
             Class<?> fieldType = field.getType();
-            Object resource = null;
-
-            // Handle Provider<T> types
-            if (Provider.class.isAssignableFrom(fieldType)) {
-                // Extract the generic type parameter
+            // Try to get class by type from resources first
+            Object resource = this.resources.get(fieldType);
+            if (resource == null) {
                 try {
-                    ParameterizedType paramType = 
-                        (ParameterizedType) field.getGenericType();
-                    Class<?> providerType = (Class<?>) paramType.getActualTypeArguments()[0];
-                    
-                    // Get provider from registry
-                    resource = getProvider(providerType);
+                    Key<?> key = Key.get(field.getGenericType());
+                    resource = injector.getInstance(key);
                 } catch (Exception e) {
-                    LOG.warn("Could not determine provider type for field {} in {}", field.getName(), obj.getClass().getName());
+                    LOG.warn("Could not get instance for field {} of type {}: {}",
+                            field.getName(), field.getGenericType(), e.getMessage());
                 }
-            } else {
-                // Handle regular types
-                resource = this.resources.get(fieldType);
             }
 
             if (resource != null) {
@@ -310,23 +295,4 @@ public class FlowContextImpl implements FlowContext {
         return graphClassifier;
     }
 
-    /**
-     * Provider registration helper method
-     * @param type - type of the provider
-     * @param provider - provider for the given type
-     */
-    private <T> void registerProvider(Class<T> type, Provider<T> provider) {
-        providerRegistry.put(type, provider);
-    }
-
-    /**
-     * Get provider for the given type on demand
-     * @param type - type of the provider
-     * @return provider for the given type
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> Provider<T> getProvider(Class<T> type) {
-        return (Provider<T>) providerRegistry.get(type);
-    }
 }

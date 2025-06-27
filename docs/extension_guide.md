@@ -135,8 +135,12 @@ Once you have the application context, you can access your custom implementation
 
 ```java
 // Get report instance from application context
-GraphReportFactory factory = context.getInstance(GraphReportFactory.class);
-GraphReport report = factory.createGraphReport();
+GraphReport report = context.getInstance(GraphReport.class);
+
+// Or get provider for it to create a new instance
+
+Provider<GraphReport> reportProvider = context.getProvider(GraphReport.class);
+GraphReport report = reportProvider.get();
 
 // Use the report
 JsonObject record = new JsonObject()
@@ -236,3 +240,4 @@ This command will:
 - Run the `ci-assembly` command
 - Use "test" as the application name
 - Process data from the `test-data` directory
+
