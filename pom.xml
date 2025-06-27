@@ -50,7 +50,7 @@
         <main.command>ci-exec</main.command>
         <guava.version>33.4.8-jre</guava.version>
         <groovy.version>4.0.26</groovy.version>
-        <vertx.version>4.5.14</vertx.version>
+        <vertx.version>5.0.0</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
     </properties>
 
