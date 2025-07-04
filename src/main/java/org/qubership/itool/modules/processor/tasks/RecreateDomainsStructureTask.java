@@ -24,6 +24,7 @@ import org.qubership.itool.utils.JsonUtils;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Provider;
+import com.google.inject.Inject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class RecreateDomainsStructureTask implements GraphProcessorTask {
 
     private GraphReport graphReport;
 
+    @Inject
     public RecreateDomainsStructureTask(Provider<GraphReport> graphReportProvider){
         this.graphReport = graphReportProvider.get();
     }

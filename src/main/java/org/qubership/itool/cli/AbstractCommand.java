@@ -47,15 +47,28 @@ import static org.qubership.itool.utils.ConfigProperties.CONFIG_PATH_POINTER;
 import static org.qubership.itool.utils.ConfigProperties.PROFILE_POINTER;
 
 
+/**
+ * Abstract base class for all CLI commands in the inventory tool.
+ * Provides common functionality for command execution, configuration handling,
+ * and flow management.
+ */
 public abstract class AbstractCommand extends ClasspathHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommand.class);
 
+    /**
+     * Configuration properties map containing default values for the command.
+     */
     protected Map<String, String> properties = new HashMap<>(Map.of(
             PROFILE_POINTER, "dev",
             CONFIG_PATH_POINTER, "inventory-tool"
     ));
 
+    /**
+     * Returns the logger instance for this command.
+     *
+     * @return the logger instance
+     */
     protected Logger getLogger() {
         return LOGGER;
     }
@@ -82,18 +95,35 @@ public abstract class AbstractCommand extends ClasspathHandler {
             });
     }
 
+    /**
+     * Runs the flow with the given Vertx instance, main verticle, and graph service.
+     *
+     * @param vertx the Vertx instance
+     * @param main the main verticle
+     * @param graphService the graph service (may be null)
+     * @return a future that completes when the flow finishes
+     */
     protected Future<?> runFlow(Vertx vertx, FlowMainVerticle main, GraphService graphService) {
         ConfigProvider configProvider = new ConfigProvider(properties, vertx);
         return Future.future(promise ->
             configProvider.handleConfig(ar -> configLoaded(vertx, main, graphService, ar.result(), promise)));
     }
 
+    /**
+     * Handles the configuration after it has been loaded.
+     *
+     * @param vertx the Vertx instance
+     * @param main the main verticle
+     * @param graphService the graph service
+     * @param config the loaded configuration
+     * @param promise the promise to complete
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void configLoaded(Vertx vertx, FlowMainVerticle main, GraphService graphService, JsonObject config, Promise promise) {
         try {
             // Create application context with the loaded config and custom modules
             ApplicationContext context = new ApplicationContext(vertx, config, createModules(vertx));
-            
+
             // Get flow context from the application context
             FlowContext flowContext = context.getInstance(FlowContext.class);
 
@@ -125,7 +155,7 @@ public abstract class AbstractCommand extends ClasspathHandler {
 
     /**
      * Create the modules for dependency injection.
-     * 
+     *
      * @param vertx The Vertx instance
      * @return Array of modules to use for dependency injection
      */
@@ -140,7 +170,7 @@ public abstract class AbstractCommand extends ClasspathHandler {
     /**
      * Create the module for dependency injection.
      * Override this method to add custom module for your application.
-     * 
+     *
      * @param vertx The Vertx instance
      * @return Module to use for dependency injection
      */
@@ -148,6 +178,12 @@ public abstract class AbstractCommand extends ClasspathHandler {
         return null;
     }
 
+    /**
+     * Called when the flow has finished execution.
+     *
+     * @param main the main verticle
+     * @param flowResult the result of the flow execution
+     */
     protected void flowFinished(FlowMainVerticle main, AsyncResult<?> flowResult) {
         main.undeploy();    // Fire-and-forget
         if (flowResult.succeeded()) {
@@ -161,6 +197,11 @@ public abstract class AbstractCommand extends ClasspathHandler {
     //------------------------------------------------------
     // Common command-line parameters
 
+    /**
+     * Sets a property with the given parameters.
+     *
+     * @param params array of property parameters in format "name=value"
+     */
     @Option(longName = "set", argName = "set", required = false)
     @Description("Universal setter: name=value (multiple)")
     public void setProperty(String[] params) {
@@ -170,12 +211,22 @@ public abstract class AbstractCommand extends ClasspathHandler {
         }
     }
 
+    /**
+     * Sets the configuration path.
+     *
+     * @param configPath the path to the configuration folder
+     */
     @Option(longName = "configPath", argName = "configPath", shortName = "c", required = false)
     @Description("Path to folder containing the configuration files")
     public void setConfigPath(String configPath) {
         properties.put(CONFIG_PATH_POINTER, configPath);
     }
 
+    /**
+     * Sets the profile to be used.
+     *
+     * @param profile the profile name or file
+     */
     @Option(longName = "profile", argName = "profile", shortName = "p", required = false)
     @Description("Custom profile to be used. By default uses properties format, in case of json, use file name with " +
             "extension (Examples: \"custom\", \"custom.properties\", \"custom_example.json\")")
