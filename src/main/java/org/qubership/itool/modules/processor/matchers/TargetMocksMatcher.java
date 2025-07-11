@@ -31,6 +31,8 @@ import io.vertx.core.json.pointer.JsonPointer;
 import static org.qubership.itool.modules.graph.Graph.*;
 import static org.qubership.itool.modules.gremlin2.P.*;
 
+import com.google.inject.Inject;
+
 /**
  * <p>This class pre-compiles matchers for already existing vertices
  * marked with keys <code>isMock: true</code> and <code>mockedFor</code>.
@@ -45,7 +47,13 @@ public class TargetMocksMatcher implements VertexMatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(TargetMocksMatcher.class);
 
+    private final MockFieldExtractor mockFieldExtractor;
     private List<VertexMatcher> compiledMatchers;
+
+    @Inject
+    public TargetMocksMatcher(MockFieldExtractor mockFieldExtractor) {
+        this.mockFieldExtractor = mockFieldExtractor;
+    }
 
     @Override
     public JsonObject findExistingVertex(Graph sourceGraph, JsonObject newVertex, Graph targetGraph) {
@@ -64,7 +72,7 @@ public class TargetMocksMatcher implements VertexMatcher {
         return null;
     }
 
-    public static List<VertexMatcher> getMatchersForTargetGraph(Graph targetGraph) {
+    private List<VertexMatcher> getMatchersForTargetGraph(Graph targetGraph) {
         List<JsonObject> mocksInTarget = targetGraph.traversal().V()
                 .has(F_MOCK_FLAG, eq(true))
                 .hasKey(F_MOCKED_FOR)
@@ -81,8 +89,8 @@ public class TargetMocksMatcher implements VertexMatcher {
             .collect(Collectors.toList());
     }
 
-    static VertexMatcher createCorrelatorByExample(Graph targetGraph, JsonObject mock) {
-        List<JsonPointer> mockPtrs = getMockedForSet(targetGraph, mock).stream()
+    private VertexMatcher createCorrelatorByExample(Graph targetGraph, JsonObject mock) {
+        List<JsonPointer> mockPtrs = mockFieldExtractor.getMockedForSet(targetGraph, mock).stream()
             .map(JsonPointer::from)
             .collect(Collectors.toList());
         if (mockPtrs.isEmpty()) {
@@ -108,21 +116,4 @@ public class TargetMocksMatcher implements VertexMatcher {
             return mock;
         };
     }
-
-    @SuppressWarnings("unchecked")
-    static Set<String> getMockedForSet(Graph origin, JsonObject mock) {
-        Object mockedFor = mock.getValue(F_MOCKED_FOR);
-        if (mockedFor instanceof JsonArray) {
-            return new HashSet<>( ((JsonArray)mockedFor).getList() );
-        } else if (mockedFor instanceof String) {
-            return Collections.singleton((String)mockedFor);
-        } else {
-//            throw new InvalidGraphException(origin,
-//                    "Vertex " + mock.getString(F_ID) + " contains improper value for " + F_MOCKED_FOR);
-            // TODO: Figure out how do we get mock domains and their purpose. They are getting caught with this error
-            LOG.error("Vertex " + mock.getString(F_ID) + " contains improper value for " + F_MOCKED_FOR);
-            return Collections.emptySet();
-        }
-    }
-
 }

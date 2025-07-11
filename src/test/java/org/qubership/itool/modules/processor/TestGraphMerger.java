@@ -24,15 +24,6 @@ import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
 import org.qubership.itool.modules.gremlin2.graph.__;
 import org.qubership.itool.modules.processor.tasks.CreateAppVertexTask;
-import org.qubership.itool.modules.processor.tasks.CreateTransitiveHttpDependenciesTask;
-import org.qubership.itool.modules.processor.tasks.CreateTransitiveQueueDependenciesTask;
-import org.qubership.itool.modules.processor.tasks.PatchIsMicroserviceFieldTask;
-import org.qubership.itool.modules.processor.tasks.PatchMockedComponentsNormalizationTask;
-import org.qubership.itool.modules.processor.tasks.PatchVertexDnsNamesNormalizationTask;
-import org.qubership.itool.modules.processor.tasks.PatchLanguagesNormalizationTask;
-import org.qubership.itool.modules.processor.tasks.RecreateDomainsStructureTask;
-import org.qubership.itool.modules.processor.tasks.RecreateHttpDependenciesTask;
-import org.qubership.itool.modules.processor.tasks.GraphProcessorTask;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.modules.report.GraphReportImpl;
 import org.qubership.itool.utils.JsonUtils;
@@ -44,7 +35,6 @@ import jakarta.inject.Provider;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;

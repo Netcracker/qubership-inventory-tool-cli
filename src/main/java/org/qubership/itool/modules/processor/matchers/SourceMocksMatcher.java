@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import static org.qubership.itool.modules.graph.Graph.*;
 import static org.qubership.itool.modules.gremlin2.P.*;
 
+import com.google.inject.Inject;
+
 /**
  * <p>This class tries to match new vertices marked with keys <code>isMock: true</code>
  * and <code>mockedFor</code> with existing vertices from the target graph.
@@ -38,6 +40,18 @@ public class SourceMocksMatcher implements VertexMatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SourceMocksMatcher.class);
 
+    private final MockFieldExtractor mockFieldExtractor;
+
+    /**
+     * Constructor with dependency injection support.
+     *
+     * @param mockFieldExtractor The mock field extractor to use
+     */
+    @Inject
+    public SourceMocksMatcher(MockFieldExtractor mockFieldExtractor) {
+        this.mockFieldExtractor = mockFieldExtractor;
+    }
+
 
     @Override
     public JsonObject findExistingVertex(Graph sourceGraph, JsonObject newVertex, Graph targetGraph) {
@@ -45,7 +59,7 @@ public class SourceMocksMatcher implements VertexMatcher {
             return null;
         }
 
-        Set<String> mockedForSet = TargetMocksMatcher.getMockedForSet(sourceGraph, newVertex);
+        Set<String> mockedForSet = mockFieldExtractor.getMockedForSet(sourceGraph, newVertex);
         if (mockedForSet.isEmpty()) {
             return null;
         }

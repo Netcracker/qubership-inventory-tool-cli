@@ -36,6 +36,11 @@ import java.io.File;
 import java.time.Duration;
 import java.util.*;
 
+/**
+ * Abstract base class for all flow tasks in the inventory tool.
+ * Provides common functionality for task execution, progress tracking,
+ * and graph operations.
+ */
 public abstract class FlowTask {
 
     protected static final Logger LOG = LoggerFactory.getLogger(FlowTask.class);
@@ -57,10 +62,21 @@ public abstract class FlowTask {
     private Long executionStart;
 
 
+    /**
+     * Returns the features that this task supports.
+     * Override this method to specify task-specific features.
+     *
+     * @return array of feature names supported by this task
+     */
     protected String[] features() {
         return new String[0];
     }
 
+    /**
+     * Returns the logger instance for this task.
+     *
+     * @return the logger instance
+     */
     protected Logger getLogger() {
         return LOG;
     }
@@ -81,10 +97,12 @@ public abstract class FlowTask {
     //------------------------------------------------------
     // Start and finish task in flow
 
-    /*
-     * Custom task code.
+    /**
+     * Abstract method that must be implemented by subclasses to define the actual task logic.
+     * This method is called when the task starts execution.
      *
-     * @param taskPromise A promise to pass to {@link #taskCompleted(Promise)} on completions
+     * @param taskPromise the promise to complete when the task finishes
+     * @throws Exception if an error occurs during task execution
      */
     abstract protected void taskStart(Promise<?> taskPromise) throws Exception;
 
