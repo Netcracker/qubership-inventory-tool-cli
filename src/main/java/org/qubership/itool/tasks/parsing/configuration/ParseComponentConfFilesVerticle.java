@@ -20,6 +20,7 @@ import org.qubership.itool.tasks.parsing.AbstractParseFileTask;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import io.vertx.core.json.*;
+import jakarta.inject.Provider;
 
 import org.qubership.itool.utils.FSUtils;
 import org.qubership.itool.utils.GitUtils;
@@ -33,6 +34,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Resource;
+
 import static org.qubership.itool.modules.report.GraphReport.EXCEPTION;
 
 /**
@@ -41,6 +44,9 @@ import static org.qubership.itool.modules.report.GraphReport.EXCEPTION;
  */
 public class ParseComponentConfFilesVerticle extends AbstractParseFileTask {
     protected Logger LOGGER = LoggerFactory.getLogger(ParseComponentConfFilesVerticle.class);
+
+    @Resource
+    Provider<YamlParser> yamlParserProvider;
 
     protected String[] getFilePatterns() {
         return new String[]{
@@ -136,7 +142,7 @@ public class ParseComponentConfFilesVerticle extends AbstractParseFileTask {
         vertex.put("content", content);
         try {
             if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
-                YamlParser yamlParser = new YamlParser();
+                YamlParser yamlParser = yamlParserProvider.get();
                 List<Object> structuredJson = yamlParser.parseYamlData(content, fileName);
                 if (isSpringYamlFile(fileName)) {
                     yamlParser.fixSpringYamlModels(structuredJson);

@@ -31,7 +31,6 @@ import static org.qubership.itool.modules.graph.Graph.V_APPLICATION;
 import static org.qubership.itool.modules.graph.Graph.V_DOMAIN;
 import static org.qubership.itool.modules.graph.Graph.V_ROOT;
 import static org.qubership.itool.modules.gremlin2.P.eq;
-import static org.qubership.itool.modules.gremlin2.P.within;
 
 public class PatchMockedComponentsNormalizationTask implements GraphProcessorTask {
 

@@ -18,7 +18,6 @@ package org.qubership.itool.tasks.dependency;
 
 import org.qubership.itool.tasks.AbstractAggregationTaskVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
@@ -50,7 +49,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
-import org.qubership.itool.utils.FutureUtils;
 
 /**
  * Run maven and collect dependency tree to "output/dependencies/${component.id}_dependency.txt"

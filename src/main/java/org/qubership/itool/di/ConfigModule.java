@@ -16,33 +16,31 @@
 package org.qubership.itool.di;
 
 import com.google.inject.AbstractModule;
-import io.vertx.core.Vertx;
+import com.google.inject.name.Names;
+import io.vertx.core.json.JsonObject;
 
 /**
- * Base module for Qubership inventory tool that can be extended by users.
- * This module combines the core functionality with any user-provided customizations.
+ * Module that provides application configuration.
+ * This module binds the application configuration JsonObject with a named binding
+ * to distinguish it from other JsonObject instances that might be needed in the future.
  */
-public class QubershipModule extends AbstractModule {
+public class ConfigModule extends AbstractModule {
 
-    private final Vertx vertx;
+    private final JsonObject config;
 
     /**
-     * Creates a new QubershipModule with default core functionality.
+     * Creates a new ConfigModule with the application configuration.
+     *
+     * @param config The application configuration
      */
-    public QubershipModule(Vertx vertx) {
-        this.vertx = vertx;
+    public ConfigModule(JsonObject config) {
+        this.config = config;
     }
 
     @Override
     protected void configure() {
-        // Install core functionality
-        install(new CoreModule(vertx));
-
-        // Install merger functionality
-        install(new MergerModule());
-
-        // Install CLI functionality
-        install(new CliModule());
+        bind(JsonObject.class)
+            .annotatedWith(Names.named("application.config"))
+            .toInstance(config);
     }
-
 }

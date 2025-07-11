@@ -38,14 +38,23 @@ public class SetTransitiveEdgesBetweenComponentsTask extends FlowTask {
     @Resource
     Provider<GraphReport> graphReportProvider;
 
+    @Resource
+    Provider<CreateTransitiveQueueDependenciesTask> createTransitiveQueueDependenciesTaskProvider;
+
+    @Resource
+    Provider<CreateTransitiveHttpDependenciesTask> createTransitiveHttpDependenciesTaskProvider;
+
+    @Resource
+    Provider<RecreateDomainsStructureTask> recreateDomainsStructureTaskProvider;
+
     protected Logger LOG = LoggerFactory.getLogger(SetTransitiveEdgesBetweenComponentsTask.class);
 
     @Override
     protected void taskStart(Promise<?> taskPromise) throws Exception {
         // For flows including graph merging, a similar sequence of tasks is performed by GraphMerger
-        new CreateTransitiveQueueDependenciesTask().processAsync(vertx, graph)
-        .compose(v -> new CreateTransitiveHttpDependenciesTask().processAsync(vertx, graph))
-        .compose(v -> new RecreateDomainsStructureTask(graphReportProvider).processAsync(vertx, graph))
+        createTransitiveQueueDependenciesTaskProvider.get().processAsync(vertx, graph)
+        .compose(v -> createTransitiveHttpDependenciesTaskProvider.get().processAsync(vertx, graph))
+        .compose(v -> recreateDomainsStructureTaskProvider.get().processAsync(vertx, graph))
         .onComplete(res -> taskCompleted(taskPromise));
     }
 

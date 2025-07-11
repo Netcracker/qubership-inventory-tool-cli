@@ -17,11 +17,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
+import jakarta.inject.Provider;
+
 import static org.qubership.itool.modules.gremlin2.P.neq;
 import static org.qubership.itool.modules.gremlin2.graph.__.outE;
 
 public class ConfluenceSummaryJavaDependenciesVerticle extends AbstractConfluenceGenerationPageVerticle {
     protected Logger LOG = LoggerFactory.getLogger(ConfluenceSummaryJavaDependenciesVerticle.class);
+
+    @Resource
+    Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -112,7 +119,7 @@ public class ConfluenceSummaryJavaDependenciesVerticle extends AbstractConfluenc
 
         List<ConfluencePage> confluencePageList = new ArrayList<>();
 
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Java Dependencies");

@@ -20,6 +20,8 @@ import org.qubership.itool.modules.template.ConfluencePage;
 import org.qubership.itool.tasks.confluence.AbstractConfluenceGenerationPageVerticle;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import jakarta.inject.Provider;
+
 import org.qubership.itool.utils.JsonUtils;
 import org.qubership.itool.utils.TechNormalizationHelper;
 import org.slf4j.Logger;
@@ -30,12 +32,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Resource;
+
 import static org.qubership.itool.modules.gremlin2.graph.__.has;
 import static org.qubership.itool.modules.gremlin2.graph.__.in;
 
 
 public class ConfluenceSummaryTechStacksPerDomainVerticle extends AbstractConfluenceGenerationPageVerticle {
     protected Logger LOG = LoggerFactory.getLogger(ConfluenceSummaryTechStacksPerDomainVerticle.class);
+
+    @Resource
+    Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -47,7 +54,7 @@ public class ConfluenceSummaryTechStacksPerDomainVerticle extends AbstractConflu
     protected List<ConfluencePage> prepareConfluencePageList() {
         List<ConfluencePage> confluencePageList = new ArrayList<>();
 
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Cloud Tech. stack per Domain");

@@ -39,7 +39,7 @@ class ConfigVariablesExtractorTest {
     void extractVariableNames() {
         Object yamlFileContents = null;
         try {
-            yamlFileContents = FSUtils.getYamlFileContents(getClass(), "classpath:/utils/variablesExtractor.yaml");
+            yamlFileContents = FSUtils.getYamlFileContents(getClass(), "classpath:/utils/variablesExtractor.yaml", parser);
         } catch (IOException e) {
             e.printStackTrace();
         }

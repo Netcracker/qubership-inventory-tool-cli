@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024-2025 NetCracker Technology Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.qubership.itool.di;
 
 import io.vertx.core.Vertx;
@@ -15,11 +30,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.qubership.itool.context.FlowContext;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.processor.GraphMerger;
+import org.qubership.itool.modules.processor.tasks.GraphProcessorTask;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.modules.report.GraphReportImpl;
+
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 @ExtendWith({VertxExtension.class, MockitoExtension.class})
 class ApplicationContextTest {
@@ -73,9 +95,9 @@ class ApplicationContextTest {
 
         // Create test module with custom factory
         Module testModule = TestModule.createOverrideModule(
-            vertx, 
-            mockGraphMerger, 
-            mockFlowContext, 
+            vertx,
+            mockGraphMerger,
+            mockFlowContext,
             new LoggingGraphReport()
         );
 
@@ -118,4 +140,20 @@ class ApplicationContextTest {
 
         testContext.completeNow();
     }
-} 
+
+    @Test
+    void testFinalizationTasks(VertxTestContext testContext) {
+        // Create default context
+        ApplicationContext context = ApplicationContext.createDefault();
+
+        Provider<List<GraphProcessorTask>> finalizationTasksProvider = context.getInjector().getProvider(
+            Key.get(new TypeLiteral<List<GraphProcessorTask>>() {}, Names.named("finalization.tasks"))
+        );
+
+        List<GraphProcessorTask> finalizationTasks = finalizationTasksProvider.get();
+        List<GraphProcessorTask> finalizationTasks2 = finalizationTasksProvider.get();
+        assertFalse(finalizationTasks.get(0)==finalizationTasks2.get(0), "Should have different instances");
+
+        testContext.completeNow();
+    }
+}

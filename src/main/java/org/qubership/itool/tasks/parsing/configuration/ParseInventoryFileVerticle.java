@@ -27,8 +27,15 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
+
+import jakarta.inject.Provider;
+
 public class ParseInventoryFileVerticle extends AbstractParseFileTask {
     protected Logger LOGGER = LoggerFactory.getLogger(ParseInventoryFileVerticle.class);
+
+    @Resource
+    protected Provider<InventoryJsonParser> inventoryJsonParser;
 
     @Override
     protected String[] getFilePatterns() {
@@ -48,8 +55,7 @@ public class ParseInventoryFileVerticle extends AbstractParseFileTask {
         }
 
         if (fileName.endsWith("inventory.json")) {
-            InventoryJsonParser parser = new InventoryJsonParser();
-            parser.parse(domain, component, inventorySource);
+            inventoryJsonParser.get().parse(domain, component, inventorySource);
         }
     }
 

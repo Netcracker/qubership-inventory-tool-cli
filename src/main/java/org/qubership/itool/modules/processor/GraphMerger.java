@@ -19,10 +19,6 @@ package org.qubership.itool.modules.processor;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
 import org.qubership.itool.modules.processor.matchers.CompoundVertexMatcher;
-import org.qubership.itool.modules.processor.matchers.FileMatcher;
-import org.qubership.itool.modules.processor.matchers.MatcherById;
-import org.qubership.itool.modules.processor.matchers.SourceMocksMatcher;
-import org.qubership.itool.modules.processor.matchers.TargetMocksMatcher;
 import org.qubership.itool.modules.processor.matchers.VertexMatcher;
 import org.qubership.itool.modules.processor.tasks.CreateAppVertexTask;
 import org.qubership.itool.modules.processor.tasks.PatchAppVertexTask;
@@ -51,8 +47,7 @@ import static org.qubership.itool.utils.JsonUtils.readJsonFile;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
-import org.qubership.itool.di.NormalizationTasks;
-import org.qubership.itool.di.FinalizationTasks;
+import com.google.inject.name.Named;
 import org.qubership.itool.modules.processor.tasks.GraphProcessorTask;
 
 import java.util.List;
@@ -95,8 +90,8 @@ public class GraphMerger implements MergerApi {
 
     @Inject
     public GraphMerger(Vertx vertx, Provider<Graph> graphProvider,
-                      @NormalizationTasks Provider<List<GraphProcessorTask>> normalizationTasks,
-                      @FinalizationTasks Provider<List<GraphProcessorTask>> finalizationTasks,
+                      @Named("normalization.tasks") Provider<List<GraphProcessorTask>> normalizationTasks,
+                      @Named("finalization.tasks") Provider<List<GraphProcessorTask>> finalizationTasks,
                       Function<JsonObject, CreateAppVertexTask> createAppVertexTaskFactory,
                       Function<JsonObject, PatchAppVertexTask> patchAppVertexTaskFactory,
                       Provider<CompoundVertexMatcher> compoundMatcherProvider) {

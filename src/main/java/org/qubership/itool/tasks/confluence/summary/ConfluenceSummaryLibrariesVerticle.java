@@ -26,10 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.inject.Provider;
+
+import javax.annotation.Resource;
+
 import static org.qubership.itool.modules.gremlin2.graph.__.*;
 
 public class ConfluenceSummaryLibrariesVerticle extends AbstractConfluenceGenerationPageVerticle {
     protected Logger LOG = LoggerFactory.getLogger(ConfluenceSummaryLibrariesVerticle.class);
+
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -40,7 +47,7 @@ public class ConfluenceSummaryLibrariesVerticle extends AbstractConfluenceGenera
     protected List<ConfluencePage> prepareConfluencePageList() {
         List<ConfluencePage> confluencePageList = new ArrayList<>();
 
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Cloud Libraries list");

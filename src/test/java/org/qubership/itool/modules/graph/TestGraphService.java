@@ -37,12 +37,10 @@ public class TestGraphService {
 
     private GraphServiceImpl graphService;
     private Vertx vertx;
-    private Provider<GraphReport> graphReportProvider;
 
     @BeforeAll
     public void setupAll() {
         vertx = Vertx.vertx();
-        graphReportProvider = () -> new GraphReportImpl();
     }
 
     @AfterAll
@@ -55,7 +53,8 @@ public class TestGraphService {
 
         JsonObject config = new JsonObject();
         ApplicationContext appContext = new ApplicationContext(vertx, config, new Module[] {new QubershipModule(vertx)});
-        Provider<Graph> graphProvider = appContext.getInjector().getProvider(Graph.class);
+        Provider<Graph> graphProvider = () -> new GraphImpl();
+        Provider<GraphReport> graphReportProvider = appContext.getInjector().getProvider(GraphReport.class);
 
         GraphManager graphManager = new GraphManager(vertx, null, false, graphProvider, graphReportProvider, null) {
 

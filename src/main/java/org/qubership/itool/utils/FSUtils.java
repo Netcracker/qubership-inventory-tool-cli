@@ -34,7 +34,6 @@ import static org.qubership.itool.modules.graph.Graph.F_DIRECTORY;
 public class FSUtils {
 
     public static final int DEFAULT_BUFFER_SIZE = 8192;
-    private static YamlParser parser = new YamlParser();
 
     public static String getComponentDirPath(JsonObject component) {
         return component.getString(F_DIRECTORY);
@@ -81,7 +80,7 @@ public class FSUtils {
         return new URL(location).openStream();  // Can it return null or always throws an IOException?
     }
 
-    public static synchronized Object getYamlFileContents(Class<?> caller, String location) throws IOException {
+    public static synchronized Object getYamlFileContents(Class<?> caller, String location, YamlParser parser) throws IOException {
         try (Reader reader = new InputStreamReader(
                 FSUtils.openUrlStream(caller, location), JsonUtils.UTF_8))
         {

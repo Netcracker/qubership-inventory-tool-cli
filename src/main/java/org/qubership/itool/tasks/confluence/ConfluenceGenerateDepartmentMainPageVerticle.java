@@ -23,6 +23,8 @@ import org.qubership.itool.modules.template.DiagramGeneralDomainMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Provider;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,8 @@ public class ConfluenceGenerateDepartmentMainPageVerticle extends AbstractConflu
 
     @Resource
     protected DiagramService diagramService;
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -47,7 +51,7 @@ public class ConfluenceGenerateDepartmentMainPageVerticle extends AbstractConflu
         List<String> domainIdList =
                 V().hasType("domain").has("department", eq(department)).id().toList();
 
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Tech of cloud " + department);

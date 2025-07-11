@@ -22,11 +22,17 @@ import org.qubership.itool.tasks.confluence.AbstractConfluenceGenerationPageVert
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Provider;
+
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConfluenceGenerateReportErrorsVerticle extends AbstractConfluenceGenerationPageVerticle {
     protected Logger LOG = LoggerFactory.getLogger(ConfluenceGenerateReportErrorsVerticle.class);
+
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -36,7 +42,7 @@ public class ConfluenceGenerateReportErrorsVerticle extends AbstractConfluenceGe
     @Override
     protected List<ConfluencePage> prepareConfluencePageList() {
         List<ConfluencePage> confluencePageList = new ArrayList<>();
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Processing errors");

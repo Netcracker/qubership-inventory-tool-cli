@@ -28,6 +28,10 @@ import org.qubership.itool.utils.TechNormalizationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Provider;
+
+import javax.annotation.Resource;
+
 import java.util.*;
 
 import static org.qubership.itool.modules.graph.Graph.F_MICROSERVICE_FLAG;
@@ -39,6 +43,9 @@ import static org.qubership.itool.modules.gremlin2.graph.__.*;
 public class ConfluenceSummaryMicroservicesVerticle extends AbstractConfluenceGenerationPageVerticle {
     protected Logger LOG = LoggerFactory.getLogger(ConfluenceSummaryMicroservicesVerticle.class);
 
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
+
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
         return null; // do nothing
@@ -48,7 +55,7 @@ public class ConfluenceSummaryMicroservicesVerticle extends AbstractConfluenceGe
     protected List<ConfluencePage> prepareConfluencePageList() {
         List<ConfluencePage> confluencePageList = new ArrayList<>();
 
-        ConfluencePage page = new ConfluencePage();
+        ConfluencePage page = confluencePageProvider.get();
         confluencePageList.add(page);
 
         page.setTitle("Cloud Microservices list");

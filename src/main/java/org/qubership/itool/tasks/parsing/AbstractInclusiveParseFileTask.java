@@ -17,8 +17,6 @@
 package org.qubership.itool.tasks.parsing;
 
 import org.qubership.itool.tasks.FlowTask;
-import org.qubership.itool.utils.FutureUtils;
-
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;

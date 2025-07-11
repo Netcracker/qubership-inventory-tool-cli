@@ -18,29 +18,12 @@ package org.qubership.itool.context;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.WebClient;
-
-import org.qubership.itool.modules.confluence.ConfluenceClient;
-import org.qubership.itool.modules.confluence.ConfluenceClientBuilder;
-import org.qubership.itool.modules.diagram.DiagramService;
-import org.qubership.itool.modules.diagram.DiagramServiceImpl;
-import org.qubership.itool.modules.diagram.providers.DomainDiagramProvider;
-import org.qubership.itool.modules.diagram.providers.GeneralDomainsDiagramProvider;
-import org.qubership.itool.modules.diagram.providers.InfrastructureDiagramProvider;
-import org.qubership.itool.modules.diagram.providers.MicroserviceDiagramProvider;
-import org.qubership.itool.modules.diagram.providers.QueueDiagramProvider;
-import org.qubership.itool.modules.git.GitAdapter;
-import org.qubership.itool.modules.git.GitAdapterBuilder;
-import org.qubership.itool.modules.git.GitFileRetriever;
-import org.qubership.itool.modules.git.GitFileRetrieverBuilder;
 import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.modules.graph.GraphClassifier;
-import org.qubership.itool.modules.graph.GraphClassifierBuilderImpl;
+import org.qubership.itool.modules.graph.GraphClassifierBuilder;
 import org.qubership.itool.modules.graph.GraphDumpSupport;
 import org.qubership.itool.modules.graph.GraphService;
 import org.qubership.itool.modules.report.GraphReport;
-import org.qubership.itool.modules.template.TemplateService;
-import org.qubership.itool.modules.template.TemplateServiceImpl;
 import org.qubership.itool.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,20 +43,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
-
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_CACHING;
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DATABASE;
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DEFAULT_COMPONENT;
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_DEFAULT_DOMAIN;
-import static org.qubership.itool.modules.diagram.providers.DiagramProvider.SKINPARAM_BACKGROUND_COLOR_QUEUE;
 
 public class FlowContextImpl implements FlowContext {
     private static final Logger LOG = LoggerFactory.getLogger(FlowContextImpl.class);
 
-    private TemplateService templateService;
-    private DiagramService diagramService;
     private final String flowInstanceId = UUID.randomUUID().toString();
 
     private final Map<Class<?>, Object> resources = new HashMap<>();
@@ -86,50 +60,21 @@ public class FlowContextImpl implements FlowContext {
     private Vertx vertx;
     private boolean breakRequested;
     private final Injector injector;
+    private final GraphClassifierBuilder graphClassifierBuilder;
 
     @Inject
-    public FlowContextImpl(Injector injector, Graph graph) {
+    public FlowContextImpl(Injector injector, Graph graph, GraphClassifierBuilder graphClassifierBuilder) {
         this.injector = injector;
 
         this.graph = graph;
         this.report = graph.getReport();
+        this.graphClassifierBuilder = graphClassifierBuilder;
     }
 
     @Override
     public void initialize(Vertx vertx, JsonObject config) {
         this.vertx = vertx;
         this.config = config;
-
-        Properties diagramProperties = new Properties();
-        diagramProperties.setProperty(SKINPARAM_BACKGROUND_COLOR_DEFAULT_DOMAIN, "Gold");
-        diagramProperties.setProperty(SKINPARAM_BACKGROUND_COLOR_DEFAULT_COMPONENT, "Yellow");
-        diagramProperties.setProperty(SKINPARAM_BACKGROUND_COLOR_DATABASE, "DeepSkyBlue");
-        diagramProperties.setProperty(SKINPARAM_BACKGROUND_COLOR_QUEUE, "GreenYellow");
-        diagramProperties.setProperty(SKINPARAM_BACKGROUND_COLOR_CACHING, "Orchid");
-
-        this.diagramService = new DiagramServiceImpl(this.getGraph(), diagramProperties);
-        this.diagramService.register(new MicroserviceDiagramProvider());
-        this.diagramService.register(new DomainDiagramProvider());
-        this.diagramService.register(new GeneralDomainsDiagramProvider());
-        this.diagramService.register(new InfrastructureDiagramProvider());
-        this.diagramService.register(new QueueDiagramProvider());
-        this.templateService = new TemplateServiceImpl(this.diagramService, config);
-
-        WebClient client = WebClient.create(vertx);
-        GitAdapter gitAdapter = GitAdapterBuilder.create(vertx, report, config);
-        ConfluenceClient confluenceClient = ConfluenceClientBuilder.create(vertx, client, config);
-        GitFileRetriever gitFileRetriever = GitFileRetrieverBuilder.create(gitAdapter, config, vertx, report);
-
-        this.resources.put(FlowContext.class, this);
-        this.resources.put(Vertx.class, vertx);
-        this.resources.put(Graph.class, this.graph);
-        this.resources.put(GraphReport.class, this.report);
-        this.resources.put(WebClient.class, client);
-        this.resources.put(ConfluenceClient.class, confluenceClient);
-        this.resources.put(DiagramService.class, this.diagramService);
-        this.resources.put(TemplateService.class, this.templateService);
-        this.resources.put(GitAdapter.class, gitAdapter);
-        this.resources.put(GitFileRetriever.class, gitFileRetriever);
 
         if (graphService != null) {
             resources.put(GraphService.class, graphService);
@@ -172,7 +117,7 @@ public class FlowContextImpl implements FlowContext {
     public void setGraphService(GraphService graphService) {
         this.graphService = graphService;
         if (graphService != null) {
-            graphClassifier = new GraphClassifierBuilderImpl()
+            graphClassifier = graphClassifierBuilder
                 .setId("flow-" + flowInstanceId)
                 .setWithReport(true)
                 .build();

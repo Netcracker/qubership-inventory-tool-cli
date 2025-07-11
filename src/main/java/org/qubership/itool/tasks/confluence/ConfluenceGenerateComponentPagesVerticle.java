@@ -34,6 +34,8 @@ import org.qubership.itool.utils.TechNormalizationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Provider;
+
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ import static org.qubership.itool.modules.gremlin2.structure.MapElement.key;
 public class ConfluenceGenerateComponentPagesVerticle extends AbstractConfluenceGenerationPageVerticle {
     @Resource
     protected DiagramService diagramService;
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
 
     public static final List<String> BACKEND_TYPES = Arrays.asList("backend", "ui backend");
 
@@ -80,7 +84,7 @@ public class ConfluenceGenerateComponentPagesVerticle extends AbstractConfluence
             String pageTitle = "Tech of " + publicDomainId + "." + component.getString("name");
             String parentTitle = "Tech of " + publicDomainId;
 
-            ConfluencePage page = new ConfluencePage();
+            ConfluencePage page = confluencePageProvider.get();
             confluencePageList.add(page);
             page.setElement(component);
             page.setElementType("component");

@@ -46,7 +46,13 @@ import static org.qubership.itool.utils.ConfigProperties.RELEASE_BRANCH_POINTER;
 import java.io.File;
 import java.util.*;
 
+import javax.annotation.Resource;
+
+import jakarta.inject.Provider;
+
 public class ParseApplicationInventoryFileTask extends FlowTask {
+    @Resource
+    Provider<InventoryJsonParser> inventoryJsonParserProvider;
 
     protected static final Logger LOG = LoggerFactory.getLogger(ParseApplicationInventoryFileTask.class);
 
@@ -64,7 +70,7 @@ public class ParseApplicationInventoryFileTask extends FlowTask {
             appInvJson = new File(inputDir, "application-inventory.json");
         }
         getLogger().info("Parsing {}", appInvJson);
-        InventoryJsonParser parser = new InventoryJsonParser();
+        InventoryJsonParser parser = inventoryJsonParserProvider.get();
 
         JsonObject inv = JsonUtils.readJsonFile(appInvJson.getPath());
 

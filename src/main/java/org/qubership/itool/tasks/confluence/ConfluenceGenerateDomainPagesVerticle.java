@@ -25,6 +25,8 @@ import org.qubership.itool.modules.template.DiagramGeneralDomainMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.inject.Provider;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class ConfluenceGenerateDomainPagesVerticle extends AbstractConfluenceGen
 
     @Resource
     protected DiagramService diagramService;
+    @Resource
+    protected Provider<ConfluencePage> confluencePageProvider;
 
     @Override
     protected List<ConfluencePage> prepareConfluencePageList(String department) {
@@ -55,7 +59,7 @@ public class ConfluenceGenerateDomainPagesVerticle extends AbstractConfluenceGen
         for (JsonObject domain : domainIdList) {
             String domainId = domain.getString(F_ID);
 
-            ConfluencePage page = new ConfluencePage();
+            ConfluencePage page = confluencePageProvider.get();
             confluencePageList.add(page);
 
             page.setElement(domain);

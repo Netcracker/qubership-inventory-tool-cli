@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024-2025 NetCracker Technology Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.qubership.itool.di;
 
 import com.google.inject.Binding;
@@ -24,7 +39,7 @@ public class ApplicationContext {
 
     /**
      * Create a new application context.
-     * 
+     *
      * @param vertx The Vertx instance to use
      * @param config The application configuration
      * @param modules The modules to use for dependency injection
@@ -32,18 +47,23 @@ public class ApplicationContext {
     public ApplicationContext(Vertx vertx, JsonObject config, Module[] modules) {
         this.vertx = vertx;
         this.config = config;
-        
+
         // Log the modules being installed
         logger.info("Creating ApplicationContext with {} modules", modules.length);
         for (int i = 0; i < modules.length; i++) {
             logger.info("Module {}: {}", i, modules[i].getClass().getSimpleName());
         }
-        
-        this.injector = Guice.createInjector(modules);
-        
+
+        // Add ConfigModule to provide application configuration
+        Module[] allModules = new Module[modules.length + 1];
+        allModules[0] = new ConfigModule(config);
+        System.arraycopy(modules, 0, allModules, 1, modules.length);
+
+        this.injector = Guice.createInjector(allModules);
+
         // Log successful creation
         logger.info("ApplicationContext created successfully");
-        
+
         // Log all Guice bindings
         logBindings();
     }
@@ -70,7 +90,7 @@ public class ApplicationContext {
 
     /**
      * Create a new application context with default settings.
-     * 
+     *
      * @return A new application context
      */
     public static ApplicationContext createDefault() {
@@ -80,7 +100,7 @@ public class ApplicationContext {
 
     /**
      * Get an instance of the specified type from the injector.
-     * 
+     *
      * @param type The type to get an instance of
      * @return An instance of the specified type
      */
@@ -90,7 +110,7 @@ public class ApplicationContext {
 
     /**
      * Get the Vertx instance associated with this context.
-     * 
+     *
      * @return The Vertx instance
      */
     public Vertx getVertx() {
@@ -99,7 +119,7 @@ public class ApplicationContext {
 
     /**
      * Get the application configuration.
-     * 
+     *
      * @return The application configuration
      */
     public JsonObject getConfig() {
@@ -109,10 +129,10 @@ public class ApplicationContext {
     /**
      * Get the injector instance.
      * This should be used sparingly and only when direct access to the injector is necessary.
-     * 
+     *
      * @return The injector instance
      */
     public Injector getInjector() {
         return injector;
     }
-} 
+}
