@@ -1,6 +1,6 @@
 # Starter
 
-[![Vert.x](https://img.shields.io/badge/vert.x-4.5.14-purple.svg)](https://vertx.io)
+[![Vert.x](https://img.shields.io/badge/vert.x-5.0.3-purple.svg)](https://vertx.io)
 
 This application was generated using [http://start.vertx.io](http://start.vertx.io)
 
