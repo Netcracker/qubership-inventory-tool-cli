@@ -48,7 +48,7 @@
         <junit-jupiter.version>5.13.2</junit-jupiter.version>
         <guava.version>33.4.8-jre</guava.version>
         <groovy.version>4.0.27</groovy.version>
-        <vertx.version>5.0.3</vertx.version>
+        <vertx.version>5.0.4</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
         <picocli.version>4.6.3</picocli.version>
     </properties>
