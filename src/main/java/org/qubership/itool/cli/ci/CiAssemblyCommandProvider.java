@@ -20,9 +20,6 @@ import org.qubership.itool.cli.spi.CommandProvider;
 
 import java.util.concurrent.Callable;
 
-/**
- * Provider for the CiAssemblyCommand.
- */
 public class CiAssemblyCommandProvider implements CommandProvider {
 
     @Override

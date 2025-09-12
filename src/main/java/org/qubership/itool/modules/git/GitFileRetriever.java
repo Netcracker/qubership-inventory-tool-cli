@@ -28,6 +28,10 @@ public interface GitFileRetriever {
 
     Future<?> copyFilesFromReleases(String release1, String release2, List<Path> files);
 
+    /**
+     * @deprecated as not used anymore
+     */
+    @Deprecated
     Future<Triple<Path, String, String>> getFileInfo(String sourceRelease, String targetRelease, Path path);
 
     List<Future<?>> copyFilesFromRepo(Git repo, String release, List<Path> files);
