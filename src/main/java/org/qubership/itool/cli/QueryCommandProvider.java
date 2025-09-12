@@ -20,9 +20,6 @@ import org.qubership.itool.cli.spi.CommandProvider;
 
 import java.util.concurrent.Callable;
 
-/**
- * Provider for the QueryCommand.
- */
 public class QueryCommandProvider implements CommandProvider {
 
     @Override

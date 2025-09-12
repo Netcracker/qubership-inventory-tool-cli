@@ -78,31 +78,28 @@ public class InventoryToolMain implements Callable<Integer> {
         // Initialize shared Vertx instance
         sharedVertx = Vertx.vertx();
 
-        // Context will be initialized in execution strategy with actual command configuration
+        try {
+            // Context will be initialized in execution strategy with actual command configuration
+            InventoryToolMain app = new InventoryToolMain();
+            CommandLine commandLine = new CommandLine(app);
 
-        InventoryToolMain app = new InventoryToolMain();
-        CommandLine commandLine = new CommandLine(app);
+            // Load and register all extension commands
+            loadExtensionCommands(commandLine);
 
-        // Configure Picocli to behave like Vertx CLI: case-insensitive and abbreviated options
-        commandLine.setOptionsCaseInsensitive(true);
-        commandLine.setAbbreviatedOptionsAllowed(true);
-        commandLine.setSubcommandsCaseInsensitive(true);
-        commandLine.setAbbreviatedSubcommandsAllowed(true);
+            // Store the CommandLine instance for use in the call method
+            app.commandLine = commandLine;
 
-        // Load and register all extension commands
-        loadExtensionCommands(commandLine);
+            // Set custom execution strategy to load configuration before command execution
+            commandLine.setExecutionStrategy(new ConfigLoadingExecutionStrategy(sharedVertx));
 
-        // Store the CommandLine instance for use in the call method
-        app.commandLine = commandLine;
-
-        // Set custom execution strategy to load configuration before command execution
-        commandLine.setExecutionStrategy(new ConfigLoadingExecutionStrategy(sharedVertx));
-
-        int exitCode = commandLine.execute(args);
-
-        // Cleanup shared resources
-        cleanupSharedResources();
-        System.exit(exitCode);
+            int exitCode = commandLine.execute(args);
+            cleanupSharedResources();
+            System.exit(exitCode);
+        } catch (Exception e) {
+            LOGGER.error("Application failed", e);
+            cleanupSharedResources();
+            System.exit(1);
+        }
     }
 
 

@@ -48,8 +48,9 @@ public class ConfluenceClientImpl implements ConfluenceClient {
         this.vertx = vertx;
         this.client = client;
         this.config = config;
-        this.credentials = (new UsernamePasswordCredentials(config.getString("login"), config.getString("password")))
-                .applyHttpChallenge(null);
+        this.credentials = new UsernamePasswordCredentials(
+                config.getString("login"),
+                config.getString("password"));
         this.session = WebClientSession.create(client);
     }
 

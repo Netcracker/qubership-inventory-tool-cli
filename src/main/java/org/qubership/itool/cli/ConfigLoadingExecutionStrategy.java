@@ -25,8 +25,9 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine.IExecutionStrategy;
 import picocli.CommandLine.ParseResult;
 import picocli.CommandLine.RunLast;
-
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Custom execution strategy that loads configuration before executing commands.
@@ -83,10 +84,25 @@ public class ConfigLoadingExecutionStrategy implements IExecutionStrategy {
 
                     LOGGER.debug("Context initialized successfully for command: {}",
                             command.getClass().getSimpleName());
+                } catch (IllegalStateException e) {
+                    LOGGER.error("Vertx not initialized: {}", e.getMessage());
+                    return 2; // Configuration error
+                } catch (ExecutionException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof TimeoutException) {
+                        LOGGER.error("Configuration loading timed out: {}", e.getMessage());
+                        return 3; // Timeout error
+                    } else {
+                        LOGGER.error("Configuration loading failed: {}", e.getMessage(), e);
+                        return 4; // Configuration loading error
+                    }
+                } catch (InterruptedException e) {
+                    LOGGER.error("Configuration loading was interrupted: {}", e.getMessage());
+                    Thread.currentThread().interrupt(); // Restore interrupt status
+                    return 5; // Interruption error
                 } catch (Exception e) {
-                    LOGGER.error("Failed to initialize context for command: {}",
-                            command.getClass().getSimpleName(), e);
-                    return 1; // Return error code instead of throwing exception
+                    LOGGER.error("Unexpected error during context initialization: {}", e.getMessage(), e);
+                    return 6; // Unexpected error
                 }
             }
         }
