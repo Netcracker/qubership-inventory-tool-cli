@@ -30,7 +30,6 @@ public interface ConfigProperties {
     String CONFIG_PATH_POINTER = "/configPath";
     String PROFILE_POINTER = "/profile";
     String DISABLED_FEATURES_POINTER = "/disabledFeatures";
-    String SAVE_PROGRESS = "saveProgress";
 
     String QUERY_PROGRESS_PATH_POINTER = "/query/progressPath";
     String QUERY_STEP_POINTER = "/query/step";
@@ -40,8 +39,15 @@ public interface ConfigProperties {
 
     String PASSWORD_PROPERTY = "password";
     String PASSWORD_SOURCE_PROPERTY = "passwordSource";
-    String OFFLINE_MODE = "offlineMode";
-    String DOCKER_MODE = "dockerMode";
+    String OFFLINE_MODE_PROPERTY = "offlineMode";
+    String DOCKER_MODE_PROPERTY = "dockerMode";
+    String SAVE_PROGRESS_PROPERTY = "saveProgress";
+    String LOGIN_PROPERTY = "login";
+    String EXCEL_EXPORT_PROPERTY = "excelExport";
+    String START_STEP_PROPERTY = "startStep";
+    String LAST_STEP_PROPERTY = "lastStep";
+    String INCLUDE_DOMAINS_PROPERTY = "includeDomains";
+    String DISABLED_FEATURES_PROPERTY = "disabledFeatures";
 
     String DEFAULT_RELEASE = "default";
     String RELEASES_DIR = "releases";

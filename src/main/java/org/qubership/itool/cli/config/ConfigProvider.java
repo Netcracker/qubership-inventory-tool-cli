@@ -70,7 +70,7 @@ public class ConfigProvider {
             return new SucceededFuture<>(config);
         }
 
-        if (Boolean.parseBoolean(config.getString(OFFLINE_MODE))) {
+        if (Boolean.parseBoolean(config.getString(OFFLINE_MODE_PROPERTY))) {
             // Assume we do not need to read passwords from anywhere and use them in offline mode
             LOG.warn("Offline mode, got no password");
             return new SucceededFuture<>(config);
@@ -145,10 +145,10 @@ public class ConfigProvider {
                 if (booleanPattern.matcher(value).matches()) {
                     pointer.writeJson(config, Boolean.valueOf(value), true);
                 } else {
-                    pointer.writeJson(config, value, true);
+                    pointer.writeJson(config, StringUtils.trimToEmpty(value), true);
                 }
             } else {
-                config.put(key, value);
+                config.put(key, StringUtils.trimToEmpty(value));
             }
         }
 

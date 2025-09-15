@@ -16,11 +16,10 @@
 
 package org.qubership.itool.modules.gremlin2.step.branch;
 
+import java.util.List;
 import org.qubership.itool.modules.gremlin2.Traversal;
 import org.qubership.itool.modules.gremlin2.Traverser;
 import org.qubership.itool.modules.gremlin2.step.AbstractStep;
-
-import java.util.List;
 
 public class UnionStep<S, E> extends AbstractStep<S, E> {
 

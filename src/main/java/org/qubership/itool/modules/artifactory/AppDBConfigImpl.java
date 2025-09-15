@@ -18,6 +18,7 @@ package org.qubership.itool.modules.artifactory;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.pointer.JsonPointer;
+import static org.qubership.itool.utils.ConfigProperties.LOGIN_PROPERTY;
 import org.qubership.itool.utils.ConfigProperties;
 
 public class AppDBConfigImpl implements AppDBConfig {
@@ -44,12 +45,13 @@ public class AppDBConfigImpl implements AppDBConfig {
                 .queryJsonOrDefault(config, BASIC_AUTH);
         switch (authMethod.toLowerCase()) {
         case BASIC_AUTH:
-            this.user = config.getString("login");
+            this.user = config.getString(LOGIN_PROPERTY);
             this.password = config.getString("password");
             break;
         default:
-            throw new IllegalArgumentException(ConfigProperties.APPDB_AUTH_METHOD_POINTER + "=" + authMethod + " not supported");
-        }
+            throw new IllegalArgumentException(ConfigProperties.APPDB_AUTH_METHOD_POINTER + "="
+                    + authMethod + " not supported");
+    }
         this.mavenEntry = (String) JsonPointer.from(ConfigProperties.APPDB_MAVEN_ENTRY_POINTER)
                 .queryJsonOrDefault(config, DEFAULT_MAVEN_ENTRY);
     }

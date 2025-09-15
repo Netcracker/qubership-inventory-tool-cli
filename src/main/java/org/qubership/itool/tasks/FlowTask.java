@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import static org.qubership.itool.utils.ConfigProperties.DISABLED_FEATURES_PROPERTY;
+import static org.qubership.itool.utils.ConfigProperties.LAST_STEP_PROPERTY;
 import java.io.File;
 import java.time.Duration;
 import java.util.*;
@@ -121,7 +123,7 @@ public abstract class FlowTask {
         }
 
         Set<String> disabledFeatures = new HashSet<>(Arrays.asList(
-                config().getString("disabledFeatures", "").split("\\s*,\\s*")));
+                config().getString(DISABLED_FEATURES_PROPERTY, "").split("\\s*,\\s*")));
         for (String feature : features) {
             if (disabledFeatures.contains(feature)) {
                 getLogger().info("Task {} [fiid={}] ignored because feature {} is disabled",
@@ -156,7 +158,7 @@ public abstract class FlowTask {
                     flowContext.getFlowInstanceId(), Duration.ofNanos(System.nanoTime() - executionStart));
         }
 
-        String lastStep = config().getString("lastStep");
+        String lastStep = config().getString(LAST_STEP_PROPERTY);
         if (lastStep != null && (TASK_ADDRESS_PREFIX + lastStep).equals(taskAddress)) {
             flowContext.setBreakRequested(true);
         }
@@ -183,7 +185,7 @@ public abstract class FlowTask {
     }
 
     private Future<Void> saveProgressIfRequired() {
-        String saveProgress = config().getString(ConfigProperties.SAVE_PROGRESS);
+        String saveProgress = config().getString(ConfigProperties.SAVE_PROGRESS_PROPERTY);
         if (saveProgressForThisTask(saveProgress)) {
             String taskName = getTaskAddress();
             getLogger().info("Save progress before execute step '{}'", taskName);

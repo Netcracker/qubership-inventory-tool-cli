@@ -42,7 +42,7 @@ public class QueryCommand extends AbstractCommand {
 
     public QueryCommand() {
         super();
-        properties.put(OFFLINE_MODE, "true");
+        properties.put(OFFLINE_MODE_PROPERTY, "true");
     }
 
     @Option(names = {"-f", "--file"}, description = "JSON file that CLI should load instead of Graph dump")
@@ -57,7 +57,7 @@ public class QueryCommand extends AbstractCommand {
 
     @Option(names = {"-l", "--login"}, description = "Login to access services requiring authentication")
     public void setLogin(String login) {
-        properties.put("login", login);
+        properties.put(LOGIN_PROPERTY, login);
     }
 
     @Option(names = {"--passwordSource"}, description = "Password source, default: \"file:password.txt\"")

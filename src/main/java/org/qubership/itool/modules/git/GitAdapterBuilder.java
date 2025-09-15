@@ -16,6 +16,7 @@
 
 package org.qubership.itool.modules.git;
 
+import static org.qubership.itool.utils.ConfigProperties.LOGIN_PROPERTY;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
@@ -33,14 +34,14 @@ public class GitAdapterBuilder {
 
     @Nullable
     public static GitAdapter create(Vertx vertx, GraphReport report, JsonObject config) {
-        boolean offlineMode = Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE));
+        boolean offlineMode = Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE_PROPERTY));
         if (offlineMode) {
             LOG.warn("Offline mode, GIT facilities will not be available");
             return null;
         }
 
         String password = config.getString("password");
-        String login = config.getString("login");
+        String login = config.getString(LOGIN_PROPERTY);
         if (login==null || password==null) {
             LOG.warn("No login or password provided, GIT facilities will not be available");
             return null;

@@ -48,8 +48,8 @@ public class ObfuscateCommand extends AbstractCommand {
     public ObfuscateCommand() {
         super();
         properties.put(PROFILE_POINTER, "ci");
-        properties.put(OFFLINE_MODE, "true");
-        properties.put(SAVE_PROGRESS, "false");
+        properties.put(OFFLINE_MODE_PROPERTY, "true");
+        properties.put(SAVE_PROGRESS_PROPERTY, "false");
     }
 
     @Option(names = {"--inputDirectory"}, description = "Input directory")
@@ -79,15 +79,15 @@ public class ObfuscateCommand extends AbstractCommand {
 
     @Override
     public Integer call() throws Exception {
-        LOGGER.info("Obfuscation main flow execution");
-        LOGGER.info("----- Configuration -----");
+        getLogger().info("Obfuscation main flow execution");
+        getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
-        LOGGER.info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        LOGGER.info("profile: {}", properties.get(PROFILE_POINTER));
-        LOGGER.info("inputDirectory: {}", properties.get(P_INPUT_DIRECTORY));
-        LOGGER.info("inputFile: {}", properties.get(P_INPUT_FILE));
-        LOGGER.info("explicit outputDirectory: {}", properties.get(P_OUTPUT_DIRECTORY));
-        LOGGER.info("outputFile: {}", properties.get(P_OUTPUT_FILE));
+        getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
+        getLogger().info("profile: {}", properties.get(PROFILE_POINTER));
+        getLogger().info("inputDirectory: {}", properties.get(P_INPUT_DIRECTORY));
+        getLogger().info("inputFile: {}", properties.get(P_INPUT_FILE));
+        getLogger().info("explicit outputDirectory: {}", properties.get(P_OUTPUT_DIRECTORY));
+        getLogger().info("outputFile: {}", properties.get(P_OUTPUT_FILE));
 
         // Execute the flow using the existing AbstractCommand infrastructure
         runFlow(new ObfuscationMainVerticle(), null);

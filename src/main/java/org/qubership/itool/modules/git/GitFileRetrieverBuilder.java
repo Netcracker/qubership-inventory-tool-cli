@@ -34,7 +34,8 @@ public class GitFileRetrieverBuilder {
     @Nullable
     public static GitFileRetriever create(GitAdapter gitAdapter, JsonObject config, Vertx vertx, GraphReport report)
     {
-        boolean offlineMode = gitAdapter==null || Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE));
+        boolean offlineMode = gitAdapter == null
+                || Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE_PROPERTY));
         if (offlineMode) {
             LOG.warn("Offline mode, GIT facilities will not be available");
             return null;

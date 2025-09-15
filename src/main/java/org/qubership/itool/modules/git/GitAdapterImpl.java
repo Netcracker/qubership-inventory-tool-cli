@@ -62,6 +62,7 @@ import java.util.stream.Collectors;
 
 import static org.qubership.itool.modules.graph.Graph.F_ID;
 import static org.qubership.itool.modules.graph.Graph.F_REPOSITORY;
+import static org.qubership.itool.utils.ConfigProperties.LOGIN_PROPERTY;
 import static org.qubership.itool.utils.ConfigProperties.SUPER_REPOSITORY_DIR_POINTER;
 import static org.qubership.itool.utils.ConfigProperties.SUPER_REPOSITORY_URL_POINTER;
 
@@ -83,7 +84,7 @@ public class GitAdapterImpl implements GitAdapter {
         this.vertx = vertx;
 
         String password = config.getString("password");
-        String login = config.getString("login");
+        String login = config.getString(LOGIN_PROPERTY);
         this.credentialsProvider = new UsernamePasswordCredentialsProvider(login, password);
 
         this.config = config;

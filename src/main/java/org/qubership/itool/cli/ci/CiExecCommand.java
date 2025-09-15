@@ -16,20 +16,25 @@
 
 package org.qubership.itool.cli.ci;
 
+import static org.qubership.itool.cli.ci.CiConstants.P_COMP_NAME;
+import static org.qubership.itool.cli.ci.CiConstants.P_COMP_VERSION;
+import static org.qubership.itool.cli.ci.CiConstants.P_DUMP_BY;
+import static org.qubership.itool.cli.ci.CiConstants.P_INPUT_DIRECTORY;
+import static org.qubership.itool.cli.ci.CiConstants.P_MOCK_DOMAIN;
+import static org.qubership.itool.cli.ci.CiConstants.P_OUTPUT_FILE;
+import static org.qubership.itool.cli.ci.CiConstants.P_REPOSITORY;
+import static org.qubership.itool.cli.ci.CiConstants.P_RUN_NAME;
+import static org.qubership.itool.utils.ConfigProperties.PROFILE_POINTER;
+import static org.qubership.itool.utils.ConfigProperties.RELEASE_POINTER;
+import java.io.File;
+import java.util.Properties;
+import org.qubership.itool.cli.FlowMainVerticle;
+import org.qubership.itool.modules.graph.GraphDataConstants;
+import org.qubership.itool.utils.ConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import java.io.File;
-import java.util.Properties;
-
-import static org.qubership.itool.cli.ci.CiConstants.*;
-import static org.qubership.itool.utils.ConfigProperties.*;
-
-import org.qubership.itool.cli.AbstractCommand;
-import org.qubership.itool.cli.FlowMainVerticle;
-import org.qubership.itool.modules.graph.GraphDataConstants;
-import org.qubership.itool.utils.ConfigUtils;
 
 /**
  * A command for single-component run on CI.
@@ -40,7 +45,7 @@ import org.qubership.itool.utils.ConfigUtils;
     description = "CI flow: parse a single component",
     mixinStandardHelpOptions = true
 )
-public class CiExecCommand extends AbstractCommand {
+public class CiExecCommand extends AbstractCiCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CiExecCommand.class);
 
@@ -50,12 +55,8 @@ public class CiExecCommand extends AbstractCommand {
 
     public CiExecCommand() {
         super();
-        // Set CI-specific defaults
+        // Set CI-exec-specific defaults
         properties.put(P_MOCK_DOMAIN, GraphDataConstants.UNKNOWN_DOMAIN_NAME);
-        properties.put(PROFILE_POINTER, "ci");
-        properties.put(OFFLINE_MODE, "true");
-        properties.put(SAVE_PROGRESS, "false");
-        properties.put(P_DEFAULT_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY_DESKTOP);
     }
 
     // CI Exec specific options
@@ -73,23 +74,12 @@ public class CiExecCommand extends AbstractCommand {
             required = true)
     public void setRepository(String repository) {
         if ("null".equals(repository)) {
-            LOGGER.error("'null' repository name passed");
+            getLogger().error("'null' repository name passed");
             System.exit(1);
         }
         properties.put(P_REPOSITORY, repository);
         String runName = repository.replaceFirst("^.*/(.*?)(\\.git)?$", "$1");
         properties.put(P_RUN_NAME, runName);
-    }
-
-    @Option(names = {"--inputDirectory"},
-            description = "Input directory with sources of the target component")
-    public void setInputDirectory(String inputDirectory) {
-        properties.put(P_INPUT_DIRECTORY, inputDirectory);
-    }
-
-    @Option(names = {"--outputDirectory"}, description = "Output directory")
-    public void setOutputDirectory(String outputDirectory) {
-        properties.put(P_OUTPUT_DIRECTORY, outputDirectory);
     }
 
     @Option(names = {"--outputFile"}, description = "Output file name")
@@ -104,19 +94,11 @@ public class CiExecCommand extends AbstractCommand {
         properties.put(P_DUMP_BY, dumpResults);
     }
 
-    @Option(names = {"--docker", "--dockerMode"}, description = "Docker mode: true/false")
-    public void setDockerMode(boolean dockerMode) {
-        properties.put(P_DEFAULT_OUTPUT_DIRECTORY,
-                dockerMode ? DEFAULT_OUTPUT_DIRECTORY_DOCKER : DEFAULT_OUTPUT_DIRECTORY_DESKTOP);
-        properties.put("dockerMode", String.valueOf(dockerMode));
-        if (dockerMode) {
-            properties.put("saveProgress", "false");
-        }
-    }
-
     @Override
     public Integer call() throws Exception {
-        LOGGER.info("Inventory tool main flow execution for CI (Picocli version)");
+        getLogger().info("Inventory tool main flow execution for CI");
+
+        logAndFillDirs();
 
         // Log configuration
         logConfiguration();
@@ -131,56 +113,15 @@ public class CiExecCommand extends AbstractCommand {
      * Logs the current configuration for debugging purposes.
      */
     private void logConfiguration() {
-        LOGGER.info("----- Configuration -----");
+        getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
-        LOGGER.info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        LOGGER.info("profile: {}", properties.get(PROFILE_POINTER));
-        logAndFillDirs();
-        LOGGER.info("outputFile: {}", properties.get(P_OUTPUT_FILE));
-        LOGGER.info("repository: {}", properties.get(P_REPOSITORY));
-        LOGGER.info("releaseBranch: {}", properties.get(RELEASE_POINTER));
-        LOGGER.info("componentName: {}", properties.get(P_COMP_NAME));
-        LOGGER.info("componentVersion: {}", properties.get(P_COMP_VERSION));
-    }
-
-    /**
-     * Processing for default directories.
-     * When flow runs, "ciInputDirectory" and "ciOutputDirectory" may be taken from "ci.properties" file.
-     * This method helps the command to fall back to default directories before the flow starts.
-     */
-    protected void logAndFillDirs() {
-        boolean isDocker = Boolean.parseBoolean(properties.getOrDefault("dockerMode", "false"));
-        LOGGER.info("dockerMode: {}", isDocker);
-
-        String defInputDirectory = getDefaultInputDir(isDocker);
-        String defOutputDirectory = getDefaultOutputDir(isDocker);
-
-        LOGGER.info("explicit inputDirectory: {}", properties.get(P_INPUT_DIRECTORY));
-        LOGGER.info("default inputDirectory: {}", defInputDirectory);
-        LOGGER.info("explicit outputDirectory: {}", properties.get(P_OUTPUT_DIRECTORY));
-        LOGGER.info("default outputDirectory: {}", defOutputDirectory);
-
-        if (!properties.containsKey(P_INPUT_DIRECTORY)) {
-            if (defInputDirectory != null) {
-                properties.put(P_INPUT_DIRECTORY, DEFAULT_INPUT_DIRECTORY_DOCKER);
-            } else {
-                LOGGER.error("Either --docker=true or --inputDirectory must be specified! EXITTING!");
-                System.exit(1);
-            }
-        }
-        if (!properties.containsKey(P_OUTPUT_DIRECTORY)) {
-            if (defOutputDirectory != null) {
-                properties.put(P_OUTPUT_DIRECTORY, defOutputDirectory);
-            }
-        }
-    }
-
-    protected String getDefaultInputDir(boolean isDocker) {
-        return isDocker ? DEFAULT_INPUT_DIRECTORY_DOCKER : null;
-    }
-
-    protected String getDefaultOutputDir(boolean isDocker) {
-        return properties.get(P_DEFAULT_OUTPUT_DIRECTORY);
+        getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
+        getLogger().info("profile: {}", properties.get(PROFILE_POINTER));
+        getLogger().info("outputFile: {}", properties.get(P_OUTPUT_FILE));
+        getLogger().info("repository: {}", properties.get(P_REPOSITORY));
+        getLogger().info("releaseBranch: {}", properties.get(RELEASE_POINTER));
+        getLogger().info("componentName: {}", properties.get(P_COMP_NAME));
+        getLogger().info("componentVersion: {}", properties.get(P_COMP_VERSION));
     }
 
     protected FlowMainVerticle createMainVerticle() {
@@ -189,22 +130,22 @@ public class CiExecCommand extends AbstractCommand {
         File appInvJson = new File(inputDir, "application_inventory.json");
         boolean appExec = false;
         if (appInvJson.isFile()) {
-            LOGGER.info("File {} exists!", appInvJson);
+            getLogger().info("File {} exists!", appInvJson);
             appExec = true;
         } else {
             File appInvJson2 = new File(inputDir, "application-inventory.json");
             if (appInvJson2.isFile()) { // Fallback
-                LOGGER.warn("File {} exists! Considering it as {}", appInvJson2, "application_inventory.json");
+                getLogger().warn("File {} exists! Considering it as {}", appInvJson2, "application_inventory.json");
                 appExec = true;
             }
         }
 
         if (appExec) {
-            LOGGER.info("==> switching to Application flow");
+            getLogger().info("==> switching to Application flow");
             return new CiExecApplicationVerticle();
         } else {
-            LOGGER.info("File {} does NOT exist", appInvJson);
-            LOGGER.info("==> Normal flow");
+            getLogger().info("File {} does NOT exist", appInvJson);
+            getLogger().info("==> Normal flow");
             return new CiExecVerticle();
         }
     }

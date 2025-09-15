@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 
 import static org.qubership.itool.modules.graph.Graph.F_ID;
 import static org.qubership.itool.modules.graph.Graph.F_TYPE;
+import static org.qubership.itool.utils.ConfigProperties.INCLUDE_DOMAINS_PROPERTY;
 import static org.qubership.itool.utils.ConfigProperties.RELEASE_BRANCH_POINTER;
 
 
@@ -58,7 +59,8 @@ public abstract class AbstractInitializeDomainsVerticle extends FlowTask {
             domainConfigs = walk.filter(Files::isRegularFile)
                 .filter(f -> f.toString().endsWith(".json") && containsIn(f, includeDomains))
                 .collect(Collectors.toList());
-            //TODO: add check if file is readable (filter(Files::isReadableFile)) and send message to report if it is not
+            // TODO: add check if file is readable (filter(Files::isReadableFile)) and send message
+            // to report if it is not
             getLogger().debug("Files discovered {}", domainConfigs);
         } catch (IOException e) {
             report.exceptionThrown(new JsonObject(), e);
@@ -81,7 +83,7 @@ public abstract class AbstractInitializeDomainsVerticle extends FlowTask {
 
 
     protected JsonArray getIncludedDomains () {
-        String includeDomains = config().getString("includeDomains");
+        String includeDomains = config().getString(INCLUDE_DOMAINS_PROPERTY);
         JsonArray result = new JsonArray();
         if (includeDomains != null) {
             result = new JsonArray(new ArrayList<>(Arrays.asList(includeDomains.split(",\\s*"))));
@@ -130,7 +132,8 @@ public abstract class AbstractInitializeDomainsVerticle extends FlowTask {
             if (!graph.addVertex(domain, component)) {
                 report.componentDuplicated(graph.getVertex(component.getString(F_ID)), component);
             }
-            JsonPointer.from("/details/releaseBranch").writeJson(component, decideReleaseBranch(component, domain), true);
+            JsonPointer.from("/details/releaseBranch").writeJson(component,
+                    decideReleaseBranch(component, domain), true);
         }
     }
 

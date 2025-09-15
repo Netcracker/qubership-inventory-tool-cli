@@ -29,7 +29,7 @@ import org.qubership.itool.utils.FSUtils;
 import org.qubership.itool.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import static org.qubership.itool.utils.ConfigProperties.START_STEP_PROPERTY;
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
@@ -120,7 +120,7 @@ public abstract class FlowMainVerticle extends AbstractVerticle {
             terminateFlow("No flow defined for " + getClass());
         }
 
-        String startStep = config().getString("startStep");
+        String startStep = config().getString(START_STEP_PROPERTY);
         if (StringUtils.isBlank(startStep)) {
             getLogger().info("========== Starting a flow: fiid={}", flowContext.getFlowInstanceId());
             startStep = flowSequence.get(0);

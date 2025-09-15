@@ -48,8 +48,8 @@ public class ExtractCommand extends AbstractCommand {
     public ExtractCommand() {
         super();
         properties.put(PROFILE_POINTER, "ci");
-        properties.put(OFFLINE_MODE, "true");
-        properties.put(SAVE_PROGRESS, "false");
+        properties.put(OFFLINE_MODE_PROPERTY, "true");
+        properties.put(SAVE_PROGRESS_PROPERTY, "false");
     }
 
     @Option(names = {"--inputFile"}, description = "Input file name", required = true)
@@ -64,12 +64,12 @@ public class ExtractCommand extends AbstractCommand {
 
     @Override
     public Integer call() throws Exception {
-        LOGGER.info("Graph data extraction flow execution");
-        LOGGER.info("----- Configuration -----");
+        getLogger().info("Graph data extraction flow execution");
+        getLogger().info("----- Configuration -----");
         Properties buildProperties = ConfigUtils.getInventoryToolBuildProperties();
-        LOGGER.info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
-        LOGGER.info("inputFile: {}", properties.get(P_INPUT_FILE));
-        LOGGER.info("outputFile: {}", properties.get(P_OUTPUT_FILE));
+        getLogger().info("cli version: {}", buildProperties.get("inventory-tool-cli.version"));
+        getLogger().info("inputFile: {}", properties.get(P_INPUT_FILE));
+        getLogger().info("outputFile: {}", properties.get(P_OUTPUT_FILE));
 
         // Execute the flow using the existing AbstractCommand infrastructure
         runFlow(new ExtractMainVerticle(), null);

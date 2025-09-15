@@ -57,6 +57,7 @@ import static org.qubership.itool.modules.graph.Graph.F_REPOSITORY;
 import static org.qubership.itool.modules.graph.Graph.F_TYPE;
 import static org.qubership.itool.modules.graph.Graph.V_LIBRARY;
 import static org.qubership.itool.modules.graph.Graph.V_MICROSERVICE;
+import static org.qubership.itool.utils.ConfigProperties.EXCEL_EXPORT_PROPERTY;
 
 public class ExcelExportVerticle extends FlowTask {
     protected Logger LOG = LoggerFactory.getLogger(ExcelExportVerticle.class);
@@ -87,7 +88,7 @@ public class ExcelExportVerticle extends FlowTask {
 
     @Override
     protected void taskStart(Promise<?> taskPromise) throws Exception {
-        String exportPath = config().getString("excelExport");
+        String exportPath = config().getString(EXCEL_EXPORT_PROPERTY);
         if (exportPath == null) {
             LOG.error("excelExport property is not set");
         }

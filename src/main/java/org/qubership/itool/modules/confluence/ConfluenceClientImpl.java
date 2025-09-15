@@ -28,7 +28,7 @@ import io.vertx.ext.web.client.WebClientSession;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import static org.qubership.itool.utils.ConfigProperties.LOGIN_PROPERTY;
 import java.nio.file.Path;
 
 public class ConfluenceClientImpl implements ConfluenceClient {
@@ -49,7 +49,7 @@ public class ConfluenceClientImpl implements ConfluenceClient {
         this.client = client;
         this.config = config;
         this.credentials = new UsernamePasswordCredentials(
-                config.getString("login"),
+                config.getString(LOGIN_PROPERTY),
                 config.getString("password"));
         this.session = WebClientSession.create(client);
     }

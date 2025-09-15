@@ -22,7 +22,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import static org.qubership.itool.utils.ConfigProperties.LOGIN_PROPERTY;
 import javax.annotation.Nullable;
 
 public class ConfluenceClientBuilder {
@@ -31,7 +31,7 @@ public class ConfluenceClientBuilder {
 
     @Nullable
     public static ConfluenceClient create(Vertx vertx, WebClient client, JsonObject config) {
-        boolean offlineMode = Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE));
+        boolean offlineMode = Boolean.parseBoolean(config.getString(ConfigProperties.OFFLINE_MODE_PROPERTY));
         if (offlineMode) {
             LOG.warn("Offline mode, Confluence facilities will not be available");
             return null;
@@ -43,7 +43,7 @@ public class ConfluenceClientBuilder {
             return null;
         }
         String password = config.getString("password");
-        String login = config.getString("login");
+        String login = config.getString(LOGIN_PROPERTY);
         if (login==null || password==null) {
             LOG.warn("No login or password provided, Confluence facilities will not be available");
             return null;
