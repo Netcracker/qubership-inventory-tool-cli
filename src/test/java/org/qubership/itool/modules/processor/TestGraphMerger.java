@@ -700,7 +700,9 @@ public class TestGraphMerger {
         assertTrue(1 <= size && size <= 3, "Wrong size of error report: " + size);
         JsonObject expRecord = new JsonObject()
             .put("type", GraphReport.CONF_ERROR)
-            .put("message", "Component duplicated. Source [Id: component1Id, Type: type1, Name: null, Repository: https://git1/, Directory: null] Duplicate [Id: component1Id, Type: type2, Name: null, Repository: https://git2/, Directory: null]")
+            .put("message", "Component duplicated. Source [Id: component1Id, Type: type1, Name: null, Repository: " +
+                "https://git1/, Directory: null] Duplicate [Id: component1Id, Type: type2, Name: null, Repository: " +
+                "https://git2/, Directory: null]")
             .put("component", "component1Id");
         for (Object record: reportRecords) {
             assertEquals(expRecord, record);

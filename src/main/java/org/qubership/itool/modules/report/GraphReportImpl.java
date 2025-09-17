@@ -147,17 +147,17 @@ public class GraphReportImpl implements GraphReport {
     @Override
     public void componentDuplicated(JsonObject sourceComponent, JsonObject duplicatedComponent) {
         addMessage(CONF_ERROR, duplicatedComponent,"Component duplicated. " +
-                   "Source [Id: " + sourceComponent.getString(F_ID) +
-                   ", Type: " + sourceComponent.getString(F_TYPE) +
-                   ", Name: " + sourceComponent.getString(F_NAME) +
-                   ", Repository: " + sourceComponent.getString(F_REPOSITORY) +
-                   ", Directory: " + sourceComponent.getString(F_DIRECTORY) + "] " +
-                   "Duplicate [Id: " + duplicatedComponent.getString(F_ID) +
-                   ", Type: " + duplicatedComponent.getString(F_TYPE) +
-                   ", Name: " + duplicatedComponent.getString(F_NAME) +
-                   ", Repository: " + duplicatedComponent.getString(F_REPOSITORY) +
-                   ", Directory: " + duplicatedComponent.getString(F_DIRECTORY) + "]"
-                  );
+                    "Source [Id: " + sourceComponent.getString(F_ID) +
+                    ", Type: " + sourceComponent.getString(F_TYPE) +
+                    ", Name: " + sourceComponent.getString(F_NAME) +
+                    ", Repository: " + sourceComponent.getString(F_REPOSITORY) +
+                    ", Directory: " + sourceComponent.getString(F_DIRECTORY) + "] " +
+                    "Duplicate [Id: " + duplicatedComponent.getString(F_ID) +
+                    ", Type: " + duplicatedComponent.getString(F_TYPE) +
+                    ", Name: " + duplicatedComponent.getString(F_NAME) +
+                    ", Repository: " + duplicatedComponent.getString(F_REPOSITORY) +
+                    ", Directory: " + duplicatedComponent.getString(F_DIRECTORY) + "]"
+            );
     }
 
     @Override
