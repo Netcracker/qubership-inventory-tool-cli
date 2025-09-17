@@ -31,7 +31,7 @@ import org.qubership.itool.modules.processor.InvalidGraphException;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-import static org.qubership.itool.modules.graph.Graph.F_ID;
+import static org.qubership.itool.modules.graph.Graph.*;
 
 public class GraphReportImpl implements GraphReport {
 
@@ -146,17 +146,15 @@ public class GraphReportImpl implements GraphReport {
 
     @Override
     public void componentDuplicated(JsonObject sourceComponent, JsonObject duplicatedComponent) {
-        addMessage(CONF_ERROR, duplicatedComponent,"Component duplicated. " + 
+        addMessage(CONF_ERROR, duplicatedComponent,"Component duplicated. " +
                    "Source [Id: " + sourceComponent.getString(F_ID) +
                    ", Type: " + sourceComponent.getString(F_TYPE) +
                    ", Name: " + sourceComponent.getString(F_NAME) +
-                   ", Version: " + sourceComponent.getString(F_VERSION) +
                    ", Repository: " + sourceComponent.getString(F_REPOSITORY) +
                    ", Directory: " + sourceComponent.getString(F_DIRECTORY) + "] " +
                    "Duplicate [Id: " + duplicatedComponent.getString(F_ID) +
                    ", Type: " + duplicatedComponent.getString(F_TYPE) +
                    ", Name: " + duplicatedComponent.getString(F_NAME) +
-                   ", Version: " + duplicatedComponent.getString(F_VERSION) +
                    ", Repository: " + duplicatedComponent.getString(F_REPOSITORY) +
                    ", Directory: " + duplicatedComponent.getString(F_DIRECTORY) + "]"
                   );

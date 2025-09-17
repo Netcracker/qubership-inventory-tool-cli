@@ -101,7 +101,7 @@ public class TestReportHelper {
 
         Assertions.assertEquals(1, report.size());
         Assertions.assertEquals("test:1", record.getString("component"));
-        Assertions.assertEquals("Component duplicated. Id: test:1", record.getString("message"));
+        Assertions.assertEquals("Component duplicated. Source [Id: test:1, Type: null, Name: test_1, Repository: null, Directory: null] Duplicate [Id: test:1, Type: null, Name: test_2, Repository: null, Directory: null]", record.getString("message"));
     }
 
     @Test
