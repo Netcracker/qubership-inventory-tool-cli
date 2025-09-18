@@ -16,11 +16,10 @@
 
 package org.qubership.itool.utils;
 
+import io.vertx.core.json.JsonArray;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-
-import io.vertx.core.json.JsonArray;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,12 +43,12 @@ public class TestYamlParser {
     @Test
     public void multiSection() throws IOException {
         String yaml =
-"---\n" +
-"a: b\n" +
-"\n" +
-"---\n" +
-"- c\n" +
-"- d\n";
+            "---\n" +
+                "a: b\n" +
+                "\n" +
+                "---\n" +
+                "- c\n" +
+                "- d\n";
         List<Object> data = parser.parseYamlData(yaml, "<generated>");
         assertEquals(2, data.size());
         assertTrue(data.get(0) instanceof Map);
@@ -80,62 +79,72 @@ public class TestYamlParser {
     @Test
     public void testNormalization() {
 
-        assertEquals( "    censored/component: censored",
-                normalizeLine("    censored/component: censored"));
+        assertEquals("    censored/component: censored",
+            normalizeLine("    censored/component: censored"));
 
-        assertEquals( "            censored1: '{{ .Values.SOME_VALUE }}'",
-                normalizeLine("            censored1: {{ .Values.SOME_VALUE }}"));
-        assertEquals( "            censored2: '{{ .Values.SOME_VALUE }}'",
-                normalizeLine("            censored2: {{ .Values.SOME_VALUE }}  \t   "));
-        assertEquals( "            censored3: '{{ .Values.SOME_VALUE }}'    ",
-                normalizeLine("            censored3: '{{ .Values.SOME_VALUE }}'    "));
-        assertEquals( "            censored4: \"{{ .Values.SOME_VALUE }}\"   ",
-                normalizeLine("            censored4: \"{{ .Values.SOME_VALUE }}\"   "));
+        assertEquals("            censored1: '{{ .Values.SOME_VALUE }}'",
+            normalizeLine("            censored1: {{ .Values.SOME_VALUE }}"));
+        assertEquals("            censored2: '{{ .Values.SOME_VALUE }}'",
+            normalizeLine("            censored2: {{ .Values.SOME_VALUE }}  \t   "));
+        assertEquals("            censored3: '{{ .Values.SOME_VALUE }}'    ",
+            normalizeLine("            censored3: '{{ .Values.SOME_VALUE }}'    "));
+        assertEquals("            censored4: \"{{ .Values.SOME_VALUE }}\"   ",
+            normalizeLine("            censored4: \"{{ .Values.SOME_VALUE }}\"   "));
 
-        assertEquals( "  replicas1: '{ { .Values.SOME_VALUE } }'",
-                normalizeLine("  replicas1: { { .Values.SOME_VALUE } }  "));
-        assertEquals( "  replicas2: '{ { .Values.SOME_VALUE } }'",
-                normalizeLine("  replicas2: '{ { .Values.SOME_VALUE } }'"));
-        assertEquals( "  replicas3: \"{ { .Values.SOME_VALUE } }\"",
-                normalizeLine("  replicas3: \"{ { .Values.SOME_VALUE } }\""));
+        assertEquals("  replicas1: '{ { .Values.SOME_VALUE } }'",
+            normalizeLine("  replicas1: { { .Values.SOME_VALUE } }  "));
+        assertEquals("  replicas2: '{ { .Values.SOME_VALUE } }'",
+            normalizeLine("  replicas2: '{ { .Values.SOME_VALUE } }'"));
+        assertEquals("  replicas3: \"{ { .Values.SOME_VALUE } }\"",
+            normalizeLine("  replicas3: \"{ { .Values.SOME_VALUE } }\""));
 
-        assertEquals( "                    censored: '{{ .Values.SOME_VALUE }}-censored-censored'",
-                normalizeLine("                    censored: '{{ .Values.SOME_VALUE }}-censored-censored'"));
+        assertEquals("                    censored: '{{ .Values.SOME_VALUE }}-censored-censored'",
+            normalizeLine("                    censored: '{{ .Values.SOME_VALUE }}-censored-censored'"));
 
-        assertEquals( "                censored: '{{ .Values.SOME_VALUE }}:{{ .Values.SOME_OTHER_VALUE }}'",
-                normalizeLine("                censored: '{{ .Values.SOME_VALUE }}:{{ .Values.SOME_OTHER_VALUE }}'"));
+        assertEquals("                censored: '{{ .Values.SOME_VALUE }}:{{ .Values.SOME_OTHER_VALUE }}'",
+            normalizeLine("                censored: '{{ .Values.SOME_VALUE }}:{{ .Values.SOME_OTHER_VALUE }}'"));
 
-        assertEquals( "    censored: '{{ .Values.SOME_VALUE }}-censored'",
-                normalizeLine("    censored: {{ .Values.SOME_VALUE }}-censored"));
-        assertEquals( "    censored: '{{ .Values.SOME_VALUE }}-censored'",
-                normalizeLine("    censored: {{ .Values.SOME_VALUE }}-censored   "));
-        assertEquals( "    censored: \"{{ .Values.SOME_VALUE }}-censored\"",
-                normalizeLine("    censored: \"{{ .Values.SOME_VALUE }}-censored\""));
+        assertEquals("    censored: '{{ .Values.SOME_VALUE }}-censored'",
+            normalizeLine("    censored: {{ .Values.SOME_VALUE }}-censored"));
+        assertEquals("    censored: '{{ .Values.SOME_VALUE }}-censored'",
+            normalizeLine("    censored: {{ .Values.SOME_VALUE }}-censored   "));
+        assertEquals("    censored: \"{{ .Values.SOME_VALUE }}-censored\"",
+            normalizeLine("    censored: \"{{ .Values.SOME_VALUE }}-censored\""));
 
-        assertEquals( "    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'",
-                normalizeLine("    censored.censored.io/censored: {{ .Values.SOME_VALUE }}-censored"));
-        assertEquals( "    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'",
-                normalizeLine("    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'"));
+        assertEquals("    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'",
+            normalizeLine("    censored.censored.io/censored: {{ .Values.SOME_VALUE }}-censored"));
+        assertEquals("    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'",
+            normalizeLine("    censored.censored.io/censored: '{{ .Values.SOME_VALUE }}-censored'"));
 
-        assertEquals( "    - censored",
-                normalizeLine("    - censored"));
+        assertEquals("    - censored",
+            normalizeLine("    - censored"));
 
-        assertEquals( "      - '{{ .Values.SOME_VALUE }}'",
-                normalizeLine("      - {{ .Values.SOME_VALUE }}"));
-        assertEquals( "      - '{{ .Values.SOME_VALUE }}'",
-                normalizeLine("      - {{ .Values.SOME_VALUE }}   "));
-        assertEquals( "      - '{{ .Values.SOME_VALUE }}'",
-                normalizeLine("      - '{{ .Values.SOME_VALUE }}'"));
+        assertEquals("      - '{{ .Values.SOME_VALUE }}'",
+            normalizeLine("      - {{ .Values.SOME_VALUE }}"));
+        assertEquals("      - '{{ .Values.SOME_VALUE }}'",
+            normalizeLine("      - {{ .Values.SOME_VALUE }}   "));
+        assertEquals("      - '{{ .Values.SOME_VALUE }}'",
+            normalizeLine("      - '{{ .Values.SOME_VALUE }}'"));
 
-        assertEquals( "  censored.version: '@censored-censored-censored.censored.censored.version@'",
-                normalizeLine("  censored.version: @censored-censored-censored.censored.censored.version@"));
-        assertEquals( "  censored.version: '@censored-censored-censored.censored.censored.version@'",
-                normalizeLine("  censored.version: '@censored-censored-censored.censored.censored.version@'"));
+        assertEquals("  censored.version: '@censored-censored-censored.censored.censored.version@'",
+            normalizeLine("  censored.version: @censored-censored-censored.censored.censored.version@"));
+        assertEquals("  censored.version: '@censored-censored-censored.censored.censored.version@'",
+            normalizeLine("  censored.version: '@censored-censored-censored.censored.censored.version@'"));
 
-        assertEquals( "  censored: '${ SOME_VALUE ? SOME_VALUE : 3 }'",
-                normalizeLine("  censored: ${ SOME_VALUE ? SOME_VALUE : 3 }"));
-        assertEquals( "  censored: '${ SOME_VALUE ? SOME_VALUE : __}'",
-                normalizeLine("  censored: ${ SOME_VALUE ? SOME_VALUE : ''}"));
+        assertEquals("  censored: '${ SOME_VALUE ? SOME_VALUE : 3 }'",
+            normalizeLine("  censored: ${ SOME_VALUE ? SOME_VALUE : 3 }"));
+        assertEquals("  censored: '${ SOME_VALUE ? SOME_VALUE : __}'",
+            normalizeLine("  censored: ${ SOME_VALUE ? SOME_VALUE : ''}"));
+
+
+        assertEquals("'{{- $censored := $.Values.SOME_VALUES -}}'",
+            normalizeLine("{{- $censored := $.Values.SOME_VALUES -}}"));
+        assertEquals("'{{ censored \"test-value.value\" . | value 4 | value }}'",
+            normalizeLine("{{ censored \"test-value.value\" . | value 4 | value }}"));
+        assertEquals("'{{- $isCensored := or (eq $.Values.SOME_VALUE true) (gt $censored 1)  -}}'",
+            normalizeLine("{{- $isCensored := or (eq $.Values.SOME_VALUE true) (gt $censored 1)  -}}"));
+        assertEquals("'{{ filter \"some-value.value.data\" . | action 4 | action }}'",
+            normalizeLine("{{ filter \"some-value.value.data\" . | action 4 | action }}"));
 
     }
 
@@ -150,13 +159,12 @@ public class TestYamlParser {
     @Test
     public void testSpringNormalization() throws IOException {
         try (Reader reader = new InputStreamReader(
-            FSUtils.openRawUrlStream(getClass(), "classpath:/yaml-parser/spring.yml"), JsonUtils.UTF_8))
-        {
+            FSUtils.openRawUrlStream(getClass(), "classpath:/yaml-parser/spring.yml"), JsonUtils.UTF_8)) {
             List<Object> data = parser.parseYaml(reader, "yaml-parser/spring.yml");
             parser.fixSpringYamlModel(data);
 
             JsonArray expected = JsonUtils.readJsonResource(getClass(),
-                    "classpath:/yaml-parser/spring-canonical.json", JsonArray.class);
+                "classpath:/yaml-parser/spring-canonical.json", JsonArray.class);
             assertEquals(expected, new JsonArray(data));
         }
     }
