@@ -341,7 +341,8 @@ public class TestGraphMerger {
             .put("message", "Source application graph contained no application vertex. Patched.")
             .put("component", "unknown")
             .put("graphId", "APPLICATION:AppName2:AppVersion2");
-        assertTrue(graph.getReport().dumpRecords(false).contains(report1), "Missing report on APPLICATION:AppName1:AppVersion1");
+        assertTrue(graph.getReport().dumpRecords(false).contains(report1), "Missing report on " +
+            "APPLICATION:AppName1:AppVersion1");
         // There must be APPLICATION:AppName1:AppVersion1 as well
     }
 
@@ -427,7 +428,8 @@ public class TestGraphMerger {
         // Modify graph1 (described as app graph) as if it already had application vertex
         assertEquals(Collections.emptyList(), graph1.traversal().V().hasType(V_APPLICATION).toList());
         new CreateAppVertexTask("AppName1", "AppVersion1").process(graph1);
-        assertEquals(Collections.singletonList("AppName1"), graph1.traversal().V().hasType(V_APPLICATION).name().toList());
+        assertEquals(Collections.singletonList("AppName1"), graph1.traversal().V().hasType(V_APPLICATION).name()
+            .toList());
 
         Graph graph = commonMerging(graph1, desc1, graph2, desc2, targetDesc, 0);
 
@@ -466,7 +468,8 @@ public class TestGraphMerger {
             List<JsonObject> mocks = graph.traversal().V().has(P_DETAILS_DNS_NAMES, P.containing(dnsName)).toList();
             assertEquals(1, mocks.size(), "There shall be 1 vertex with dnsName " + dnsName);
             JsonObject mock = mocks.get(0);
-            assertEquals(Boolean.FALSE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) + " must NOT be a mock");
+            assertEquals(Boolean.FALSE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) +
+                " must NOT be a mock");
         }
         String[] mockDnsNames = { "mock-dns-1", "mock-dns-2", "mock-dns-3", "mock-dns-4",
                 "mock-dns-5", "mock-dns-6" };
@@ -474,7 +477,8 @@ public class TestGraphMerger {
             List<JsonObject> mocks = graph.traversal().V().has(P_DETAILS_DNS_NAMES, dnsName).toList();
             assertEquals(1, mocks.size(), "There shall be 1 vertex with dnsName " + dnsName);
             JsonObject mock = mocks.get(0);
-            assertEquals(Boolean.TRUE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) + " must be a mock");
+            assertEquals(Boolean.TRUE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) +
+                " must be a mock");
         }
 
         // Test report contents
@@ -531,7 +535,8 @@ public class TestGraphMerger {
             List<JsonObject> nonMocks = graph.traversal().V().has(P_DETAILS_DNS_NAMES, P.containing(dnsName)).toList();
             assertEquals(1, nonMocks.size(), "There shall be 1 vertex with dnsName " + dnsName);
             JsonObject nonMock = nonMocks.get(0);
-            assertEquals(Boolean.FALSE, nonMock.getValue(F_MOCK_FLAG), "Vertex " + nonMock.getString(F_ID) + " must NOT be a mock");
+            assertEquals(Boolean.FALSE, nonMock.getValue(F_MOCK_FLAG), "Vertex " + nonMock.getString(F_ID) +
+                " must NOT be a mock");
         }
         String[] mockDnsNames = { "mock-dns-1", "mock-dns-2",
                 "mock-dns-3", "mock-dns-4" };
@@ -539,7 +544,8 @@ public class TestGraphMerger {
             List<JsonObject> mocks = graph.traversal().V().has(P_DETAILS_DNS_NAME, dnsName).toList();
             assertEquals(1, mocks.size(), "There shall be 1 vertex with dnsName " + dnsName);
             JsonObject mock = mocks.get(0);
-            assertEquals(Boolean.TRUE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) + " must be a mock");
+            assertEquals(Boolean.TRUE, mock.getValue(F_MOCK_FLAG), "Vertex " + mock.getString(F_ID) +
+                " must be a mock");
         }
         assertEquals(2, graph.traversal().V(V_ROOT).out().hasType(V_DOMAIN)
                 .out().has(F_MICROSERVICE_FLAG, P.eq(true)).count().next());
@@ -562,33 +568,39 @@ public class TestGraphMerger {
         //--- Double-check input data
 
         // component3 graph: non-mock component3, mock component4, 1 edge
-        List<JsonObject> components3InComponent3Graph = graph1.traversal().V().has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
+        List<JsonObject> components3InComponent3Graph = graph1.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
         assertEquals(1, components3InComponent3Graph.size());
         JsonObject component3InComponent3Graph = components3InComponent3Graph.get(0);
         assertEquals("component3Id", component3InComponent3Graph.getString(F_ID));
         assertNotEquals(Boolean.TRUE, component3InComponent3Graph.getValue(F_MOCK_FLAG));
 
-        List<JsonObject> components4IdInComponent3Graph = graph1.traversal().V().has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
+        List<JsonObject> components4IdInComponent3Graph = graph1.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
         assertEquals(1, components4IdInComponent3Graph.size());
         JsonObject component4IdInComponent3Graph = components4IdInComponent3Graph.get(0);
         assertEquals(Boolean.TRUE, component4IdInComponent3Graph.getValue(F_MOCK_FLAG));
 
-        List<JsonObject> component3ToComponent4IdEdges1 = graph1.getEdgesBetween(component3InComponent3Graph, component4IdInComponent3Graph);
+        List<JsonObject> component3ToComponent4IdEdges1 = graph1
+            .getEdgesBetween(component3InComponent3Graph, component4IdInComponent3Graph);
         assertEquals(1, component3ToComponent4IdEdges1.size());
 
         // component4Id graph: non-mock component4Id, mock component3, 1 edge
-        List<JsonObject> components3InComponent4Graph = graph2.traversal().V().has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
+        List<JsonObject> components3InComponent4Graph = graph2.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
         assertEquals(1, components3InComponent4Graph.size());
         JsonObject component3InComponent4Graph = components3InComponent4Graph.get(0);
         assertEquals(Boolean.TRUE, component3InComponent4Graph.getValue(F_MOCK_FLAG));
 
-        List<JsonObject> components4InComponent4Graph = graph2.traversal().V().has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
+        List<JsonObject> components4InComponent4Graph = graph2.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
         assertEquals(1, components4InComponent4Graph.size());
         JsonObject component4IdInComponent4IdGraph = components4InComponent4Graph.get(0);
         assertEquals("component4Id", component4IdInComponent4IdGraph.getString(F_ID));
         assertNotEquals(Boolean.TRUE, component4IdInComponent4IdGraph.getValue(F_MOCK_FLAG));
 
-        List<JsonObject> component4ToComponent3Edges2 = graph2.getEdgesBetween(component4IdInComponent4IdGraph, component3InComponent4Graph);
+        List<JsonObject> component4ToComponent3Edges2 = graph2
+            .getEdgesBetween(component4IdInComponent4IdGraph, component3InComponent4Graph);
         assertEquals(1, component4ToComponent3Edges2.size());
 
         //--- Merge and perform common checks
@@ -597,24 +609,28 @@ public class TestGraphMerger {
         //--- Check mock merging
 
         // Non-mock component3
-        List<JsonObject> components3InMergedGraph = graph.traversal().V().has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
+        List<JsonObject> components3InMergedGraph = graph.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component3-dns-name").toList();
         assertEquals(1, components3InMergedGraph.size());
         JsonObject component3InMergedGraph = components3InMergedGraph.get(0);
         assertEquals("component3Id", component3InMergedGraph.getString(F_ID));
         assertNotEquals(Boolean.TRUE, component3InMergedGraph.getValue(F_MOCK_FLAG));
 
         // Non-mock component4
-        List<JsonObject> component4IdsInMergedGraph = graph.traversal().V().has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
+        List<JsonObject> component4IdsInMergedGraph = graph.traversal().V()
+            .has(P_DETAILS_DNS_NAME, "component4-dns-name").toList();
         assertEquals(1, component4IdsInMergedGraph.size());
         JsonObject component4IdInMergedGraph = component4IdsInMergedGraph.get(0);
         assertEquals("component4Id", component4IdInMergedGraph.getString(F_ID));
         assertNotEquals(Boolean.TRUE, component4IdInMergedGraph.getValue(F_MOCK_FLAG));
 
         // 1 edge in every direction
-        List<JsonObject> component3ToComponent4IdEdges = graph.getEdgesBetween("component3Id", "component4Id");
+        List<JsonObject> component3ToComponent4IdEdges = graph
+            .getEdgesBetween("component3Id", "component4Id");
         assertEquals(1, component3ToComponent4IdEdges.size());
 
-        List<JsonObject> component4ToComponent3Edges = graph.getEdgesBetween("component4Id", "component3Id");
+        List<JsonObject> component4ToComponent3Edges = graph
+            .getEdgesBetween("component4Id", "component3Id");
         assertEquals(1, component4ToComponent3Edges.size());
     }
 
@@ -883,7 +899,8 @@ public class TestGraphMerger {
         return graph;
     }
 
-    protected Graph minimalMerging(Graph graph1, JsonObject desc1, Graph graph2, JsonObject desc2, JsonObject targetDesc) {
+    protected Graph minimalMerging(
+        Graph graph1, JsonObject desc1, Graph graph2, JsonObject desc2, JsonObject targetDesc) {
         Graph graph = new GraphImpl();
         GraphReport report = new GraphReportImpl();
         graph.setReport(report);

@@ -31,7 +31,11 @@ import org.qubership.itool.modules.processor.InvalidGraphException;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-import static org.qubership.itool.modules.graph.Graph.*;
+import static org.qubership.itool.modules.graph.Graph.F_ID;
+import static org.qubership.itool.modules.graph.Graph.F_TYPE;
+import static org.qubership.itool.modules.graph.Graph.F_NAME;
+import static org.qubership.itool.modules.graph.Graph.F_REPOSITORY;
+import static org.qubership.itool.modules.graph.Graph.F_DIRECTORY;
 
 public class GraphReportImpl implements GraphReport {
 
