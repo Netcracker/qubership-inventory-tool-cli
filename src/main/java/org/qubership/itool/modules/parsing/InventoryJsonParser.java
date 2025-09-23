@@ -82,9 +82,11 @@ public class InventoryJsonParser {
         JsonArray documentation = inventoryJson.getJsonArray("documentation");
         putValueIfNotNull(detailsJson, "documentationLink", documentation);
 
-        JsonObject tmfSpec = inventoryJson.getJsonObject("tmfSpec");
+        Object tmfSpec = inventoryJson.getValue("tmfSpec");
         if (tmfSpec != null) {
-            detailsJson.put("tmfSpec", convertToLegacyTmfSpec(tmfSpec));
+            //We have string and JsonObject formats in inventory file, so need to support both
+            detailsJson.put("tmfSpec", tmfSpec instanceof JsonObject ? convertToLegacyTmfSpec((JsonObject) tmfSpec)
+                : new JsonArray().add(tmfSpec));
         }
 
         Object language = inventoryJson.getValue("language");
@@ -123,10 +125,10 @@ public class InventoryJsonParser {
 
         Object apisp = inventoryJson.getValue("openAPIpublished");
         if (apisp instanceof JsonArray) {
-	        JsonArray apiSpecPublished = (JsonArray) apisp;
+            JsonArray apiSpecPublished = (JsonArray) apisp;
             apiJson.put("apiSpecPublished", apiSpecPublished);
         } else if (apisp instanceof String) {
-	        JsonArray apiSpecPublished = new JsonArray().add(apisp);
+            JsonArray apiSpecPublished = new JsonArray().add(apisp);
             apiJson.put("apiSpecPublished", apiSpecPublished);
         }
     }
@@ -138,7 +140,7 @@ public class InventoryJsonParser {
         }
 
         JsonArray target = JsonUtils.getOrCreateJsonArray(details, JsonPointer.from("/database/database"));
-        for (Object o: source) {
+        for (Object o : source) {
             JsonObject jo = JsonUtils.asJsonObject(o);
             String name = jo.getString("name");
             // Put database name like "PostgreSQL 12" to "/details/database/database[]/item"
@@ -161,7 +163,7 @@ public class InventoryJsonParser {
         }
 
         JsonObject target = JsonUtils.getOrCreateJsonObject(details, "messageQueues");
-        for (Object o: source) {
+        for (Object o : source) {
             JsonObject jo = (JsonObject) o;
             String type = jo.getString("type", "").toLowerCase();
             if ("rabbitmq".equals(type)) {
@@ -186,7 +188,7 @@ public class InventoryJsonParser {
         featuresJson.put("multitenancy", multitenancyJson);
 
         String defaultTenantId = (Boolean) JsonPointer.from("/multitenancy/defaultTenantId")
-                .queryJsonOrDefault(inventoryJson, Boolean.FALSE) ? "yes" : "no";
+            .queryJsonOrDefault(inventoryJson, Boolean.FALSE) ? "yes" : "no";
         multitenancyJson.put("defaultTenantId", defaultTenantId);
     }
 
@@ -194,12 +196,12 @@ public class InventoryJsonParser {
      * Converts "tmfSpec": {"622": { "version": ["18.0.3", "19.0.1"] }, "666": { "version": ["18.0.3"] }}
      * to "tmfSpec": ["622 v18.0.3", "622 v19.0.1", "666 v18.0.3"]
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static JsonArray convertToLegacyTmfSpec(JsonObject spec) {
         JsonArray result = new JsonArray();
         for (Map.Entry<String, Object> item : spec.getMap().entrySet()) {
             String tmfSpecNumber = item.getKey();
-            for (String tmfSpecVersion: getVersions(new JsonObject((Map) item.getValue()))) {
+            for (String tmfSpecVersion : getVersions(new JsonObject((Map) item.getValue()))) {
                 result.add(tmfSpecNumber + " v" + tmfSpecVersion);
             }
         }
@@ -216,9 +218,9 @@ public class InventoryJsonParser {
         if (tmfSpecVersions == null) {
             return Collections.emptyList();
         } else if (tmfSpecVersions instanceof JsonArray) {
-            return ((JsonArray)tmfSpecVersions).getList();
+            return ((JsonArray) tmfSpecVersions).getList();
         } else if (tmfSpecVersions instanceof String) {
-            return Collections.singletonList((String)tmfSpecVersions);
+            return Collections.singletonList((String) tmfSpecVersions);
         } else {
             return Collections.singletonList(version.getString("version"));
         }
