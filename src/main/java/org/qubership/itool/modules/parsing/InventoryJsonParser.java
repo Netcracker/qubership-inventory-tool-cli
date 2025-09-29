@@ -85,12 +85,14 @@ public class InventoryJsonParser {
         putValueIfNotNull(detailsJson, "documentationLink", documentation);
 
         Object tmfSpec = inventoryJson.getValue("tmfSpec");
-        if (tmfSpec instanceof JsonObject) {
-            detailsJson.put("tmfSpec", convertToLegacyTmfSpec((JsonObject) tmfSpec));
-        } else {
-            report.addMessage(GraphReport.CONF_ERROR, component,
-                component + ": TMF Spec has wrong type mentioned- "
-                    + tmfSpec.getClass());
+        if (tmfSpec != null) {
+            if (tmfSpec instanceof JsonObject) {
+                detailsJson.put("tmfSpec", convertToLegacyTmfSpec((JsonObject) tmfSpec));
+            } else {
+                report.addMessage(GraphReport.CONF_ERROR, component,
+                    component + ": TMF Spec has wrong type mentioned- "
+                        + tmfSpec.getClass());
+            }
         }
 
         Object language = inventoryJson.getValue("language");
