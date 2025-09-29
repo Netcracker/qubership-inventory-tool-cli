@@ -25,17 +25,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.utils.JsonUtils;
 import org.qubership.itool.utils.LanguageUtils;
 
+import javax.annotation.Resource;
 import static org.qubership.itool.modules.graph.Graph.F_DNS_NAME;
 import static org.qubership.itool.modules.graph.Graph.F_DNS_NAMES;
-import static org.qubership.itool.utils.JsonUtils.convertListToFilteredString;
-import static org.qubership.itool.utils.JsonUtils.copyValueIfNotNull;
-import static org.qubership.itool.utils.JsonUtils.getOrCreateJsonObject;
-import static org.qubership.itool.utils.JsonUtils.putValueIfNotNull;
+import static org.qubership.itool.utils.JsonUtils.*;
 
 public class InventoryJsonParser {
+
+    @Resource
+    protected GraphReport report;
 
     public void parse(JsonObject domain, JsonObject component, String inventorySource) {
         parse(domain, component, new JsonObject(inventorySource));
@@ -83,10 +85,12 @@ public class InventoryJsonParser {
         putValueIfNotNull(detailsJson, "documentationLink", documentation);
 
         Object tmfSpec = inventoryJson.getValue("tmfSpec");
-        if (tmfSpec != null) {
-            //We have string and JsonObject formats in inventory file, so need to support both
-            detailsJson.put("tmfSpec", tmfSpec instanceof JsonObject ? convertToLegacyTmfSpec((JsonObject) tmfSpec)
-                : new JsonArray().add(tmfSpec));
+        if (tmfSpec instanceof JsonObject) {
+            detailsJson.put("tmfSpec", convertToLegacyTmfSpec((JsonObject) tmfSpec));
+        } else {
+            report.addMessage(GraphReport.CONF_ERROR, component,
+                component + ": TMF Spec has wrong type mentioned- "
+                    + tmfSpec.getClass());
         }
 
         Object language = inventoryJson.getValue("language");
