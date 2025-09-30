@@ -63,7 +63,7 @@ public class CoreModule extends AbstractModule {
     @Override
     protected void configure() {
         // Bind core factories
-        bind(GraphReport.class).to(GraphReportImpl.class);
+        bind(GraphReport.class).to(GraphReportImpl.class).asEagerSingleton();
         bind(Vertx.class).toInstance(vertx);
     }
 
