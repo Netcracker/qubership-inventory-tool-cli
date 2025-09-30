@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.utils.JsonUtils;
@@ -36,8 +37,16 @@ import static org.qubership.itool.utils.JsonUtils.*;
 
 public class InventoryJsonParser {
 
-    @Resource
-    protected GraphReport report;
+    GraphReport report;
+
+    @Inject
+    public InventoryJsonParser (GraphReport report) {
+        this.report = report;
+    }
+
+    public InventoryJsonParser() {
+
+    }
 
     public void parse(JsonObject domain, JsonObject component, String inventorySource) {
         parse(domain, component, new JsonObject(inventorySource));
@@ -90,7 +99,7 @@ public class InventoryJsonParser {
                 detailsJson.put("tmfSpec", convertToLegacyTmfSpec((JsonObject) tmfSpec));
             } else {
                 report.addMessage(GraphReport.CONF_ERROR, component,
-                    component + ": TMF Spec has wrong type mentioned- "
+                    component.getString("id") + ": TMF Spec has wrong type mentioned- "
                         + tmfSpec.getClass());
             }
         }
