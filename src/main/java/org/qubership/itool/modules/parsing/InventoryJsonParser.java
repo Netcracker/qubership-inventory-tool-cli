@@ -30,7 +30,6 @@ import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.utils.JsonUtils;
 import org.qubership.itool.utils.LanguageUtils;
 
-import javax.annotation.Resource;
 import static org.qubership.itool.modules.graph.Graph.F_DNS_NAME;
 import static org.qubership.itool.modules.graph.Graph.F_DNS_NAMES;
 import static org.qubership.itool.utils.JsonUtils.*;
