@@ -46,7 +46,7 @@
         <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
         <logback.version>1.5.18</logback.version>
         <junit-jupiter.version>5.13.4</junit-jupiter.version>
-        <guava.version>33.4.8-jre</guava.version>
+        <guava.version>33.5.0-jre</guava.version>
         <groovy.version>5.0.1</groovy.version>
         <vertx.version>5.0.4</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
