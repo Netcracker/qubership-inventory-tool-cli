@@ -50,7 +50,7 @@
         <groovy.version>5.0.1</groovy.version>
         <vertx.version>5.0.4</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
-        <picocli.version>4.6.3</picocli.version>
+        <picocli.version>4.7.7</picocli.version>
     </properties>
 
     <dependencyManagement>
