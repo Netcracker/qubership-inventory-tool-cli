@@ -1,512 +1,577 @@
 {
-  "modelVersion" : 1,
-  "graph" : {
-    "modelVersion" : 3,
-    "root" : {
-      "id" : "root",
-      "type" : "root",
-      "name" : "root",
-      "meta" : {
-        "type" : "component",
-        "name" : "test-inventory-component-1",
-        "version" : "1.0.0",
-        "aditVersion" : "3.0.4-SNAPSHOT"
+  "modelVersion": 1,
+  "graph": {
+    "modelVersion": 3,
+    "root": {
+      "id": "root",
+      "type": "root",
+      "name": "root",
+      "meta": {
+        "type": "component",
+        "name": "test-inventory-component-1",
+        "version": "1.0.0",
+        "aditVersion": "3.0.4-SNAPSHOT"
       }
     },
-    "edgeGeneratorCounter" : 26,
-    "vertexList" : [ {
-      "id" : "Spec",
-      "type" : "Spec",
-      "name" : "Spec",
-      "technical-manager" : "none",
-      "tmf" : {
-        "620" : {
-          "code" : 620,
-          "name" : "Product Catalog Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf620-product-catalog-management-api-rest-specification-r19-0-0/"
-        },
-        "621" : {
-          "code" : 621,
-          "name" : "Trouble Ticket",
-          "url" : "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
-        },
-        "621 v19.0.1" : {
-          "code" : 621,
-          "name" : "Trouble Ticket",
-          "version" : "19.0.1",
-          "url" : "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
-        },
-        "622" : {
-          "code" : 622,
-          "name" : "Product Ordering",
-          "url" : "https://www.tmforum.org/resources/specification/tmf622-product-ordering-management-api-rest-specification-r19-0-0/"
-        },
-        "629" : {
-          "code" : 629,
-          "name" : "Customer Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf629-customer-management-api-rest-specification-r19-0-0/"
-        },
-        "632" : {
-          "code" : 632,
-          "name" : "Party Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf632-party-management-api-rest-specification-r19-0-0/"
-        },
-        "637" : {
-          "code" : 637,
-          "name" : "Product Inventory Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf637-product-inventory-management-api-rest-specification-r19-0-0/"
-        },
-        "648" : {
-          "code" : 648,
-          "name" : "Quote Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf648-quote-management-api-rest-specification-r19-0-0/"
-        },
-        "651" : {
-          "code" : 651,
-          "name" : "Agreement Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r19-0-0/"
-        },
-        "651 v18.0.0" : {
-          "code" : 651,
-          "name" : "Agreement Management",
-          "version" : "18.0.0",
-          "url" : "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r18-0-0/"
-        },
-        "663" : {
-          "code" : 663,
-          "name" : "Shopping Cart Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf663-shopping-cart-management-api-rest-specification-r19-0-0/"
-        },
-        "666" : {
-          "code" : 666,
-          "name" : "Account Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf666-account-management-api-rest-specification-r19-0-0/"
-        },
-        "669" : {
-          "code" : 669,
-          "name" : "Party Role Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf669-party-role-management-api-rest-specification-r19-0-0/"
-        },
-        "670" : {
-          "code" : 670,
-          "name" : "Payment Methods",
-          "url" : "https://www.tmforum.org/resources/specification/tmf670-payment-methods-api-rest-specification-r17-5-0/"
-        },
-        "674" : {
-          "code" : 674,
-          "name" : "Geographic Site",
-          "url" : "https://www.tmforum.org/resources/specification/tmf674-geographic-site-api-rest-specification-r17-5-0/"
-        },
-        "683" : {
-          "code" : 683,
-          "name" : "Party Interactions",
-          "url" : "https://www.tmforum.org/resources/specification/tmf683-party-interactions-api-rest-specification-r18-0-0/"
-        },
-        "699" : {
-          "code" : 699,
-          "name" : "Sales Management",
-          "url" : "https://www.tmforum.org/resources/specification/tmf699-sales-management-api-rest-specification-r19-0-0/"
-        }
-      }
-    }, {
-      "id" : "Infra",
-      "type" : "Infra",
-      "name" : "Infra",
-      "technical-manager" : "none"
-    }, {
-      "id" : "Cassandra",
-      "type" : "database",
-      "name" : "Cassandra",
-      "drivers" : [ {
-        "groupId" : "com.datastax.oss.quarkus",
-        "artifactId" : "cassandra-quarkus-client"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "PostgreSQL",
-      "type" : "database",
-      "name" : "PostgreSQL",
-      "drivers" : [ {
-        "groupId" : "org.postgresql",
-        "artifactId" : "postgresql"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Elasticsearch",
-      "type" : "indexation",
-      "name" : "Elasticsearch",
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Opensearch",
-      "type" : "indexation",
-      "name" : "Opensearch",
-      "drivers" : [ {
-        "groupId" : "org.opensearch",
-        "artifactId" : "opensearch"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Kafka",
-      "type" : "mq",
-      "name" : "Kafka",
-      "drivers" : [ {
-        "groupId" : "org.apache.kafka",
-        "artifactId" : "kafka-clients"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "RabbitMQ",
-      "type" : "mq",
-      "name" : "RabbitMQ",
-      "drivers" : [ {
-        "groupId" : "com.rabbitmq",
-        "artifactId" : "amqp-client"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Redis",
-      "type" : "caching",
-      "name" : "Redis",
-      "drivers" : [ {
-        "groupId" : "redis.clients",
-        "artifactId" : "jedis"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Zookeeper",
-      "type" : "config",
-      "name" : "Zookeeper",
-      "drivers" : [ {
-        "groupId" : "org.apache.zookeeper",
-        "artifactId" : "zookeeper"
-      } ],
-      "details" : {
-        "domain" : "Infra",
-        "releaseBranch" : "main"
-      }
-    }, {
-      "id" : "Info",
-      "type" : "Info",
-      "name" : "Info",
-      "technical-manager" : "none"
-    }, {
-      "id" : "test-component-1",
-      "isMock" : false,
-      "type" : "backend",
-      "directoryPath" : "/home/mew/work/repos/test1",
-      "releaseBranch" : "main",
-      "repository" : "http://tmp.git",
-      "details" : {
-        "domain" : "D_domain1",
-        "releaseBranch" : "main",
-        "abbreviation" : "test-component-1",
-        "name" : "Qubership Inventory Tool test component 1",
-        "owner" : "none",
-        "dnsName" : "qubership-inventory-tool-component-1",
-        "dnsNames" : [ "qubership-inventory-tool-component-1" ],
-        "domainFromInventory" : "domain1",
-        "description" : "Qubership Inventory Tool test component 1",
-        "type" : "backend",
-        "framework" : "n/a",
-        "language" : [ {
-          "name" : "Java",
-          "version" : "21",
-          "usage" : [ "release", "source", "target" ]
-        } ],
-        "api" : {
-          "openApi" : "no"
-        },
-        "documentationLink" : [ ],
-        "database" : {
-          "database" : [ ]
+    "edgeGeneratorCounter": 26,
+    "vertexList": [
+      {
+        "id": "Spec",
+        "type": "Spec",
+        "name": "Spec",
+        "technical-manager": "none",
+        "tmf": {
+          "620": {
+            "code": 620,
+            "name": "Product Catalog Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf620-product-catalog-management-api-rest-specification-r19-0-0/"
+          },
+          "621": {
+            "code": 621,
+            "name": "Trouble Ticket",
+            "url": "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
+          },
+          "621 v19.0.1": {
+            "code": 621,
+            "name": "Trouble Ticket",
+            "version": "19.0.1",
+            "url": "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
+          },
+          "622": {
+            "code": 622,
+            "name": "Product Ordering",
+            "url": "https://www.tmforum.org/resources/specification/tmf622-product-ordering-management-api-rest-specification-r19-0-0/"
+          },
+          "629": {
+            "code": 629,
+            "name": "Customer Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf629-customer-management-api-rest-specification-r19-0-0/"
+          },
+          "632": {
+            "code": 632,
+            "name": "Party Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf632-party-management-api-rest-specification-r19-0-0/"
+          },
+          "637": {
+            "code": 637,
+            "name": "Product Inventory Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf637-product-inventory-management-api-rest-specification-r19-0-0/"
+          },
+          "648": {
+            "code": 648,
+            "name": "Quote Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf648-quote-management-api-rest-specification-r19-0-0/"
+          },
+          "651": {
+            "code": 651,
+            "name": "Agreement Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r19-0-0/"
+          },
+          "651 v18.0.0": {
+            "code": 651,
+            "name": "Agreement Management",
+            "version": "18.0.0",
+            "url": "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r18-0-0/"
+          },
+          "663": {
+            "code": 663,
+            "name": "Shopping Cart Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf663-shopping-cart-management-api-rest-specification-r19-0-0/"
+          },
+          "666": {
+            "code": 666,
+            "name": "Account Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf666-account-management-api-rest-specification-r19-0-0/"
+          },
+          "669": {
+            "code": 669,
+            "name": "Party Role Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf669-party-role-management-api-rest-specification-r19-0-0/"
+          },
+          "670": {
+            "code": 670,
+            "name": "Payment Methods",
+            "url": "https://www.tmforum.org/resources/specification/tmf670-payment-methods-api-rest-specification-r17-5-0/"
+          },
+          "674": {
+            "code": 674,
+            "name": "Geographic Site",
+            "url": "https://www.tmforum.org/resources/specification/tmf674-geographic-site-api-rest-specification-r17-5-0/"
+          },
+          "683": {
+            "code": 683,
+            "name": "Party Interactions",
+            "url": "https://www.tmforum.org/resources/specification/tmf683-party-interactions-api-rest-specification-r18-0-0/"
+          },
+          "699": {
+            "code": 699,
+            "name": "Sales Management",
+            "url": "https://www.tmforum.org/resources/specification/tmf699-sales-management-api-rest-specification-r19-0-0/"
+          }
         }
       },
-      "abbreviation" : "test-component-1",
-      "name" : "Qubership Inventory Tool test component 1",
-      "features" : {
-        "multitenancy" : {
-          "defaultTenantId" : "no"
+      {
+        "id": "Infra",
+        "type": "Infra",
+        "name": "Infra",
+        "technical-manager": "none"
+      },
+      {
+        "id": "Cassandra",
+        "type": "database",
+        "name": "Cassandra",
+        "drivers": [
+          {
+            "groupId": "com.datastax.oss.quarkus",
+            "artifactId": "cassandra-quarkus-client"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
         }
       },
-      "isMicroservice" : false
-    }, {
-      "id" : "D_domain1",
-      "type" : "domain",
-      "department" : "unknown",
-      "isMock" : true,
-      "abbreviation" : "domain1"
-    }, {
-      "id" : "873755fa-bfca-4ef2-8b03-32492f29c371",
-      "type" : "file",
-      "path" : "inventory.json",
-      "fileLink" : "http://tmp/-/blob/main/inventory.json",
-      "name" : "inventory.json",
-      "content" : "{\n    \"id\": \"test-component-1\",\n    \"name\": \"Qubership Inventory Tool test component 1\",\n    \"owner\": \"none\",\n    \"domain\": \"domain1\",\n    \"dnsName\": \"qubership-inventory-tool-component-1\",\n    \"description\": \"Qubership Inventory Tool test component 1\",\n    \"type\": \"backend\",\n    \"framework\": \"n/a\"\n}\n",
-      "structured" : {
-        "id" : "test-component-1",
-        "name" : "Qubership Inventory Tool test component 1",
-        "owner" : "none",
-        "domain" : "domain1",
-        "dnsName" : "qubership-inventory-tool-component-1",
-        "description" : "Qubership Inventory Tool test component 1",
-        "type" : "backend",
-        "framework" : "n/a"
+      {
+        "id": "PostgreSQL",
+        "type": "database",
+        "name": "PostgreSQL",
+        "drivers": [
+          {
+            "groupId": "org.postgresql",
+            "artifactId": "postgresql"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Elasticsearch",
+        "type": "indexation",
+        "name": "Elasticsearch",
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Opensearch",
+        "type": "indexation",
+        "name": "Opensearch",
+        "drivers": [
+          {
+            "groupId": "org.opensearch",
+            "artifactId": "opensearch"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Kafka",
+        "type": "mq",
+        "name": "Kafka",
+        "drivers": [
+          {
+            "groupId": "org.apache.kafka",
+            "artifactId": "kafka-clients"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "RabbitMQ",
+        "type": "mq",
+        "name": "RabbitMQ",
+        "drivers": [
+          {
+            "groupId": "com.rabbitmq",
+            "artifactId": "amqp-client"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Redis",
+        "type": "caching",
+        "name": "Redis",
+        "drivers": [
+          {
+            "groupId": "redis.clients",
+            "artifactId": "jedis"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Zookeeper",
+        "type": "config",
+        "name": "Zookeeper",
+        "drivers": [
+          {
+            "groupId": "org.apache.zookeeper",
+            "artifactId": "zookeeper"
+          }
+        ],
+        "details": {
+          "domain": "Infra",
+          "releaseBranch": "main"
+        }
+      },
+      {
+        "id": "Info",
+        "type": "Info",
+        "name": "Info",
+        "technical-manager": "none"
+      },
+      {
+        "id": "test-component-1",
+        "isMock": false,
+        "type": "backend",
+        "directoryPath": "/home/mew/work/repos/test1",
+        "releaseBranch": "main",
+        "repository": "http://tmp.git",
+        "details": {
+          "domain": "D_domain1",
+          "releaseBranch": "main",
+          "abbreviation": "test-component-1",
+          "name": "Qubership Inventory Tool test component 1",
+          "owner": "none",
+          "dnsName": "qubership-inventory-tool-component-1",
+          "dnsNames": ["qubership-inventory-tool-component-1"],
+          "domainFromInventory": "domain1",
+          "description": "Qubership Inventory Tool test component 1",
+          "type": "backend",
+          "framework": "n/a",
+          "language": [
+            {
+              "name": "Java",
+              "version": "21",
+              "usage": ["release", "source", "target"]
+            }
+          ],
+          "api": {
+            "openApi": "no"
+          },
+          "documentationLink": [],
+          "database": {
+            "database": []
+          }
+        },
+        "abbreviation": "test-component-1",
+        "name": "Qubership Inventory Tool test component 1",
+        "features": {
+          "multitenancy": {
+            "defaultTenantId": "no"
+          }
+        },
+        "isMicroservice": false
+      },
+      {
+        "id": "D_domain1",
+        "type": "domain",
+        "department": "unknown",
+        "isMock": true,
+        "abbreviation": "domain1"
+      },
+      {
+        "id": "873755fa-bfca-4ef2-8b03-32492f29c371",
+        "type": "file",
+        "path": "inventory.json",
+        "fileLink": "http://tmp/-/blob/main/inventory.json",
+        "name": "inventory.json",
+        "content": "{\n    \"id\": \"test-component-1\",\n    \"name\": \"Qubership Inventory Tool test component 1\",\n    \"owner\": \"none\",\n    \"domain\": \"domain1\",\n    \"dnsName\": \"qubership-inventory-tool-component-1\",\n    \"description\": \"Qubership Inventory Tool test component 1\",\n    \"type\": \"backend\",\n    \"framework\": \"n/a\"\n}\n",
+        "structured": {
+          "id": "test-component-1",
+          "name": "Qubership Inventory Tool test component 1",
+          "owner": "none",
+          "domain": "domain1",
+          "dnsName": "qubership-inventory-tool-component-1",
+          "description": "Qubership Inventory Tool test component 1",
+          "type": "backend",
+          "framework": "n/a"
+        }
+      },
+      {
+        "id": "821c8a42-e1c9-4dd8-8458-649a848f4769",
+        "type": "file",
+        "path": "pom.xml",
+        "fileLink": "http://tmp/-/blob/main/pom.xml",
+        "name": "pom.xml",
+        "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n\n    <groupId>org.qubership</groupId>\n    <artifactId>test-inventory-component</artifactId>\n    <version>1.0-SNAPSHOT</version>\n\n    <properties>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n        <java.version>21</java.version>\n        <maven.compiler.source>${java.version}</maven.compiler.source>\n        <maven.compiler.target>${java.version}</maven.compiler.target>\n        <maven.compiler.release>${java.version}</maven.compiler.release>\n    </properties>\n\n    <dependencies>\n        <dependency>\n            <groupId>org.junit.jupiter</groupId>\n            <artifactId>junit-jupiter-engine</artifactId>\n            <version>5.10.2</version>\n            <scope>test</scope>\n        </dependency>\n    </dependencies>\n\n    <build>\n        <plugins>\n            <plugin>\n                <groupId>org.apache.maven.plugins</groupId>\n                <artifactId>maven-surefire-plugin</artifactId>\n                <version>3.2.5</version>\n            </plugin>\n        </plugins>\n    </build>\n</project>\n"
+      },
+      {
+        "id": "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
+        "artifactId": "test-inventory-component",
+        "groupId": "org.qubership",
+        "package": "jar",
+        "version": "1.0-SNAPSHOT",
+        "type": "library"
+      },
+      {
+        "id": "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
+        "artifactId": "junit-jupiter-engine",
+        "groupId": "org.junit.jupiter",
+        "package": "jar",
+        "version": "5.10.2",
+        "type": "library"
+      },
+      {
+        "id": "org.junit.platform:junit-platform-engine:jar:1.10.2",
+        "artifactId": "junit-platform-engine",
+        "groupId": "org.junit.platform",
+        "package": "jar",
+        "version": "1.10.2",
+        "type": "library"
+      },
+      {
+        "id": "org.opentest4j:opentest4j:jar:1.3.0",
+        "artifactId": "opentest4j",
+        "groupId": "org.opentest4j",
+        "package": "jar",
+        "version": "1.3.0",
+        "type": "library"
+      },
+      {
+        "id": "org.junit.platform:junit-platform-commons:jar:1.10.2",
+        "artifactId": "junit-platform-commons",
+        "groupId": "org.junit.platform",
+        "package": "jar",
+        "version": "1.10.2",
+        "type": "library"
+      },
+      {
+        "id": "org.junit.jupiter:junit-jupiter-api:jar:5.10.2",
+        "artifactId": "junit-jupiter-api",
+        "groupId": "org.junit.jupiter",
+        "package": "jar",
+        "version": "5.10.2",
+        "type": "library"
+      },
+      {
+        "id": "org.apiguardian:apiguardian-api:jar:1.1.2",
+        "artifactId": "apiguardian-api",
+        "groupId": "org.apiguardian",
+        "package": "jar",
+        "version": "1.1.2",
+        "type": "library"
+      },
+      {
+        "id": "Java 21",
+        "type": "language",
+        "name": "Java",
+        "version": "21"
       }
-    }, {
-      "id" : "821c8a42-e1c9-4dd8-8458-649a848f4769",
-      "type" : "file",
-      "path" : "pom.xml",
-      "fileLink" : "http://tmp/-/blob/main/pom.xml",
-      "name" : "pom.xml",
-      "content" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n\n    <groupId>org.qubership</groupId>\n    <artifactId>test-inventory-component</artifactId>\n    <version>1.0-SNAPSHOT</version>\n\n    <properties>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n        <java.version>21</java.version>\n        <maven.compiler.source>${java.version}</maven.compiler.source>\n        <maven.compiler.target>${java.version}</maven.compiler.target>\n        <maven.compiler.release>${java.version}</maven.compiler.release>\n    </properties>\n\n    <dependencies>\n        <dependency>\n            <groupId>org.junit.jupiter</groupId>\n            <artifactId>junit-jupiter-engine</artifactId>\n            <version>5.10.2</version>\n            <scope>test</scope>\n        </dependency>\n    </dependencies>\n\n    <build>\n        <plugins>\n            <plugin>\n                <groupId>org.apache.maven.plugins</groupId>\n                <artifactId>maven-surefire-plugin</artifactId>\n                <version>3.2.5</version>\n            </plugin>\n        </plugins>\n    </build>\n</project>\n"
-    }, {
-      "id" : "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
-      "artifactId" : "test-inventory-component",
-      "groupId" : "org.qubership",
-      "package" : "jar",
-      "version" : "1.0-SNAPSHOT",
-      "type" : "library"
-    }, {
-      "id" : "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
-      "artifactId" : "junit-jupiter-engine",
-      "groupId" : "org.junit.jupiter",
-      "package" : "jar",
-      "version" : "5.10.2",
-      "type" : "library"
-    }, {
-      "id" : "org.junit.platform:junit-platform-engine:jar:1.10.2",
-      "artifactId" : "junit-platform-engine",
-      "groupId" : "org.junit.platform",
-      "package" : "jar",
-      "version" : "1.10.2",
-      "type" : "library"
-    }, {
-      "id" : "org.opentest4j:opentest4j:jar:1.3.0",
-      "artifactId" : "opentest4j",
-      "groupId" : "org.opentest4j",
-      "package" : "jar",
-      "version" : "1.3.0",
-      "type" : "library"
-    }, {
-      "id" : "org.junit.platform:junit-platform-commons:jar:1.10.2",
-      "artifactId" : "junit-platform-commons",
-      "groupId" : "org.junit.platform",
-      "package" : "jar",
-      "version" : "1.10.2",
-      "type" : "library"
-    }, {
-      "id" : "org.junit.jupiter:junit-jupiter-api:jar:5.10.2",
-      "artifactId" : "junit-jupiter-api",
-      "groupId" : "org.junit.jupiter",
-      "package" : "jar",
-      "version" : "5.10.2",
-      "type" : "library"
-    }, {
-      "id" : "org.apiguardian:apiguardian-api:jar:1.1.2",
-      "artifactId" : "apiguardian-api",
-      "groupId" : "org.apiguardian",
-      "package" : "jar",
-      "version" : "1.1.2",
-      "type" : "library"
-    }, {
-      "id" : "Java 21",
-      "type" : "language",
-      "name" : "Java",
-      "version" : "21"
-    } ],
-    "edgeList" : [ {
-      "source" : "root",
-      "target" : "Spec",
-      "edge" : {
-        "id" : "edge::0"
+    ],
+    "edgeList": [
+      {
+        "source": "root",
+        "target": "Spec",
+        "edge": {
+          "id": "edge::0"
+        }
+      },
+      {
+        "source": "root",
+        "target": "Infra",
+        "edge": {
+          "id": "edge::1"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Cassandra",
+        "edge": {
+          "id": "edge::2"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "PostgreSQL",
+        "edge": {
+          "id": "edge::3"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Elasticsearch",
+        "edge": {
+          "id": "edge::4"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Opensearch",
+        "edge": {
+          "id": "edge::5"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Kafka",
+        "edge": {
+          "id": "edge::6"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "RabbitMQ",
+        "edge": {
+          "id": "edge::7"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Redis",
+        "edge": {
+          "id": "edge::8"
+        }
+      },
+      {
+        "source": "Infra",
+        "target": "Zookeeper",
+        "edge": {
+          "id": "edge::9"
+        }
+      },
+      {
+        "source": "root",
+        "target": "Info",
+        "edge": {
+          "id": "edge::10"
+        }
+      },
+      {
+        "source": "root",
+        "target": "D_domain1",
+        "edge": {
+          "id": "edge::13"
+        }
+      },
+      {
+        "source": "D_domain1",
+        "target": "test-component-1",
+        "edge": {
+          "id": "edge::14"
+        }
+      },
+      {
+        "source": "test-component-1",
+        "target": "873755fa-bfca-4ef2-8b03-32492f29c371",
+        "edge": {
+          "type": "file",
+          "id": "edge::15"
+        }
+      },
+      {
+        "source": "test-component-1",
+        "target": "821c8a42-e1c9-4dd8-8458-649a848f4769",
+        "edge": {
+          "type": "file",
+          "id": "edge::16"
+        }
+      },
+      {
+        "source": "test-component-1",
+        "target": "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
+        "edge": {
+          "type": "module",
+          "component": "test-component-1",
+          "id": "edge::17"
+        }
+      },
+      {
+        "source": "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
+        "target": "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::18"
+        }
+      },
+      {
+        "source": "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
+        "target": "org.junit.platform:junit-platform-engine:jar:1.10.2",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::19"
+        }
+      },
+      {
+        "source": "org.junit.platform:junit-platform-engine:jar:1.10.2",
+        "target": "org.opentest4j:opentest4j:jar:1.3.0",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::20"
+        }
+      },
+      {
+        "source": "org.junit.platform:junit-platform-engine:jar:1.10.2",
+        "target": "org.junit.platform:junit-platform-commons:jar:1.10.2",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::21"
+        }
+      },
+      {
+        "source": "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
+        "target": "org.junit.jupiter:junit-jupiter-api:jar:5.10.2",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::22"
+        }
+      },
+      {
+        "source": "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
+        "target": "org.apiguardian:apiguardian-api:jar:1.1.2",
+        "edge": {
+          "type": "dependency",
+          "scope": "test",
+          "component": "test-component-1",
+          "id": "edge::23"
+        }
+      },
+      {
+        "source": "Info",
+        "target": "Java 21",
+        "edge": {
+          "id": "edge::24"
+        }
+      },
+      {
+        "source": "test-component-1",
+        "target": "Java 21",
+        "edge": {
+          "type": "info",
+          "usage": ["release", "source", "target"],
+          "id": "edge::25"
+        }
       }
-    }, {
-      "source" : "root",
-      "target" : "Infra",
-      "edge" : {
-        "id" : "edge::1"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Cassandra",
-      "edge" : {
-        "id" : "edge::2"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "PostgreSQL",
-      "edge" : {
-        "id" : "edge::3"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Elasticsearch",
-      "edge" : {
-        "id" : "edge::4"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Opensearch",
-      "edge" : {
-        "id" : "edge::5"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Kafka",
-      "edge" : {
-        "id" : "edge::6"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "RabbitMQ",
-      "edge" : {
-        "id" : "edge::7"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Redis",
-      "edge" : {
-        "id" : "edge::8"
-      }
-    }, {
-      "source" : "Infra",
-      "target" : "Zookeeper",
-      "edge" : {
-        "id" : "edge::9"
-      }
-    }, {
-      "source" : "root",
-      "target" : "Info",
-      "edge" : {
-        "id" : "edge::10"
-      }
-    }, {
-      "source" : "root",
-      "target" : "D_domain1",
-      "edge" : {
-        "id" : "edge::13"
-      }
-    }, {
-      "source" : "D_domain1",
-      "target" : "test-component-1",
-      "edge" : {
-        "id" : "edge::14"
-      }
-    }, {
-      "source" : "test-component-1",
-      "target" : "873755fa-bfca-4ef2-8b03-32492f29c371",
-      "edge" : {
-        "type" : "file",
-        "id" : "edge::15"
-      }
-    }, {
-      "source" : "test-component-1",
-      "target" : "821c8a42-e1c9-4dd8-8458-649a848f4769",
-      "edge" : {
-        "type" : "file",
-        "id" : "edge::16"
-      }
-    }, {
-      "source" : "test-component-1",
-      "target" : "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
-      "edge" : {
-        "type" : "module",
-        "component" : "test-component-1",
-        "id" : "edge::17"
-      }
-    }, {
-      "source" : "org.qubership:test-inventory-component:jar:1.0-SNAPSHOT",
-      "target" : "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::18"
-      }
-    }, {
-      "source" : "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
-      "target" : "org.junit.platform:junit-platform-engine:jar:1.10.2",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::19"
-      }
-    }, {
-      "source" : "org.junit.platform:junit-platform-engine:jar:1.10.2",
-      "target" : "org.opentest4j:opentest4j:jar:1.3.0",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::20"
-      }
-    }, {
-      "source" : "org.junit.platform:junit-platform-engine:jar:1.10.2",
-      "target" : "org.junit.platform:junit-platform-commons:jar:1.10.2",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::21"
-      }
-    }, {
-      "source" : "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
-      "target" : "org.junit.jupiter:junit-jupiter-api:jar:5.10.2",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::22"
-      }
-    }, {
-      "source" : "org.junit.jupiter:junit-jupiter-engine:jar:5.10.2",
-      "target" : "org.apiguardian:apiguardian-api:jar:1.1.2",
-      "edge" : {
-        "type" : "dependency",
-        "scope" : "test",
-        "component" : "test-component-1",
-        "id" : "edge::23"
-      }
-    }, {
-      "source" : "Info",
-      "target" : "Java 21",
-      "edge" : {
-        "id" : "edge::24"
-      }
-    }, {
-      "source" : "test-component-1",
-      "target" : "Java 21",
-      "edge" : {
-        "type" : "info",
-        "usage" : [ "release", "source", "target" ],
-        "id" : "edge::25"
-      }
-    } ]
+    ]
   },
-  "report" : {
-    "modelVersion" : 1,
-    "records" : [ ]
+  "report": {
+    "modelVersion": 1,
+    "records": []
   }
 }

@@ -1,11 +1,11 @@
 {
-    "id": "component-id",
-    "name": "Component name",
-    "owner": "Owner Name",
-    "dnsName": "component-dns-name",
-    "altDnsNames": ["component-alt-dns-name", "component-alt-dns-name-2"],
-    "domain": "domain-name",
-    "description": "Human-readable description",
-    "type": "backend",
-    "framework": "SpringBoot 2.6.9",
+  "id": "component-id",
+  "name": "Component name",
+  "owner": "Owner Name",
+  "dnsName": "component-dns-name",
+  "altDnsNames": ["component-alt-dns-name", "component-alt-dns-name-2"],
+  "domain": "domain-name",
+  "description": "Human-readable description",
+  "type": "backend",
+  "framework": "SpringBoot 2.6.9"
 }

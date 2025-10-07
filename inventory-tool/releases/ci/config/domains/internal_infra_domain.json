@@ -1,41 +1,64 @@
 {
-    "id" : "Infra",
-    "type" : "Infra",
-    "name" : "Infra",
-    "technical-manager" : "none",
-    "components": [
+  "id": "Infra",
+  "type": "Infra",
+  "name": "Infra",
+  "technical-manager": "none",
+  "components": [
+    {
+      "id": "Cassandra",
+      "type": "database",
+      "name": "Cassandra",
+      "drivers": [
         {
-            "id": "Cassandra", "type": "database", "name": "Cassandra",
-            "drivers": [
-                { "groupId": "com.datastax.oss.quarkus", "artifactId": "cassandra-quarkus-client" }
-            ]
-        },
-        {
-            "id": "PostgreSQL", "type": "database", "name": "PostgreSQL",
-            "drivers": [ { "groupId": "org.postgresql", "artifactId": "postgresql" } ]
-        },
-        {
-            "id": "Elasticsearch", "type": "indexation", "name": "Elasticsearch"
-        },
-        {
-            "id": "Opensearch", "type": "indexation", "name": "Opensearch",
-            "drivers": [ { "groupId": "org.opensearch", "artifactId": "opensearch" } ]
-        },
-        {
-            "id": "Kafka", "type": "mq", "name": "Kafka",
-            "drivers": [ { "groupId": "org.apache.kafka", "artifactId": "kafka-clients" } ]
-        },
-        {
-            "id": "RabbitMQ", "type": "mq", "name": "RabbitMQ",
-            "drivers": [ { "groupId": "com.rabbitmq", "artifactId": "amqp-client" } ]
-        },
-        {
-            "id": "Redis", "type": "caching", "name": "Redis",
-            "drivers": [ { "groupId": "redis.clients", "artifactId": "jedis" } ]
-        },
-        {
-            "id": "Zookeeper", "type": "config", "name": "Zookeeper",
-            "drivers": [ { "groupId": "org.apache.zookeeper", "artifactId": "zookeeper" } ]
+          "groupId": "com.datastax.oss.quarkus",
+          "artifactId": "cassandra-quarkus-client"
         }
-    ]
+      ]
+    },
+    {
+      "id": "PostgreSQL",
+      "type": "database",
+      "name": "PostgreSQL",
+      "drivers": [{ "groupId": "org.postgresql", "artifactId": "postgresql" }]
+    },
+    {
+      "id": "Elasticsearch",
+      "type": "indexation",
+      "name": "Elasticsearch"
+    },
+    {
+      "id": "Opensearch",
+      "type": "indexation",
+      "name": "Opensearch",
+      "drivers": [{ "groupId": "org.opensearch", "artifactId": "opensearch" }]
+    },
+    {
+      "id": "Kafka",
+      "type": "mq",
+      "name": "Kafka",
+      "drivers": [
+        { "groupId": "org.apache.kafka", "artifactId": "kafka-clients" }
+      ]
+    },
+    {
+      "id": "RabbitMQ",
+      "type": "mq",
+      "name": "RabbitMQ",
+      "drivers": [{ "groupId": "com.rabbitmq", "artifactId": "amqp-client" }]
+    },
+    {
+      "id": "Redis",
+      "type": "caching",
+      "name": "Redis",
+      "drivers": [{ "groupId": "redis.clients", "artifactId": "jedis" }]
+    },
+    {
+      "id": "Zookeeper",
+      "type": "config",
+      "name": "Zookeeper",
+      "drivers": [
+        { "groupId": "org.apache.zookeeper", "artifactId": "zookeeper" }
+      ]
+    }
+  ]
 }

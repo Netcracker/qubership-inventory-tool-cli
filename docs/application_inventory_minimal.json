@@ -1,60 +1,48 @@
 {
-    "id": "app_id in form 'application:${app-name}:${app-version}",
-    "name": "app-name",
-    "version": "app-version or 'unknown'",
-    "components": [ {
-        "id": "component_id_1",
-        "name": "microservice_1_name",
-        "owner": "owner-name",
-        "dnsName": "dns-name-1",
-        "domain": "domain-name",
-        "description": "Some human-readable description",
-        "type": "backend",
-        "queue": [
-            {
-                "name": "topic name",
-                "type": "Kafka/RabbitMQ",
-                "role": "producer/consumer"
-            }
-        ],
-        "database": [
-            {
-                "name": "PosgreSQL/Cassandra/etc.",
-                "version": "version"
-            }
-        ],
-        "dependency": {
-            "startup": [
-                "component-2-dns-name"
-            ],
-            "mandatory": [
-                "component-3-dns-name"
-            ],
-            "optional": [
-                "component-4-dns-name",
-                "component-5-dns-name"
-            ]
+  "id": "app_id in form 'application:${app-name}:${app-version}",
+  "name": "app-name",
+  "version": "app-version or 'unknown'",
+  "components": [
+    {
+      "id": "component_id_1",
+      "name": "microservice_1_name",
+      "owner": "owner-name",
+      "dnsName": "dns-name-1",
+      "domain": "domain-name",
+      "description": "Some human-readable description",
+      "type": "backend",
+      "queue": [
+        {
+          "name": "topic name",
+          "type": "Kafka/RabbitMQ",
+          "role": "producer/consumer"
         }
+      ],
+      "database": [
+        {
+          "name": "PosgreSQL/Cassandra/etc.",
+          "version": "version"
+        }
+      ],
+      "dependency": {
+        "startup": ["component-2-dns-name"],
+        "mandatory": ["component-3-dns-name"],
+        "optional": ["component-4-dns-name", "component-5-dns-name"]
+      }
     },
     {
-        "id": "component_id_2",
-        "name": "component_2_name",
-        "owner": "owner-name",
-        "dnsName": "component-2-dns-name",
-        "domain": "domain-name",
-        "description": "Some human-readable description",
-        "type": "backend",
-        "dependency": {
-            "startup": [
-                "component-3-dns-name"
-            ],
-            "mandatory": [
-                "component-4-dns-name"
-            ],
-            "optional": [
-                "component-5-dns-name",
-                "component-6-dns-name"
-            ]
-        }
-    } ]
+      "id": "component_id_2",
+      "name": "component_2_name",
+      "owner": "owner-name",
+      "dnsName": "component-2-dns-name",
+      "domain": "domain-name",
+      "description": "Some human-readable description",
+      "type": "backend",
+      "dependency": {
+        "startup": ["component-3-dns-name"],
+        "mandatory": ["component-4-dns-name"],
+        "optional": ["component-5-dns-name", "component-6-dns-name"]
+      }
+    }
+  ]
 }

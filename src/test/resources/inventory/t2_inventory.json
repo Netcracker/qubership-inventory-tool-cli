@@ -1,42 +1,33 @@
 {
-    "id": "component-id",
-    "name": "Component name",
-    "owner": "Owner Name",
-    "dnsName": "component-dns-name",
-    "altDnsNames": ["component-alt-dns-name", "component-alt-dns-name-2"],
-    "domain": "domain-name",
-    "description": "Human-readable description",
-    "type": "backend",
-    "framework": "SpringBoot 2.6.9",
-    "tmfSpec": {
-        "622": {"version": ["18.0.3", "19.0.1"]},
-        "666": {"version": ["18.0.3"]}
-    },
-    "language": [
-        "TypeScript"
-    ],
-    "thirdparty": {
-        "MongoDB": {"version": ""},
-        "Redis": {"mandatory": false}
-    },
-    "dependency": {
-        "startup": [
-            "component-2-dns-name"
-        ],
-        "mandatory": [
-            "component-3-dns-name"
-        ],
-        "optional": [
-            "component-4-dns-name",
-            "component-5-dns-name"
-        ]
-    },
-    "documentation": [
-        "(URLs to the documentation (Confluence or Git))"
-    ],
-    "openAPI": true,
-    "openAPIpublished": ["https://git.your.host/path/component-4/-/tree/main/component-4-spec/src/main/resources/path"],
-    "multitenancy": {
-        "defaultTenantId": true
-    }
+  "id": "component-id",
+  "name": "Component name",
+  "owner": "Owner Name",
+  "dnsName": "component-dns-name",
+  "altDnsNames": ["component-alt-dns-name", "component-alt-dns-name-2"],
+  "domain": "domain-name",
+  "description": "Human-readable description",
+  "type": "backend",
+  "framework": "SpringBoot 2.6.9",
+  "tmfSpec": {
+    "622": { "version": ["18.0.3", "19.0.1"] },
+    "666": { "version": ["18.0.3"] }
+  },
+  "language": ["TypeScript"],
+  "thirdparty": {
+    "MongoDB": { "version": "" },
+    "Redis": { "mandatory": false }
+  },
+  "dependency": {
+    "startup": ["component-2-dns-name"],
+    "mandatory": ["component-3-dns-name"],
+    "optional": ["component-4-dns-name", "component-5-dns-name"]
+  },
+  "documentation": ["(URLs to the documentation (Confluence or Git))"],
+  "openAPI": true,
+  "openAPIpublished": [
+    "https://git.your.host/path/component-4/-/tree/main/component-4-spec/src/main/resources/path"
+  ],
+  "multitenancy": {
+    "defaultTenantId": true
+  }
 }

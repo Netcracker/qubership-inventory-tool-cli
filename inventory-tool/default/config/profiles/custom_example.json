@@ -1,14 +1,14 @@
 {
-  "disabledFeatures" : "---",
-  "confluence" : {
-    "uploadConfluencePages" : "none"
+  "disabledFeatures": "---",
+  "confluence": {
+    "uploadConfluencePages": "none"
   },
-  "git" : {
-    "releaseBranch" : "release/candidate"
+  "git": {
+    "releaseBranch": "release/candidate"
   },
-  "release" : "1.1.1",
-  "saveProgress" : true,
-  "profile" : "custom",
-  "login" : "your_login",
-  "excelExport" : "output/export/inventorization.xls"
+  "release": "1.1.1",
+  "saveProgress": true,
+  "profile": "custom",
+  "login": "your_login",
+  "excelExport": "output/export/inventorization.xls"
 }

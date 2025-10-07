@@ -1,5 +1,5 @@
 {
-    "progress/task.result.json" : "progress/task.result.json",
-    "output/effectiveConfig.json" : "config/effectiveConfig.json",
-    "output/export" : "output/export"
+  "progress/task.result.json": "progress/task.result.json",
+  "output/effectiveConfig.json": "config/effectiveConfig.json",
+  "output/export": "output/export"
 }

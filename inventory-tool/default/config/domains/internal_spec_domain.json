@@ -1,66 +1,65 @@
 {
-    "id" : "Spec",
-    "type" : "Spec",
-    "name" : "Spec",
-    "technical-manager" : "none",
-    "tmf": {
-        "620": {
-            "name":"Product Catalog Management"
-        },
-        "621": {
-            "name":"Trouble Ticket"
-        },
-        "622": {
-            "name":"Product Ordering Management"
-        },
-        "629": {
-            "name":"Customer Management"
-        },
-        "632": {
-            "name":"Party Management"
-        },
-        "637": {
-            "name":"Product Inventory Management"
-        },
-        "641": {
-            "name":"Service Ordering"
-        },
-        "648": {
-            "name":"Quote Management"
-        },
-        "651": {
-            "name":"Agreement Management"
-        },
-        "663": {
-            "name":"Shopping Cart Management"
-        },
-        "666": {
-            "name":"Account Management"
-        },
-        "669": {
-            "name":"Party Role Management"
-        },
-        "670": {
-            "name":"Payment Methods"
-        },
-        "671": {
-            "name":"Promotion"
-        },
-        "674": {
-            "name":"Geographic Site"
-        },
-        "680": {
-            "name":"Recommendation"
-        },
-        "683": {
-            "name":"Party Interactions"
-        },
-        "699": {
-            "name":"Sales Management"
-        },
-        "701": {
-            "name":"Process Flow Management"
-        }
+  "id": "Spec",
+  "type": "Spec",
+  "name": "Spec",
+  "technical-manager": "none",
+  "tmf": {
+    "620": {
+      "name": "Product Catalog Management"
+    },
+    "621": {
+      "name": "Trouble Ticket"
+    },
+    "622": {
+      "name": "Product Ordering Management"
+    },
+    "629": {
+      "name": "Customer Management"
+    },
+    "632": {
+      "name": "Party Management"
+    },
+    "637": {
+      "name": "Product Inventory Management"
+    },
+    "641": {
+      "name": "Service Ordering"
+    },
+    "648": {
+      "name": "Quote Management"
+    },
+    "651": {
+      "name": "Agreement Management"
+    },
+    "663": {
+      "name": "Shopping Cart Management"
+    },
+    "666": {
+      "name": "Account Management"
+    },
+    "669": {
+      "name": "Party Role Management"
+    },
+    "670": {
+      "name": "Payment Methods"
+    },
+    "671": {
+      "name": "Promotion"
+    },
+    "674": {
+      "name": "Geographic Site"
+    },
+    "680": {
+      "name": "Recommendation"
+    },
+    "683": {
+      "name": "Party Interactions"
+    },
+    "699": {
+      "name": "Sales Management"
+    },
+    "701": {
+      "name": "Process Flow Management"
     }
-
+  }
 }

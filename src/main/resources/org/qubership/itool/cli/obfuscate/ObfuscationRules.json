@@ -1,17 +1,13 @@
 {
-  "vertices" : {
-    "byType" : {
-      "domain" : {
-        "rule" : "truncate",
-        "allowList" : [
-          "/id",
-          "/type",
-          "/name"
-        ]
+  "vertices": {
+    "byType": {
+      "domain": {
+        "rule": "truncate",
+        "allowList": ["/id", "/type", "/name"]
       },
-      "*component*" : {
-        "rule" : "truncate",
-        "allowList" : [
+      "*component*": {
+        "rule": "truncate",
+        "allowList": [
           "/id",
           "/type",
           "/name",
@@ -42,20 +38,20 @@
           "/details/k8s-labels/labels/value"
         ]
       },
-      "file" : {
-        "rule" : "drop"
+      "file": {
+        "rule": "drop"
       },
-      "directory" : {
-        "rule" : "drop"
+      "directory": {
+        "rule": "drop"
       },
-      "Info" : {
-        "rule" : "saveByChildren"
+      "Info": {
+        "rule": "saveByChildren"
       },
-      "Infra" : {
-        "rule" : "saveByChildren"
+      "Infra": {
+        "rule": "saveByChildren"
       },
-      "Spec" : {
-        "rule" : "saveByChildren"
+      "Spec": {
+        "rule": "saveByChildren"
       }
     }
   }

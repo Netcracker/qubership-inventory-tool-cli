@@ -1,9 +1,9 @@
 {
-    "id": "qubership-inventory-tool-cli",
-    "name": "Qubership Inventory Tool CLI",
-    "owner": "TBD",
-    "dnsName": "qubership-inventory-tool-cli",
-    "description": "Qubership Inventory Tool CLI",
-    "type": "library",
-    "framework": "Vertx"
+  "id": "qubership-inventory-tool-cli",
+  "name": "Qubership Inventory Tool CLI",
+  "owner": "TBD",
+  "dnsName": "qubership-inventory-tool-cli",
+  "description": "Qubership Inventory Tool CLI",
+  "type": "library",
+  "framework": "Vertx"
 }

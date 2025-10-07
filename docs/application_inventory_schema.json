@@ -17,7 +17,7 @@
     "components": {
       "description": "Components in this application. Components are usually microservices",
       "type": "array",
-      "items" : {
+      "items": {
         "type": "object",
         "properties": {
           "id": {
@@ -47,7 +47,16 @@
           "type": {
             "description": "Component type",
             "type": "string",
-            "enum": ["backend", "library", "ui", "ui app bundle", "ui backend", "ui cdn", "config", "job"]
+            "enum": [
+              "backend",
+              "library",
+              "ui",
+              "ui app bundle",
+              "ui backend",
+              "ui cdn",
+              "config",
+              "job"
+            ]
           },
           "framework": {
             "description": "Framework used. SpringBoot and Quarkus can automatically be detected for Java components",
@@ -69,9 +78,7 @@
                     }
                   }
                 },
-                "required": [
-                  "version"
-                ]
+                "required": ["version"]
               }
             }
           },
@@ -131,7 +138,7 @@
           },
           "queue": {
             "type": "array",
-            "items" : {
+            "items": {
               "type": "object",
               "properties": {
                 "name": {
@@ -145,18 +152,15 @@
                 "role": {
                   "description": "Component role for this queue",
                   "type": "string",
-                  "enum": [ "producer", "consumer", "both" ]
+                  "enum": ["producer", "consumer", "both"]
                 }
               },
-              "required": [
-                "name",
-                "type"
-              ]
+              "required": ["name", "type"]
             }
           },
           "database": {
             "type": "array",
-            "items" : {
+            "items": {
               "type": "object",
               "properties": {
                 "name": {
@@ -168,9 +172,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "name"
-              ]
+              "required": ["name"]
             }
           },
           "documentation": {
@@ -200,22 +202,12 @@
                 "type": "boolean"
               }
             },
-            "required": [
-              "defaultTenantId"
-            ]
+            "required": ["defaultTenantId"]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "dnsName",
-          "type"
-        ]
+        "required": ["id", "name", "dnsName", "type"]
       }
     }
   },
-  "required": [
-    "name",
-    "components"
-  ]
+  "required": ["name", "components"]
 }

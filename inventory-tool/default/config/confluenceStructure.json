@@ -1,42 +1,42 @@
 {
-    "title" : "Architecture",
-    "children" : [
+  "title": "Architecture",
+  "children": [
+    {
+      "title": "Cloud: Documentation",
+      "children": [
         {
-            "title" : "Cloud: Documentation",
-            "children" : [
+          "type": "department",
+          "children": [
+            {
+              "type": "domain",
+              "children": [
                 {
-                    "type" : "department",
-                    "children" : [
-                        {
-                            "type" : "domain",
-                            "children" : [
-                                {
-                                    "type" : "component"
-                                }
-                            ]
-                        },
-                        {
-                            "type" : "departmentDocsSummary"
-                        }
-                    ]
-                },
-                {
-                    "title" : "Reports",
-                    "children" : [
-                        {
-                            "type" : "report"
-                        }
-                    ]
-                },
-                {
-                    "title" : "Summary",
-                    "children" : [
-                        {
-                            "type" : "summary"
-                        }
-                    ]
+                  "type": "component"
                 }
-            ]
+              ]
+            },
+            {
+              "type": "departmentDocsSummary"
+            }
+          ]
+        },
+        {
+          "title": "Reports",
+          "children": [
+            {
+              "type": "report"
+            }
+          ]
+        },
+        {
+          "title": "Summary",
+          "children": [
+            {
+              "type": "summary"
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

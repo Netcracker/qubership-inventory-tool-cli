@@ -1,96 +1,95 @@
 {
-    "id" : "Spec",
-    "type" : "Spec",
-    "name" : "Spec",
-    "technical-manager" : "none",
-    "tmf": {
-        "620": {
-            "code": 620,
-            "name":"Product Catalog Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf620-product-catalog-management-api-rest-specification-r19-0-0/"
-        },
-        "621": {
-            "code": 621,
-            "name":"Trouble Ticket",
-            "url":"https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
-        },
-        "621 v19.0.1": {
-            "code": 621,
-            "name":"Trouble Ticket",
-            "version": "19.0.1",
-            "url":"https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
-        },
-        "622": {
-            "code": 622,
-            "name":"Product Ordering",
-            "url":"https://www.tmforum.org/resources/specification/tmf622-product-ordering-management-api-rest-specification-r19-0-0/"
-        },
-        "629": {
-            "code": 629,
-            "name":"Customer Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf629-customer-management-api-rest-specification-r19-0-0/"
-        },
-        "632": {
-            "code": 632,
-            "name":"Party Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf632-party-management-api-rest-specification-r19-0-0/"
-        },
-        "637": {
-            "code": 637,
-            "name":"Product Inventory Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf637-product-inventory-management-api-rest-specification-r19-0-0/"
-        },
-        "648": {
-            "code": 648,
-            "name":"Quote Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf648-quote-management-api-rest-specification-r19-0-0/"
-        },
-        "651": {
-            "code": 651,
-            "name":"Agreement Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r19-0-0/"
-        },
-        "651 v18.0.0": {
-            "code": 651,
-            "name":"Agreement Management",
-            "version": "18.0.0",
-            "url":"https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r18-0-0/"
-        },
-        "663": {
-            "code": 663,
-            "name":"Shopping Cart Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf663-shopping-cart-management-api-rest-specification-r19-0-0/"
-        },
-        "666": {
-            "code": 666,
-            "name":"Account Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf666-account-management-api-rest-specification-r19-0-0/"
-        },
-        "669": {
-            "code": 669,
-            "name":"Party Role Management",
-            "url": "https://www.tmforum.org/resources/specification/tmf669-party-role-management-api-rest-specification-r19-0-0/"
-        },
-        "670": {
-            "code": 670,
-            "name":"Payment Methods",
-            "url":"https://www.tmforum.org/resources/specification/tmf670-payment-methods-api-rest-specification-r17-5-0/"
-        },
-        "674": {
-            "code": 674,
-            "name":"Geographic Site",
-            "url":"https://www.tmforum.org/resources/specification/tmf674-geographic-site-api-rest-specification-r17-5-0/"
-        },
-        "683": {
-            "code": 683,
-            "name":"Party Interactions",
-            "url":"https://www.tmforum.org/resources/specification/tmf683-party-interactions-api-rest-specification-r18-0-0/"
-        },
-        "699": {
-            "code": 699,
-            "name":"Sales Management",
-            "url":"https://www.tmforum.org/resources/specification/tmf699-sales-management-api-rest-specification-r19-0-0/"
-        }
+  "id": "Spec",
+  "type": "Spec",
+  "name": "Spec",
+  "technical-manager": "none",
+  "tmf": {
+    "620": {
+      "code": 620,
+      "name": "Product Catalog Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf620-product-catalog-management-api-rest-specification-r19-0-0/"
+    },
+    "621": {
+      "code": 621,
+      "name": "Trouble Ticket",
+      "url": "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
+    },
+    "621 v19.0.1": {
+      "code": 621,
+      "name": "Trouble Ticket",
+      "version": "19.0.1",
+      "url": "https://www.tmforum.org/resources/specification/tmf621-trouble-ticket-management-api-rest-specification-r19-0-0/"
+    },
+    "622": {
+      "code": 622,
+      "name": "Product Ordering",
+      "url": "https://www.tmforum.org/resources/specification/tmf622-product-ordering-management-api-rest-specification-r19-0-0/"
+    },
+    "629": {
+      "code": 629,
+      "name": "Customer Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf629-customer-management-api-rest-specification-r19-0-0/"
+    },
+    "632": {
+      "code": 632,
+      "name": "Party Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf632-party-management-api-rest-specification-r19-0-0/"
+    },
+    "637": {
+      "code": 637,
+      "name": "Product Inventory Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf637-product-inventory-management-api-rest-specification-r19-0-0/"
+    },
+    "648": {
+      "code": 648,
+      "name": "Quote Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf648-quote-management-api-rest-specification-r19-0-0/"
+    },
+    "651": {
+      "code": 651,
+      "name": "Agreement Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r19-0-0/"
+    },
+    "651 v18.0.0": {
+      "code": 651,
+      "name": "Agreement Management",
+      "version": "18.0.0",
+      "url": "https://www.tmforum.org/resources/specification/tmf651-agreement-management-api-rest-specification-r18-0-0/"
+    },
+    "663": {
+      "code": 663,
+      "name": "Shopping Cart Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf663-shopping-cart-management-api-rest-specification-r19-0-0/"
+    },
+    "666": {
+      "code": 666,
+      "name": "Account Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf666-account-management-api-rest-specification-r19-0-0/"
+    },
+    "669": {
+      "code": 669,
+      "name": "Party Role Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf669-party-role-management-api-rest-specification-r19-0-0/"
+    },
+    "670": {
+      "code": 670,
+      "name": "Payment Methods",
+      "url": "https://www.tmforum.org/resources/specification/tmf670-payment-methods-api-rest-specification-r17-5-0/"
+    },
+    "674": {
+      "code": 674,
+      "name": "Geographic Site",
+      "url": "https://www.tmforum.org/resources/specification/tmf674-geographic-site-api-rest-specification-r17-5-0/"
+    },
+    "683": {
+      "code": 683,
+      "name": "Party Interactions",
+      "url": "https://www.tmforum.org/resources/specification/tmf683-party-interactions-api-rest-specification-r18-0-0/"
+    },
+    "699": {
+      "code": 699,
+      "name": "Sales Management",
+      "url": "https://www.tmforum.org/resources/specification/tmf699-sales-management-api-rest-specification-r19-0-0/"
     }
-
+  }
 }

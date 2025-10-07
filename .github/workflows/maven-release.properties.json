@@ -1,12 +1,6 @@
 {
   "name": "Qubership Release And Upload to Maven Central",
   "description": "Release And Upload to Maven Central workflow template. It can be used to create GitHub release and upload artifacts to Maven Central.",
-  "categories": [
-      "Java",
-      "Automation",
-      "Maven"
-  ],
-  "filePatterns": [
-      "^pom.xml"
-  ]
+  "categories": ["Java", "Automation", "Maven"],
+  "filePatterns": ["^pom.xml"]
 }

@@ -21,14 +21,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "directory"
-        ]
+        "required": ["id", "directory"]
       }
     }
   },
-  "required": [
-    "domain"
-  ]
+  "required": ["domain"]
 }

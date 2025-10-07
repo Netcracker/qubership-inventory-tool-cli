@@ -1,91 +1,75 @@
 {
-    "name": "app-name",
-    "version": "app-version",
-    "components": [ {
-        "id": "component_id_1",
-        "name": "microservice 1",
-        "owner": "owner1",
-        "dnsName": "component-1-dns-name",
-        "domain": "domain_name_1",
-        "description": "Some human-readable description",
-        "type": "backend",
-        "framework": "SpringBoot 2.6.9",
-        "queue": [ {
-            "name": "topic1",
-            "type": "Kafka",
-            "role": "producer"
-        }, {
-            "name": "topic2",
-            "type": "RabbitMQ",
-            "role": "consumer"
-        }],
-        "database": [ {
-            "name": "PostgreSQL",
-            "version": "15"
-        } ],
-        "language": [
-            "TypeScript"
-        ],
-        "thirdparty": {
-            "SOMETHING": {"version": ""}
+  "name": "app-name",
+  "version": "app-version",
+  "components": [
+    {
+      "id": "component_id_1",
+      "name": "microservice 1",
+      "owner": "owner1",
+      "dnsName": "component-1-dns-name",
+      "domain": "domain_name_1",
+      "description": "Some human-readable description",
+      "type": "backend",
+      "framework": "SpringBoot 2.6.9",
+      "queue": [
+        {
+          "name": "topic1",
+          "type": "Kafka",
+          "role": "producer"
         },
-        "dependency": {
-            "startup": [
-                "component-3-dns-name"
-            ],
-            "mandatory": [
-                "component-4-dns-name"
-            ],
-            "optional": [
-                "component-5-dns-name",
-                "component-6-dns-name"
-            ]
-        },
-        "documentation": [
-            "(URLs to the documentation (Confluence or Git))"
-        ],
-        "openAPI": true,
-        "openAPIpublished": [
-            "https://git.your.host/path/-/tree/main/path/src/main/resources/path"
-        ],
-        "multitenancy": {
-            "defaultTenantId": true
+        {
+          "name": "topic2",
+          "type": "RabbitMQ",
+          "role": "consumer"
         }
+      ],
+      "database": [
+        {
+          "name": "PostgreSQL",
+          "version": "15"
+        }
+      ],
+      "language": ["TypeScript"],
+      "thirdparty": {
+        "SOMETHING": { "version": "" }
+      },
+      "dependency": {
+        "startup": ["component-3-dns-name"],
+        "mandatory": ["component-4-dns-name"],
+        "optional": ["component-5-dns-name", "component-6-dns-name"]
+      },
+      "documentation": ["(URLs to the documentation (Confluence or Git))"],
+      "openAPI": true,
+      "openAPIpublished": [
+        "https://git.your.host/path/-/tree/main/path/src/main/resources/path"
+      ],
+      "multitenancy": {
+        "defaultTenantId": true
+      }
     },
     {
-        "id": "component_id_2",
-        "name": "microservice 2",
-        "owner": "owner2",
-        "dnsName": "component-2-dns-name",
-        "domain": "domain-name-2",
-        "description": "Some human-readable description",
-        "type": "backend",
-        "framework": "SpringBoot 2.6.9",
-        "language": [
-            "TypeScript"
-        ],
-        "dependency": {
-            "startup": [
-                "component-3-dns-name"
-            ],
-            "mandatory": [
-                "component-5-dns-name"
-            ],
-            "optional": [
-                "component-6-dns-name",
-                "component-7-dns-name"
-            ]
-        },
-        "documentation": [
-            "(URLs to the documentation (Confluence or Git))"
-        ],
-        "openAPI": true,
-        "openAPIpublished": [
-            "https://git.your.host/path/-/tree/main/path/src/main/resources/path"
-        ],
-        "multitenancy": {
-            "defaultTenantId": true
-        }
-    } ]
-
+      "id": "component_id_2",
+      "name": "microservice 2",
+      "owner": "owner2",
+      "dnsName": "component-2-dns-name",
+      "domain": "domain-name-2",
+      "description": "Some human-readable description",
+      "type": "backend",
+      "framework": "SpringBoot 2.6.9",
+      "language": ["TypeScript"],
+      "dependency": {
+        "startup": ["component-3-dns-name"],
+        "mandatory": ["component-5-dns-name"],
+        "optional": ["component-6-dns-name", "component-7-dns-name"]
+      },
+      "documentation": ["(URLs to the documentation (Confluence or Git))"],
+      "openAPI": true,
+      "openAPIpublished": [
+        "https://git.your.host/path/-/tree/main/path/src/main/resources/path"
+      ],
+      "multitenancy": {
+        "defaultTenantId": true
+      }
+    }
+  ]
 }
