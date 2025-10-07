@@ -63,6 +63,18 @@ public class YamlParser {
         + "([\\w-]*\\{\\s*\\{.*?\\}\\s*\\}.*?)\\s*$"
     );
 
+    // Pattern: Handle already-quoted template expressions with nested quotes
+    protected static final Pattern NESTED_QUOTE_PROTECTOR = Pattern.compile(
+        // Key or dash
+        "^(\\s*(?:(?!-)[^:]*:|-)?\\s*)"
+        // Opening quote (capture which type)
+        + "(['\"])"
+        // Template expression with quotes inside
+        + "(\\{\\s*\\{.*\\}\\s*\\})"
+        // Closing quote (must match opening quote using backreference \2)
+        + "(\\2\\s*)$"
+    );
+
     protected static final Pattern AT_PROTECTOR = Pattern.compile(
         // Look-behind: non-quote
         "(^|[^\\'\\\"])"
@@ -200,6 +212,24 @@ public class YamlParser {
             return s1;
         }
 
+        // Step 4: Handle nested quotes
+        Matcher m = NESTED_QUOTE_PROTECTOR.matcher(s);
+        if (m.find()) {
+            String opening = m.group(2);
+            String template = m.group(3);
+            String closing = m.group(4);
+
+            String escaped;
+            if (opening.equals("\"")) {
+                // Double-quoted: escape internal " as \"
+                escaped = template.replace("\"", "\\\"");
+            } else {
+                // Single-quoted: escape internal ' as ''
+                escaped = template.replace("'", "''");
+            }
+            s1 = m.group(1) + opening + escaped + closing;
+            return s1;
+        }
         return s;
     }
 

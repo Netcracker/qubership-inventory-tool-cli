@@ -16,18 +16,19 @@
 
 package org.qubership.itool.utils;
 
-import io.vertx.core.json.JsonArray;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import io.vertx.core.json.JsonArray;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestYamlParser {
@@ -146,6 +147,10 @@ public class TestYamlParser {
         assertEquals("'{{ filter \"some-value.value.data\" . | action 4 | action }}'",
             normalizeLine("{{ filter \"some-value.value.data\" . | action 4 | action }}"));
 
+        assertEquals("data: \"{{ index (regexSplit \\\",\\\" $.Values.CENSORED_NAME -1) $index }}\"",
+            normalizeLine("data: \"{{ index (regexSplit \",\" $.Values.CENSORED_NAME -1) $index }}\""));
+        assertEquals("data: \'{{ index (regexSplit '','' $.Values.CENSORED_NAME -1) $index }}\'",
+            normalizeLine("data: '{{ index (regexSplit ',' $.Values.CENSORED_NAME -1) $index }}'"));
     }
 
     private boolean acceptLine(String s) {
@@ -154,6 +159,78 @@ public class TestYamlParser {
 
     private String normalizeLine(String s) {
         return parser.normalizeLine(s);
+    }
+
+    @Test
+    public void testNestedQuotesActuallyParse() throws IOException {
+        // Test that normalized YAML with nested quotes actually parses without errors
+        // IMPORTANT: parseYamlData() normalizes internally, so pass UN-normalized strings
+
+        // First, let's test simple YAML without templates to confirm basics work
+        String simpleYaml = "data: \"hello\\\"world\"";
+        List<Object> simpleParsed = parser.parseYamlData(simpleYaml, "<simple-test>");
+        assertNotNull(simpleParsed);
+        assertEquals(1, simpleParsed.size());
+        assertTrue(simpleParsed.get(0) instanceof Map);
+        Map<?, ?> simpleMap = (Map<?, ?>) simpleParsed.get(0);
+        assertEquals("hello\"world", simpleMap.get("data"));
+
+        // Test case 1: Double-quoted value with internal double quotes
+        // Input has nested quotes that need escaping
+        String yaml1 = "data: \"{{ index (regexSplit \",\" $.Values.CENSORED_NAME -1) $index }}\"";
+
+        // Verify normalization works correctly
+        String normalized1 = parser.normalizeLine(yaml1);
+        assertEquals("data: \"{{ index (regexSplit \\\",\\\" $.Values.CENSORED_NAME -1) $index }}\"", normalized1);
+
+        // Verify the ORIGINAL (un-normalized) YAML parses correctly
+        // parseYamlData() will normalize it internally
+        List<Object> parsed1 = parser.parseYamlData(yaml1, "<test1>");
+        assertNotNull(parsed1);
+        assertEquals(1, parsed1.size());
+        assertTrue(parsed1.get(0) instanceof Map);
+        Map<?, ?> map1 = (Map<?, ?>) parsed1.get(0);
+        assertTrue(map1.containsKey("data"));
+        // The parsed value should contain the template with escaped quotes
+        String value1 = (String) map1.get("data");
+        assertTrue(value1.contains("regexSplit"));
+
+        // Test case 2: Single-quoted value with internal single quotes
+        String yaml2 = "data: '{{ index (regexSplit ',' $.Values.CENSORED_NAME -1) $index }}'";
+
+        // Verify normalization works correctly
+        String normalized2 = parser.normalizeLine(yaml2);
+        assertEquals("data: '{{ index (regexSplit '','' $.Values.CENSORED_NAME -1) $index }}'", normalized2);
+
+        // Verify the ORIGINAL (un-normalized) YAML parses correctly
+        List<Object> parsed2 = parser.parseYamlData(yaml2, "<test2>");
+        assertNotNull(parsed2);
+        assertEquals(1, parsed2.size());
+        assertTrue(parsed2.get(0) instanceof Map);
+        Map<?, ?> map2 = (Map<?, ?>) parsed2.get(0);
+        assertTrue(map2.containsKey("data"));
+        String value2 = (String) map2.get("data");
+        assertTrue(value2.contains("regexSplit"));
+
+        // Test case 3: More complex YAML document with nested quotes
+        String yaml3 =
+            "apiVersion: v1\n" +
+            "kind: ConfigMap\n" +
+            "data:\n" +
+            "  value1: \"{{ index (regexSplit \",\" $.Values.LIST -1) 0 }}\"\n" +
+            "  value2: '{{ printf 'test' }}'\n";
+
+        List<Object> parsed3 = parser.parseYamlData(yaml3, "<test3>");
+        assertNotNull(parsed3);
+        assertEquals(1, parsed3.size());
+        assertTrue(parsed3.get(0) instanceof Map);
+        Map<?, ?> map3 = (Map<?, ?>) parsed3.get(0);
+        assertEquals("v1", map3.get("apiVersion"));
+        assertEquals("ConfigMap", map3.get("kind"));
+        assertTrue(map3.get("data") instanceof Map);
+        Map<?, ?> data3 = (Map<?, ?>) map3.get("data");
+        assertTrue(data3.containsKey("value1"));
+        assertTrue(data3.containsKey("value2"));
     }
 
     @Test
