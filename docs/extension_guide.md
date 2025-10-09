@@ -231,7 +231,7 @@ This will create a fat JAR file in the `target` directory.
 After building, you can run the example using the following command from the `target` directory:
 
 ```bash
-java -jar qubership-inventory-tool-extension-*-fat.jar ci-assembly -appname test --inputDir test-data
+java -jar qubership-inventory-tool-extension-*-fat.jar ci-assembly --appname test --inputDir test-data
 ```
 
 This command will:
