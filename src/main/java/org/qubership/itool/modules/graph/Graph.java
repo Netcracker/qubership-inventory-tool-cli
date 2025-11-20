@@ -33,6 +33,7 @@ public interface Graph extends BasicGraph {
     String F_VERSION = "version";
     String F_REPOSITORY = "repository";
     String F_DIRECTORY = "directoryPath";
+    String F_PROCESSING_ISSUES = "processingIssues";
 
     /**
      * <p>This attribute is set to true to indicate mock vertices that need to be replaced with

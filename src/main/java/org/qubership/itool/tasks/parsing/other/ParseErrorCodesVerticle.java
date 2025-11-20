@@ -16,6 +16,7 @@
 
 package org.qubership.itool.tasks.parsing.other;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -32,13 +33,16 @@ import org.qubership.itool.modules.graph.Graph;
 import org.qubership.itool.tasks.parsing.AbstractParseFileTask;
 import org.qubership.itool.utils.FSUtils;
 import org.qubership.itool.utils.GitUtils;
+import org.qubership.itool.utils.ProcessingIssueBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.qubership.itool.modules.graph.Graph.F_ID;
@@ -54,6 +58,7 @@ import static org.qubership.itool.modules.parsing.MdParserUtils.findColumnIdxByT
 import static org.qubership.itool.modules.parsing.MdParserUtils.findHeading;
 import static org.qubership.itool.modules.parsing.MdParserUtils.findTableBody;
 import static org.qubership.itool.modules.parsing.MdParserUtils.findTableHead;
+import static org.qubership.itool.utils.ProcessingIssueCategories.PARSING;
 
 public class ParseErrorCodesVerticle extends AbstractParseFileTask {
 
@@ -206,14 +211,39 @@ public class ParseErrorCodesVerticle extends AbstractParseFileTask {
                         .collect(Collectors.joining("\n"));
     }
 
+    /**
+     * Generates a unique vertex ID for an error code by combining the error code
+     * with a hash of the component identifier to ensure uniqueness per component.
+     *
+     * @param code error code identifier
+     * @param componentId component identifier
+     * @return unique vertex ID in format: code-hash
+     */
+    private String generateErrorCodeVertexId(String code, String componentId) {
+        int hash = Objects.hash(code, componentId);
+        return code + "-" + Integer.toHexString(hash);
+    }
+
     private void addErrorCode(JsonObject component, String fileName, String code,
             String messageText, String scenarioText, String reasonText, String solutionText) {
+        String componentId = component.getString(F_ID);
+        String errorCodeVertexId = generateErrorCodeVertexId(code, componentId);
         JsonObject details = new JsonObject()
                 .put("describedIn", GitUtils.buildRepositoryLink(component, fileName, config()));
+        JsonArray processingErrors = new JsonArray();
         if (messageText != null) {
             details.put("messageText", messageText);
         } else {
             report.mandatoryValueMissed(component, "/errorCode/" + code + "/messageText");
+            JsonObject processingError = new ProcessingIssueBuilder(PARSING, "Message text is missing")
+                .source("ParseErrorCodesVerticle", "")
+                .timestamp(Instant.now())
+                .details(d -> {
+                    d.put("file", fileName);
+                    d.put("code", code);
+                })
+                .build();
+            processingErrors.add(processingError);
         }
         if (scenarioText != null) {
             details.put("scenario", scenarioText);
@@ -224,18 +254,19 @@ public class ParseErrorCodesVerticle extends AbstractParseFileTask {
         if (solutionText != null) {
             details.put("solution", solutionText);
         }
+        Graph graph = this.graph;
         JsonObject errorCode = new JsonObject()
-                .put(F_ID, code)
+                .put(F_ID, errorCodeVertexId)
                 .put(F_TYPE, V_ERROR_CODE)
                 .put(F_NAME, code)
                 .put("details", details);
+        if (!processingErrors.isEmpty()) {
+            ProcessingIssueBuilder.ensureIssuesArray(errorCode).addAll(processingErrors);
+        }
         JsonObject edge = new JsonObject()
                 .put(F_TYPE, V_ERROR_CODE);
 
-        Graph graph = this.graph;
-        if (graph.addEdge(component, errorCode, edge) == null) {    // Adds destination vertex as well
-            report.componentDuplicated(component, errorCode);
-        }
+        graph.addEdge(component, errorCode, edge);
     }
 
 }

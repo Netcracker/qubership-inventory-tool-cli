@@ -9,6 +9,19 @@ Inventory tool stores all collected data into Graph. Graph has following structu
 
 [Source](https://www.planttext.com/?text=ZLJBRiCW43oNhq0-sOTKFVPKfKsQAb8YrMr_W62SeDfWOQmqglBlvM5Z38xKYyNkx8lPmSjM8Y6xkWAWnQWYyE7-4O2IgjClW50GB14xzXQ4wPQLNDH8Kiuowzafl4D7qfiRWMfovk8x0tVf6vBaZ2uQkeAvSfyDmRIas2_ujT_SJb3z1MgbwB3inD1pXV29icDlxVF-i4OI7L0xH6rPGNvSeokuzlTCp1Tp9WcJRJ9qMbFTd8lBS34LbUaanHSj4POmAKX3L566AHdpTlGWaCvIeUFu2PSd8jf41wMlGd01LxmWOLI-VOVuX2Xh5GylwynMJPqx6onIaLgDQ_BJ3yvb1XUB9pKrhqsOxvliB00cPFfOi1aVUcwQoW5WQ6cn5QyRpinaaxWOtVEYKunQm97cJe4VJ6vXGKzg8MfodJ0ZLCDEco3aeMVIgMS6j-oDUfeluNHveu9MAWYOjfdc3G2FB-lkEGi0ZVYIYb5For5Dg-l8RIQ8l1wdKHrl6z7S-OnpP2T49io6eBUNgA8dhn1pw_R8c10GkZtEuchUW_JE8-QUvyIQUGJvFvECL9RgRwD-rNy0)
 
+### Processing issues field
+
+All vertex types may include an optional `processingIssues` array to capture problems detected while building or enriching the graph. Each array element records a single issue and follows the schema below. Unless a producer can provide the data, it should omit the field.
+
+| Property  | Type     | Mandatory | Description |
+|:----------|:---------|:----------|:------------|
+| category  | String   | yes       | High-level issue type such as `parsing`, `processing`, `validation`, `io`, or `data-integrity`. |
+| summary   | String   | yes       | Short human-readable description suitable for dashboards and reports. |
+| source    | Object   | no        | Identifies the producer, e.g. `{ "task": "ParseErrorCodesVerticle", "stage": "error-code-enrichment" }`. |
+| affected  | Object   | no        | Highlights a related sub-entity, e.g. `{ "type": "errorCode", "id": "ERR_123" }`. |
+| timestamp | String   | no        | ISO-8601 timestamp indicating when the issue was captured. |
+| details   | Object   | no        | Additional evidence, such as `{ "field": "errorCode", "rawValue": "" }`, exception metadata, or other context. |
+
 ## Vertex description
 ### Root
 Anchor vertex. Can be used as a start point. Contains meta-info for the current graph.
