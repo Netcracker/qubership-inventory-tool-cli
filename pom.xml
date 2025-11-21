@@ -37,7 +37,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>5.0.2</revision>
+        <revision>5.0.3-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>

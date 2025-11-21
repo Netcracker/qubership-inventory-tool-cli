@@ -6,7 +6,7 @@
 
     <groupId>org.qubership</groupId>
     <artifactId>qubership-inventory-tool-extension</artifactId>
-    <version>5.0.2-SNAPSHOT</version>
+    <version>5.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Qubership Inventory Tool Extension</name>
@@ -21,7 +21,7 @@
         <junit-jupiter.version>5.12.2</junit-jupiter.version>
         <mockito.version>5.11.0</mockito.version>
         <vertx.version>5.0.3</vertx.version>
-        <inventory-tool-cli.version>5.0.2-SNAPSHOT</inventory-tool-cli.version>
+        <inventory-tool-cli.version>5.0.3-SNAPSHOT</inventory-tool-cli.version>
         <main.verticle>org.qubership.itool.cli.ci.extension.ExtensionCiAssemblyVerticle</main.verticle>
         <main.command>ci-assembly</main.command>
         <maven-resource-plugin.version>3.3.1</maven-resource-plugin.version>
