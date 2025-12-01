@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy Maven Snapshot
         uses: netcracker/qubership-workflow-hub/actions/maven-snapshot-deploy@240ec0b6bab8629f663b0c779ee280b257f454c0 # main
