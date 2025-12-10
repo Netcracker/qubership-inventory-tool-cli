@@ -87,7 +87,15 @@ public class RepositoriesPrepareSuperRepositoryVerticle extends AbstractAggregat
                         previousReleaseCopyFuture = gitAdapter.switchSuperRepoBranch(superRepository, sourceRelease)
                                 .compose(r -> getFilesList())
                                 .compose(list -> Future.join(gitFileRetriever.copyFilesFromRepo(
-                                        superRepository, sourceRelease, (List<Path>) list)));
+                                        superRepository, sourceRelease, (List<Path>) list)))
+                                .recover(throwable -> {
+                                    getLogger().warn(
+                                            "Comparison with prior release failed, continuing with target release: {}",
+                                            throwable instanceof Throwable
+                                                    ? ((Throwable) throwable).getMessage()
+                                                    : throwable);
+                                    return SucceededFuture.EMPTY;
+                                });
                     }
 
                     Future<Void> resultFuture = previousReleaseCopyFuture
