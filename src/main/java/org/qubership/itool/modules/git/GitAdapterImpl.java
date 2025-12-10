@@ -34,6 +34,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.submodule.SubmoduleStatus;
@@ -41,6 +42,7 @@ import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.util.FileUtils;
 import org.qubership.itool.modules.report.GraphReport;
 import org.qubership.itool.utils.ConfigProperties;
 import org.qubership.itool.utils.ConfigUtils;
@@ -248,7 +250,27 @@ public class GitAdapterImpl implements GitAdapter {
             String submoduleDir = superRepo.getRepository().getDirectory().toPath().getParent().toAbsolutePath()
                     .relativize(submodulePath.toAbsolutePath())
                     .toString().replaceAll("\\\\", "/");
-            SubmoduleAddCommand submoduleAddCommand = new IToolSubmoduleAddCommand(superRepo.getRepository());
+            // Workaround: clean existing submodule work/git dirs to avoid non-empty directory errors
+            // when adding submodules that exist in other branches
+            try {
+                File modulesBase = new File(superRepo.getRepository().getCommonDirectory(),
+                        Constants.MODULES);
+                File moduleGitDir = new File(modulesBase, submoduleDir);
+                File moduleWorkDir = new File(superRepo.getRepository().getWorkTree(), submoduleDir);
+                if (moduleWorkDir.exists()) {
+                    LOG.warn("Removing existing submodule work dir before add: {}", moduleWorkDir);
+                    FileUtils.delete(moduleWorkDir,
+                            FileUtils.RECURSIVE | FileUtils.RETRY);
+                }
+                if (moduleGitDir.exists()) {
+                    LOG.warn("Removing existing submodule git dir before add: {}", moduleGitDir);
+                    FileUtils.delete(moduleGitDir,
+                            FileUtils.RECURSIVE | FileUtils.RETRY);
+                }
+            } catch (Exception cleanupEx) {
+                LOG.warn("Cleanup of existing submodule dirs failed, proceeding: {}", cleanupEx.getMessage());
+            }
+            SubmoduleAddCommand submoduleAddCommand = new SubmoduleAddCommand(superRepo.getRepository());
             try {
                 repository = submoduleAddCommand
                         .setCredentialsProvider(credentialsProvider)
