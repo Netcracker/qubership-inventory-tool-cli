@@ -1,0 +1,74 @@
+---
+# This GitHub Actions workflow uses the maven-release action for automated releases.
+# Based on: https://github.com/netcracker/qubership-workflow-hub/blob/v2.0.4/actions/maven-release/README.md
+#
+# The maven-release action handles:
+# - Automatic version bumping (major/minor/patch)
+# - Building the Maven artifact
+# - Creating a Git tag automatically
+# - Deploying to Maven Central or GitHub Packages
+# - Optionally bumping dependencies to next snapshot
+
+name: Maven Release v2
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-type:
+        required: true
+        type: choice
+        default: 'patch'
+        description: 'Version bump type (major, minor, or patch)'
+        options:
+          - major
+          - minor
+          - patch
+      java-version:
+        required: false
+        type: string
+        default: "21"
+        description: 'Java version (e.g., 21)'
+      profile:
+        type: choice
+        default: 'central'
+        description: 'Release mode (github or central)'
+        required: true
+        options:
+          - github
+          - central
+      dry-run:
+        required: false
+        type: boolean
+        default: false
+        description: 'Dry run (test without pushing changes)'
+      bump-dependencies:
+        required: false
+        type: boolean
+        default: false
+        description: 'Bump dependencies to next snapshot after release'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Maven Artifact
+        uses: netcracker/qubership-workflow-hub/actions/maven-release@3e428f45132119ce49d90f3770a45d4fe1d1078d # v2.0.4
+        with:
+          version-type: ${{ github.event.inputs.version-type }}
+          module: ${{ github.event.repository.name }}
+          ref: ${{ github.ref_name }}
+          java-version: ${{ github.event.inputs.java-version }}
+          server-id: ${{ github.event.inputs.profile }}
+          profile: ${{ github.event.inputs.profile }}
+          dry-run: ${{ github.event.inputs.dry-run }}
+          maven-args: ${{ github.event.inputs.dry-run == 'true' && '-DskipTests=true -Dmaven.javadoc.skip=true -B -Dgpg.skip=true -DskipPublishing=true' || '-DskipTests=true -Dmaven.javadoc.skip=true -B' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          maven-user: ${{ secrets.MAVEN_USER }}
+          maven-password: ${{ secrets.MAVEN_PASSWORD }}
+          bump-dependencies-after-release: ${{ github.event.inputs.bump-dependencies }}
