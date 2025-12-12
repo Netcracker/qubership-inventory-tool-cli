@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.qubership</groupId>
+    <groupId>org.qubership.itool</groupId>
     <artifactId>qubership-inventory-tool-extension</artifactId>
     <version>5.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -30,7 +30,7 @@
     <dependencies>
         <!-- Core CLI dependency -->
         <dependency>
-            <groupId>org.qubership</groupId>
+            <groupId>org.qubership.itool</groupId>
             <artifactId>qubership-inventory-tool-cli</artifactId>
             <version>${inventory-tool-cli.version}</version>
         </dependency>
