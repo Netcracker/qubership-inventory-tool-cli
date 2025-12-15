@@ -25,8 +25,8 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/Netcracker/qubership-inventory-tool-cli.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Netcracker/qubership-inventory-tool-cli.git</developerConnection>
+        <connection>scm:git:https://github.com/Netcracker/qubership-inventory-tool-cli.git</connection>
+        <developerConnection>scm:git:git@github.com:Netcracker/qubership-inventory-tool-cli.git</developerConnection>
         <url>https://github.com/Netcracker/qubership-inventory-tool-cli/tree/main</url>
     </scm>
     <distributionManagement>
