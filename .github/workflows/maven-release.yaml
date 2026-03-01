@@ -142,7 +142,7 @@ jobs:
 
   tag:
     needs: [tests]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/tag-creator.yml@ac0b35120b940eaa644cdcfee7d4957038998ec2 # v2.0.9
+    uses: netcracker/qubership-workflow-hub/.github/workflows/tag-creator.yml@6b356d28e46b2d4683cccb1d91f92643d7f0c513 # v2.0.11
     with:
       tag-name: "v${{ github.event.inputs.version }}"
 
