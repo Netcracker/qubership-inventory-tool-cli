@@ -192,7 +192,7 @@ jobs:
 
   github-release:
     needs: [tag]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/release-drafter.yml@3e428f45132119ce49d90f3770a45d4fe1d1078d # v2.0.4
+    uses: netcracker/qubership-workflow-hub/.github/workflows/release-drafter.yml@6b356d28e46b2d4683cccb1d91f92643d7f0c513 # v2.0.11
     with:
       version: ${{ github.event.inputs.version }}
       publish: false
