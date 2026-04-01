@@ -63,7 +63,7 @@ jobs:
           private-key: ${{ secrets.GH_BUMP_VERSION_APP_KEY }}
 
       - name: Release Maven Artifact
-        uses: netcracker/qubership-workflow-hub/actions/maven-release@ac0b35120b940eaa644cdcfee7d4957038998ec2 # v2.0.9
+        uses: netcracker/qubership-workflow-hub/actions/maven-release@d11baa8a4b42d1a931808c0766ee23eb344c47dd # v2.2.0
         with:
           version-type: ${{ github.event.inputs.version-type }}
           module: ${{ github.event.repository.name }}
