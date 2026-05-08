@@ -20,7 +20,7 @@ permissions:
 jobs:
   assign-labels:
     name: "Assign Labels to PR #${{ github.event.pull_request.number }}"
-    if: (github.event.pull_request.merged == false) && (github.event.pull_request.user.login != 'dependabot[bot]') && (github.event.pull_request.user.login != 'github-actions[bot]')
+    if: (github.event.pull_request.merged == false) && (github.event.pull_request.user.login != 'dependabot[bot]') && (github.event.pull_request.user.login != 'renovate[bot]') && (github.event.pull_request.user.login != 'github-actions[bot]')
     permissions:
       pull-requests: write
       contents: read

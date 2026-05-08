@@ -12,6 +12,7 @@ on:
       - "**release*"
       - "prettier/**"
       - "dependabot/**"
+      - "renovate/**"
     paths-ignore:
       - "docs/**"
       - "README.md"
@@ -24,7 +25,7 @@ on:
       - edited
   workflow_dispatch: {}
 permissions:
-  packages: write # Required for GitHub packages deployment. For maven central deployment it can be ommited
+  packages: write # Required for GitHub packages deployment. For maven central deployment it can be omitted
   contents: read
 jobs:
   build:
