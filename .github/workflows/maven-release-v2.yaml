@@ -56,14 +56,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Prepare app token"
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ vars.GH_BUMP_VERSION_APP_ID }}
           private-key: ${{ secrets.GH_BUMP_VERSION_APP_KEY }}
 
       - name: Release Maven Artifact
-        uses: netcracker/qubership-workflow-hub/actions/maven-release@d11baa8a4b42d1a931808c0766ee23eb344c47dd # v2.2.0
+        uses: netcracker/qubership-workflow-hub/actions/maven-release@6a2de8d62ac5b6998e30f923613c998c263ea9f2 # v2.2.2
         with:
           version-type: ${{ github.event.inputs.version-type }}
           module: ${{ github.event.repository.name }}
