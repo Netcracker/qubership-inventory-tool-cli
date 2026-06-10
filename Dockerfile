@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25-alpine
+FROM eclipse-temurin:25-alpine@sha256:30d9f87d702c2c1c601ed0d31e0c88ea1ea474ee7676cda7b7a59e759181c4dd
 
 LABEL maintainer="qubership.org"
 LABEL org.opencontainers.image.authors="qubership.org"
