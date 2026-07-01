@@ -42,14 +42,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
         <maven-resource-plugin.version>3.5.0</maven-resource-plugin.version>
         <maven-shade-plugin.version>3.6.2</maven-shade-plugin.version>
-        <logback.version>1.5.32</logback.version>
-        <junit-jupiter.version>6.0.3</junit-jupiter.version>
+        <logback.version>1.5.35</logback.version>
+        <junit-jupiter.version>6.1.0</junit-jupiter.version>
         <guava.version>33.6.0-jre</guava.version>
         <groovy.version>5.0.6</groovy.version>
-        <vertx.version>5.0.12</vertx.version>
+        <vertx.version>5.1.3</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
         <picocli.version>4.7.7</picocli.version>
     </properties>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>7.6.0.202603022253-r</version>
+            <version>7.7.0.202606012155-r</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -179,14 +179,14 @@
         <dependency>
             <groupId>org.jline</groupId>
             <artifactId>jline</artifactId>
-            <version>4.1.0</version>
+            <version>4.2.1</version>
         </dependency>
 
         <!-- Markdown parser -->
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>0.28.0</version>
+            <version>0.29.0</version>
         </dependency>
 
         <!-- Picocli for CLI parsing -->
@@ -198,7 +198,7 @@
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-gfm-tables</artifactId>
-            <version>0.28.0</version>
+            <version>0.29.0</version>
         </dependency>
 
         <!-- OpenApi parser -->
@@ -224,7 +224,7 @@
         <dependency>
             <groupId>com.networknt</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.5</version>
         </dependency>
 
         <!-- Utils -->
@@ -498,7 +498,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.10.0</version>
+                        <version>0.11.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
