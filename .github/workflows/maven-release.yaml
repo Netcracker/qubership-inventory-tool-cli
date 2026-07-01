@@ -64,11 +64,11 @@ jobs:
           echo "Java version: ${{ github.event.inputs.java-version }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Check if tag exists
         id: check_tag
-        uses: netcracker/qubership-workflow-hub/actions/tag-checker@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+        uses: netcracker/qubership-workflow-hub/actions/tag-checker@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
         with:
           tag: 'v${{ github.event.inputs.version }}'
         env:
@@ -100,25 +100,25 @@ jobs:
           private-key: ${{ secrets.GH_BUMP_VERSION_APP_KEY }}
 
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Update pom.xml
         id: config
-        uses: netcracker/qubership-workflow-hub/actions/pom-updater@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+        uses: netcracker/qubership-workflow-hub/actions/pom-updater@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
         with:
           new_value: ${{ github.event.inputs.version }}
 
       - name: Commit Changes
-        uses: netcracker/qubership-workflow-hub/actions/commit-and-push@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+        uses: netcracker/qubership-workflow-hub/actions/commit-and-push@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
         with:
           commit_message: "Update pom.xml version to ${{ github.event.inputs.version }}"
 
   mvn-package:
     needs: [update-pom-version]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/maven-publish.yml@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+    uses: netcracker/qubership-workflow-hub/.github/workflows/maven-publish.yml@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
     with:
       maven-command: "--batch-mode package"
       java-version: ${{ github.event.inputs.java-version }}
@@ -135,20 +135,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Run tests
         run: echo "Running tests here"
 
   tag:
     needs: [tests]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/tag-creator.yml@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+    uses: netcracker/qubership-workflow-hub/.github/workflows/tag-creator.yml@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
     with:
       tag-name: "v${{ github.event.inputs.version }}"
 
   mvn-deploy:
     needs: [update-pom-version, tag]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/maven-publish.yml@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+    uses: netcracker/qubership-workflow-hub/.github/workflows/maven-publish.yml@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
     with:
       maven-command: ${{ (github.event.inputs.dry-run == 'true' && '--batch-mode package') || github.event.inputs.profile == 'github'  && '--batch-mode deploy -P github' || '--batch-mode deploy -P central' }}
       java-version: ${{ github.event.inputs.java-version }}
@@ -167,7 +167,7 @@ jobs:
     outputs:
       dockerfile_exists: ${{ steps.check_dockerfile.outputs.df_exists }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: "Check Dockerfile existence"
         id: check_dockerfile
         shell: bash
@@ -184,7 +184,7 @@ jobs:
   docker-build-publish:
     needs: [update-pom-version, tag, check-dockerfile]
     if: ${{ github.event.inputs.build-docker == 'true' && needs.check-dockerfile.outputs.dockerfile_exists == 'exists' }}
-    uses: netcracker/qubership-workflow-hub/.github/workflows/docker-publish.yml@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+    uses: netcracker/qubership-workflow-hub/.github/workflows/docker-publish.yml@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
     with:
       ref: "v${{ github.event.inputs.version }}"
       artifact-id: ${{ needs.update-pom-version.outputs.artifact_id }}
@@ -192,7 +192,7 @@ jobs:
 
   github-release:
     needs: [tag]
-    uses: netcracker/qubership-workflow-hub/.github/workflows/release-drafter.yml@cabbb90e9471163cfac84bd50ff0296b2803b44c # v2.3.0
+    uses: netcracker/qubership-workflow-hub/.github/workflows/release-drafter.yml@8c6dbeb901920bae9f40d7d7b646d8d9127e1ce7 # v2.4.0
     with:
       version: ${{ github.event.inputs.version }}
       publish: false
