@@ -1,0 +1,4 @@
+name: troubleshoot-inventory-tool
+version: 1.0.0
+description: Diagnose confirmed failures of the Qubership Inventory Tool CLI in startup and configuration, Git and the super repository, flow execution and progress, CI and Docker execution, graph dumps and obfuscation, Confluence export, or extensions and custom tasks from a pasted problem description and logs, with no live system access.
+author: Qubership
