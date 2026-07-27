@@ -248,7 +248,7 @@ A `.git` entry is present, so `prepareSuperRepoHandler` calls `Git.open` instead
 
 **How to check:**
 
-1. Read the directory from the message and confirm git agrees it is broken:
+1. Read the directory from the message and confirm Git agrees it is broken:
 
    ```bash
    git -C <git.superRepositoryDir> status
@@ -545,7 +545,7 @@ failure.
 **Symptoms:**
 
 * Fewer files appear in the output directory than components were processed.
-* Multiple runs wrote to the same output directory with the same generated file name.
+* Multiple runs wrote to the same output directory with the same generated filename.
 
 **Root cause:**
 
@@ -553,8 +553,8 @@ When `--outputFile` is not given, `SaveSingleResultVerticle` generates the name 
 defaulting to `hash`: `result.<md5 of the repository URL>.json`
 (`src/main/java/org/qubership/itool/tasks/ci/SaveSingleResultVerticle.java:55-75`). Two runs that pass the same
 `--repository` — a multi-component repository processed twice, or the same repository built on two branches into one
-output directory — therefore write the same file name and the second overwrites the first. The other two strategies
-do not resolve every collision: `id` names the file after the component id, and `repo` after the repository's last
+output directory — therefore write the same filename and the second overwrites the first. The other two strategies
+do not resolve every collision: `id` names the file after the component ID, and `repo` after the repository's last
 path segment (`src/main/java/org/qubership/itool/cli/ci/CiExecCommand.java:83-84`), so two builds of the *same*
 component — two branches, two versions — still collide under all three.
 
@@ -572,7 +572,7 @@ component — two branches, two versions — still collide under all three.
 **How to fix:**
 
 1. Give each run an explicit, distinct output file. Use a filesystem-safe build identifier containing only letters,
-   digits, dots, underscores, or hyphens; do not place a raw branch name such as `feature/foo` in the file name:
+   digits, dots, underscores, or hyphens; do not place a raw branch name such as `feature/foo` in the filename:
 
    ```bash
    docker run ... itool ci-exec --repository=<url> --componentName=<name> \
@@ -750,7 +750,7 @@ logs `Can't load source graph` when the read fails or produces no dump
 
 **How to fix:**
 
-1. Pass `--inputFile` as a bare file name and let `--inputDirectory` default to `/var/input`:
+1. Pass `--inputFile` as a bare filename and let `--inputDirectory` default to `/var/input`:
 
    ```bash
    docker run -v <in>:/var/input -v <out>:/var/output itool ci-obfuscate \
