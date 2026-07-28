@@ -1,0 +1,1 @@
+../agent-packages/troubleshoot-inventory-tool/.apm/skills/troubleshoot-inventory-tool/references/troubleshooting.md
