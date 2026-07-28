@@ -1,14 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "schedule:monthly"],
-  "labels": ["dependencies"],
+  "extends": [
+    "github>Netcracker/renovate-config:base",
+    "github>Netcracker/renovate-config:github-actions",
+    "github>Netcracker/renovate-config:netcracker-dependencies",
+    "schedule:monthly"
+  ],
   "prConcurrentLimit": 20,
   "packageRules": [
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "github-actions",
-      "separateMajorMinor": false
-    },
     {
       "matchManagers": ["maven"],
       "groupName": "maven-deps"
