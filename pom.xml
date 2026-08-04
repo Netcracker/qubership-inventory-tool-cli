@@ -45,11 +45,11 @@
         <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
         <maven-resource-plugin.version>3.5.0</maven-resource-plugin.version>
         <maven-shade-plugin.version>3.6.2</maven-shade-plugin.version>
-        <logback.version>1.5.35</logback.version>
-        <junit-jupiter.version>6.1.0</junit-jupiter.version>
+        <logback.version>1.6.1</logback.version>
+        <junit-jupiter.version>6.1.2</junit-jupiter.version>
         <guava.version>33.6.0-jre</guava.version>
-        <groovy.version>5.0.6</groovy.version>
-        <vertx.version>5.1.3</vertx.version>
+        <groovy.version>5.0.7</groovy.version>
+        <vertx.version>5.1.5</vertx.version>
         <freemarker.version>2.3.34</freemarker.version>
         <picocli.version>4.7.7</picocli.version>
     </properties>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>7.7.0.202606012155-r</version>
+            <version>7.7.1.202607240634-r</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -135,7 +135,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-util</artifactId>
-            <version>4.20.0</version>
+            <version>4.21.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -166,20 +166,20 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.26.0</version>
+            <version>2.26.1</version>
         </dependency>
         <!-- Log4j2 to SLF4J bridge to route POI logging to Logback -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.26.0</version>
+            <version>2.26.1</version>
         </dependency>
 
         <!-- Console handling input -->
         <dependency>
             <groupId>org.jline</groupId>
             <artifactId>jline</artifactId>
-            <version>4.2.1</version>
+            <version>4.3.1</version>
         </dependency>
 
         <!-- Markdown parser -->
@@ -224,7 +224,7 @@
         <dependency>
             <groupId>com.networknt</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>3.0.5</version>
+            <version>3.0.6</version>
         </dependency>
 
         <!-- Utils -->
@@ -241,7 +241,7 @@
         <dependency>
         <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.22.0</version>
+            <version>1.22.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
