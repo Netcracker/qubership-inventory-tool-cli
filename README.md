@@ -70,5 +70,5 @@ ci-exec
 ## Help
 
 * [Vert.x Documentation](https://vertx.io/docs/)
-* [Vert.x Stack Overflow](https://stackoverflow.com/questions/tagged/vert.x?sort=newest&pageSize=15)
+* [Vert.x Community Resources](https://vertx.io/resources/)
 * [Vert.x User Group](https://groups.google.com/forum/?fromgroups#!forum/vertx)
