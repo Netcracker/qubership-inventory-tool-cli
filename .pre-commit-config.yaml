@@ -47,6 +47,6 @@ repos:
           - --config-file
           - .github/linters/.yaml-lint.yml
   - repo: https://github.com/exadmin/CyberFerret # CyberFerret Check
-    rev: v.1.2.5
+    rev: cfcli-v2.0.5
     hooks:
       - id: cyberferret
