@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Deploy Maven Snapshot
-        uses: netcracker/qubership-workflow-hub/actions/maven-snapshot-deploy@b6bee6f61fdc8b367777c1173fc852a58878a6a7 # v2.5.0
+        uses: netcracker/qubership-workflow-hub/actions/maven-snapshot-deploy@27fd7674286e5f561a6fd8277f2f389ff96ddb9e # v2.6.0
         with:
           java-version: '21' # Specify the Java version to use for the build
           target-store: 'github' # or 'central' for Maven Central repository
