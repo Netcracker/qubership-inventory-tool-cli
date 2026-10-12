@@ -444,21 +444,6 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin for source code jar creation. Mandatory for Maven Central deployment -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Plugin for javadoc generation. Mandatory for Maven Central deployment -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
