@@ -6,17 +6,6 @@
 name: Maven Build
 
 on:
-  push:
-    branches-ignore:
-      - "main"
-      - "**release*"
-      - "prettier/**"
-      - "dependabot/**"
-      - "renovate/**"
-    paths-ignore:
-      - "docs/**"
-      - "README.md"
-      - ".github/**"
   pull_request:
     types:
       - opened
